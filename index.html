@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<title>Almoxarifado Manutenção</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef2f7;color:#0f172a}
+header{background:#0f172a;color:#fff;padding:15px}header h1{margin:0;font-size:20px}header small{color:#cbd5e1}
+nav{display:flex;overflow:auto;gap:5px;background:#fff;padding:8px;position:sticky;top:0;z-index:5;border-bottom:1px solid #ddd}
+nav button{white-space:nowrap;width:auto;margin:0;padding:9px 12px;background:#e2e8f0;color:#0f172a}nav .active{background:#0f172a;color:#fff}
+main{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 9px #0001}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+label{display:block;font-size:12px;font-weight:bold;margin:9px 0 5px}input,select,button,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
+button{background:#0f172a;color:#fff;border:0;font-weight:bold;margin-top:8px}.green{background:#15803d}.red{background:#dc2626}.orange{background:#c2410c}.secondary{background:#e2e8f0;color:#0f172a}
+.stat{text-align:center;background:#f8fafc;padding:12px;border-radius:10px}.stat b{display:block;font-size:22px}.stat span{font-size:11px;color:#64748b}
+.item{border:1px solid #e2e8f0;border-radius:10px;padding:11px;margin-top:8px}.muted{font-size:12px;color:#64748b}
+.badge{display:inline-block;padding:4px 7px;border-radius:99px;font-size:11px;margin-top:5px}.ok{background:#dcfce7;color:#166534}.low{background:#fee2e2;color:#991b1b}
+.hidden{display:none!important}.notice{font-size:12px;color:#64748b;margin-top:8px}
+.scanRow{display:grid;grid-template-columns:1fr 125px;gap:7px}
+.scanBtn{margin-top:0;white-space:nowrap}
+.scannerBox{margin-top:8px;padding:8px;background:#0f172a;border-radius:10px}
+.scannerVideo{width:100%;max-height:280px;border-radius:8px;background:#000;object-fit:cover}
+.photoPreview{width:100%;max-height:220px;object-fit:contain;border:1px solid #e2e8f0;border-radius:10px;margin-top:8px;background:#f8fafc}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;border-bottom:1px solid #e2e8f0;text-align:left}th{background:#f8fafc}
+@media(max-width:600px){.grid3{grid-template-columns:1fr 1fr}.grid3 .stat:last-child{grid-column:span 2}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cloudLogin" class="card" style="max-width:520px;margin:15px auto">
+<h3>☁️ Acesso ao estoque online</h3>
+<div class="grid"><input id="cloudEmail" type="email" placeholder="E-mail"><input id="cloudPass" type="password" placeholder="Senha"></div>
+<div class="grid"><button id="cloudLoginBtn">Entrar</button><button id="cloudSignupBtn" class="secondary">Criar conta</button></div>
+<div id="cloudMsg" class="notice"></div></div>
+<header><h1>📦 Almoxarifado — Manutenção</h1><small>Controle de peças, consumo e aplicação em TUE</small></header>
+<nav>
+<button data-tab="dash" class="active">Resumo</button><button data-tab="material">Materiais</button>
+<button data-tab="mov">Entrada/Saída</button><button data-tab="invent">Inventário</button>
+<button data-tab="cad">Cadastros</button><button data-tab="rel">Relatórios</button><button data-tab="dados">Dados</button>
+</nav>
+<main>
+<section id="dash" class="tab">
+<div class="card"><h2>Visão geral</h2><div class="grid3">
+<div class="stat"><b id="nMat">0</b><span>Materiais</span></div><div class="stat"><b id="nQty">0</b><span>Itens em estoque</span></div><div class="stat"><b id="nLow">0</b><span>Estoque baixo</span></div>
+</div></div>
+<div class="card"><h3>⚠️ Reposição necessária</h3><div id="alerts"></div></div>
+<div class="card"><h3>Últimas movimentações</h3><div id="recent"></div></div>
+</section>
+
+<section id="material" class="tab hidden">
+<div class="card"><h2>Cadastro de material</h2>
+<label>Código de barras / código do material</label>
+<div class="scanRow"><input id="code" placeholder="Ex.: 7891234567890"><button type="button" id="scanMaterial" class="scanBtn">📷 Escanear</button></div>
+<div id="scannerMaterial" class="scannerBox hidden"><video id="videoMaterial" class="scannerVideo" autoplay playsinline></video><button type="button" id="stopMaterial" class="secondary">Parar câmera</button><div class="notice">Aponte a câmera para o código de barras.</div></div>
+<label>Descrição</label><input id="desc" placeholder="Ex.: Relé auxiliar 24 V">
+<div class="grid"><div><label>Unidade</label><select id="unit"><option>UN</option><option>PC</option><option>JG</option><option>CX</option><option>KG</option><option>L</option><option>M</option></select></div><div><label>Estoque mínimo</label><input id="min" type="number" min="0" value="0"></div></div>
+<div class="grid"><div><label>Local do estoque</label><input id="shelf" placeholder="Ex.: A-03-02"></div><div><label>Fornecedor</label><input id="supplier" placeholder="Opcional"></div></div>
+<label>Foto do material</label><input id="photo" type="file" accept="image/*" capture="environment">
+<img id="photoPreview" class="photoPreview hidden" alt="Foto do material">
+<div class="notice">Tire a foto pela câmera do celular ou selecione uma imagem da galeria.</div>
+<button class="green" id="saveMat">Salvar material</button><button class="secondary" id="clearMat">Limpar</button>
+</div>
+<div class="card"><h3>Materiais cadastrados</h3><input id="matSearch" placeholder="🔎 Buscar código, descrição, local"><div id="matList"></div></div>
+</section>
+
+<section id="mov" class="tab hidden">
+<div class="card"><h2>Movimentação de estoque</h2>
+<div class="grid"><button id="entry" class="green">➕ ENTRADA</button><button id="exit" class="red">➖ SAÍDA</button></div>
+<label>Código do material</label>
+<div class="scanRow"><input id="mcode" placeholder="Digite ou escaneie o código"><button type="button" id="scanMovement" class="scanBtn">📷 Escanear</button></div>
+<div id="scannerMovement" class="scannerBox hidden"><video id="videoMovement" class="scannerVideo" autoplay playsinline></video><button type="button" id="stopMovement" class="secondary">Parar câmera</button><div class="notice">Aponte a câmera para o código de barras.</div></div>
+<div id="mInfo" class="notice"></div>
+<label>Quantidade</label><input id="mqty" type="number" min="1" value="1">
+<div class="grid"><div><label>Data</label><input id="mdate" type="date"></div><div><label>Responsável</label><select id="employee"></select></div></div>
+<div class="grid"><div><label>Local de aplicação</label><select id="application"></select></div><div><label>TUE / composição</label><input id="tue" placeholder="Ex.: 4013x4014"></div></div>
+<div class="grid"><div><label>Ordem de serviço</label><input id="os" placeholder="Ex.: OS-12345"></div><div><label>Motivo</label><select id="reason"><option>Manutenção preventiva</option><option>Manutenção corretiva</option><option>Reparo</option><option>Requisição de estoque</option><option>Inventário</option><option>Outro</option></select></div></div>
+<label>Observação</label><textarea id="note" rows="2"></textarea>
+<button id="saveMove">Registrar movimentação</button>
+</div>
+<div class="card"><h3>Histórico</h3><input id="moveSearch" placeholder="🔎 Buscar por TUE, material, responsável ou OS"><div id="history"></div></div>
+</section>
+
+<section id="invent" class="tab hidden">
+<div class="card"><h2>Inventário</h2><p class="notice">Informe a quantidade física. O sistema registra automaticamente o ajuste.</p><div id="inventory"></div></div>
+</section>
+
+<section id="cad" class="tab hidden">
+<div class="card"><h2>Funcionários</h2>
+<div class="grid"><input id="empName" placeholder="Nome completo"><select id="empRole"><option>Almoxarife</option><option>Manutenção</option><option>Supervisor</option><option>Engenharia</option><option>Administrador</option></select></div>
+<button id="saveEmp" class="green">Cadastrar funcionário</button><div id="empList"></div>
+</div>
+<div class="card"><h2>Locais de aplicação</h2>
+<div class="grid"><input id="locName" placeholder="Ex.: Oficina de Deodoro"><select id="locType"><option>Oficina</option><option>Seção</option><option>Almoxarifado</option><option>TUE</option><option>Outro</option></select></div>
+<button id="saveLoc" class="green">Cadastrar local</button><div id="locList"></div>
+</div>
+</section>
+
+<section id="rel" class="tab hidden">
+<div class="card"><h2>Relatórios de consumo</h2>
+<div class="grid"><div><label>Período inicial</label><input id="rStart" type="date"></div><div><label>Período final</label><input id="rEnd" type="date"></div></div>
+<div class="grid"><select id="rType"><option value="">Todas as movimentações</option><option>SAÍDA</option><option>ENTRADA</option></select><input id="rTue" placeholder="Filtrar TUE"></div>
+<button id="runReport">Gerar relatório</button><button id="exportReport" class="green">⬇️ Exportar relatório CSV</button>
+<div id="report"></div>
+</div>
+</section>
+
+<section id="dados" class="tab hidden">
+<div class="card"><h2>Backup e dados</h2>
+<button id="backup">💾 Fazer backup completo</button><label>Restaurar backup JSON</label><input id="restore" type="file" accept=".json">
+<button id="exportAll">⬇️ Exportar movimentações CSV</button><button id="wipe" class="red">Apagar todos os dados</button>
+<p class="notice">Esta versão funciona localmente. A estrutura está preparada para a próxima etapa de sincronização em nuvem.</p>
+</div></section>
+</main>
+
+<script>
+const KEY='almox_v4';let db=JSON.parse(localStorage.getItem(KEY)||'{"materials":{},"moves":[],"employees":[],"locations":[]}');let type='SAÍDA',lastReport=[];
+const $=id=>document.getElementById(id);$('mdate').value=today();$('rStart').value=today();$('rEnd').value=today();
+function today(){return new Date().toISOString().slice(0,10)}function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function tab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('nav button[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));render()}
+document.querySelectorAll('nav button[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+function render(){
+let ms=Object.values(db.materials);$('nMat').textContent=ms.length;$('nQty').textContent=ms.reduce((s,m)=>s+Number(m.stock),0);$('nLow').textContent=ms.filter(m=>m.stock<=m.min).length;
+$('alerts').innerHTML=ms.filter(m=>m.stock<=m.min).map(m=>`<div class=item><b>${esc(m.desc)}</b><div class=muted>${esc(m.code)} · ${m.stock} ${m.unit} · mínimo ${m.min} · local ${esc(m.shelf)}</div></div>`).join('')||'<p class=muted>Nenhum material abaixo do mínimo.</p>';
+$('recent').innerHTML=db.moves.slice().reverse().slice(0,8).map(moveHTML).join('')||'<p class=muted>Sem movimentações.</p>';
+let q=$('matSearch').value.toLowerCase();$('matList').innerHTML=ms.filter(m=>(m.code+m.desc+m.shelf).toLowerCase().includes(q)).map(m=>`<div class=item>${m.photo?`<img class="photoPreview" src="${m.photo}" alt="Foto do material">`:``}<b>${esc(m.desc)}</b><div class=muted>Código: ${esc(m.code)} · ${m.stock} ${m.unit} · Estoque mínimo: ${m.min}</div><div class=muted>Local: ${esc(m.shelf)} · Fornecedor: ${esc(m.supplier||'-')}</div><span class="badge ${m.stock<=m.min?'low':'ok'}">${m.stock<=m.min?'REPOR':'OK'}</span></div>`).join('')||'<p class=muted>Nenhum material.</p>';
+let q2=$('moveSearch').value.toLowerCase();$('history').innerHTML=db.moves.slice().reverse().filter(m=>(m.code+m.desc+m.tue+m.user+m.os+m.loc).toLowerCase().includes(q2)).map(moveHTML).join('');
+$('employee').innerHTML='<option value="">Selecione</option>'+db.employees.map((e,i)=>`<option value="${i}">${esc(e.name)} — ${esc(e.role)}</option>`).join('');
+$('application').innerHTML='<option value="">Selecione</option>'+db.locations.map((l,i)=>`<option value="${i}">${esc(l.name)} — ${esc(l.type)}</option>`).join('');
+$('inventory').innerHTML=ms.map(m=>`<div class=item><b>${esc(m.desc)}</b><div class=muted>${esc(m.code)} · sistema: ${m.stock} ${m.unit} · local: ${esc(m.shelf)}</div><div class=grid><input id="phys_${encodeURIComponent(m.code)}" type=number min=0 value="${m.stock}"><button onclick="adjust('${encodeURIComponent(m.code)}')">Ajustar</button></div></div>`).join('');
+$('empList').innerHTML=db.employees.map((e,i)=>`<div class=item><b>${esc(e.name)}</b><div class=muted>${esc(e.role)}</div><button class=red onclick="delEmp(${i})">Excluir</button></div>`).join('');
+$('locList').innerHTML=db.locations.map((l,i)=>`<div class=item><b>${esc(l.name)}</b><div class=muted>${esc(l.type)}</div><button class=red onclick="delLoc(${i})">Excluir</button></div>`).join('');
+}
+function moveHTML(m){return `<div class=item><b>${esc(m.type)} — ${esc(m.desc||m.code)}</b><div class=muted>${m.date} · Qtd. ${m.qty} · Código: ${esc(m.code)}</div><div class=muted>Responsável: ${esc(m.user||'-')} · Aplicação: ${esc(m.loc||'-')} · TUE: ${esc(m.tue||'-')}</div><div class=muted>OS: ${esc(m.os||'-')} · ${esc(m.reason||'')}</div>${m.note?`<div class=muted>Obs.: ${esc(m.note)}</div>`:''}</div>`}
+$('entry').onclick=()=>{type='ENTRADA';$('mInfo').textContent='Modo ENTRADA';};$('exit').onclick=()=>{type='SAÍDA';$('mInfo').textContent='Modo SAÍDA';};
+function fillMovementFromCode(){
+ let code=$('mcode').value.trim(),m=db.materials[code];
+ if(m){
+   $('mInfo').innerHTML=`<b>${esc(m.desc)}</b> · Saldo atual: ${m.stock} ${m.unit} · Local: ${esc(m.shelf||'-')}`;
+   $('mloc').value=m.shelf||'';
+ }else{
+   $('mInfo').textContent=code?'Código não cadastrado. Cadastre o material primeiro.':'';
+ }
+}
+$('mcode').oninput=fillMovementFromCode;
+let photoData='';
+$('photo').onchange=e=>{
+ const file=e.target.files[0];
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{$('photoPreview').src=reader.result;$('photoPreview').classList.remove('hidden');photoData=reader.result};
+ reader.readAsDataURL(file);
+};
+$('saveMat').onclick=()=>{let c=$('code').value.trim(),d=$('desc').value.trim();if(!c||!d)return alert('Informe código e descrição.');let m=db.materials[c]||{code:c,stock:0};Object.assign(m,{desc:d,unit:$('unit').value,min:Number($('min').value)||0,shelf:$('shelf').value.trim(),supplier:$('supplier').value.trim()});if(photoData)m.photo=photoData;db.materials[c]=m;save();alert('Material cadastrado com foto.')}
+$('clearMat').onclick=()=>{['code','desc','shelf','supplier'].forEach(x=>$(x).value='');$('photo').value='';photoData='';$('photoPreview').src='';$('photoPreview').classList.add('hidden')};
+
+let activeStream=null, activeScanning=false;
+
+async function startBarcodeScanner(videoId, boxId, targetId, onRead){
+ if(!('BarcodeDetector' in window) || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+   alert('Seu navegador não oferece leitura automática de código de barras. No Android, use Chrome atualizado ou digite o código manualmente.');
+   return;
+ }
+ try{
+   const detector=new BarcodeDetector({formats:['code_128','ean_13','ean_8','upc_a','upc_e','itf','code_39','codabar']});
+   activeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+   const video=$(videoId);
+   video.srcObject=activeStream;
+   $(boxId).classList.remove('hidden');
+   activeScanning=true;
+
+   const scanLoop=async()=>{
+     if(!activeScanning)return;
+     try{
+       const codes=await detector.detect(video);
+       if(codes.length){
+         const value=codes[0].rawValue;
+         $(targetId).value=value;
+         onRead(value);
+         stopBarcodeScanner(boxId);
+         return;
+       }
+     }catch(e){}
+     requestAnimationFrame(scanLoop);
+   };
+   scanLoop();
+ }catch(err){
+   alert('Não foi possível acessar a câmera. Autorize o acesso à câmera e tente novamente.');
+ }
+}
+
+function stopBarcodeScanner(boxId){
+ activeScanning=false;
+ if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null;}
+ $(boxId).classList.add('hidden');
+}
+
+$('scanMaterial').onclick=()=>startBarcodeScanner('videoMaterial','scannerMaterial','code',()=>{
+ const m=db.materials[$('code').value.trim()];
+ if(m){
+   $('desc').value=m.desc;
+   $('unit').value=m.unit;
+   $('min').value=m.min;
+   $('shelf').value=m.shelf||'';
+   $('supplier').value=m.supplier||'';
+   if(m.photo){$('photoPreview').src=m.photo;$('photoPreview').classList.remove('hidden');photoData=m.photo;}
+ }else{
+   $('desc').focus();
+ }
+});
+$('stopMaterial').onclick=()=>stopBarcodeScanner('scannerMaterial');
+
+$('scanMovement').onclick=()=>startBarcodeScanner('videoMovement','scannerMovement','mcode',fillMovementFromCode);
+$('stopMovement').onclick=()=>stopBarcodeScanner('scannerMovement');
+
+$('saveMove').onclick=()=>{let c=$('mcode').value.trim(),m=db.materials[c],q=Number($('mqty').value);if(!m)return alert('Cadastre o material primeiro.');if(q<1)return alert('Quantidade inválida.');if(type==='SAÍDA'&&q>m.stock)return alert(`Estoque insuficiente. Saldo: ${m.stock} ${m.unit}`);let ei=$('employee').value,li=$('application').value;m.stock+=type==='ENTRADA'?q:-q;db.moves.push({type,code:c,desc:m.desc,qty:q,date:$('mdate').value,user:ei!==''?db.employees[ei].name:'',role:ei!==''?db.employees[ei].role:'',loc:li!==''?db.locations[li].name:m.shelf,tue:$('tue').value.trim(),os:$('os').value.trim(),reason:$('reason').value,note:$('note').value.trim()});save();alert('Movimentação registrada.')}
+window.adjust=c=>{let code=decodeURIComponent(c),m=db.materials[code],v=Number($('phys_'+encodeURIComponent(code)).value),old=m.stock;if(v<0)return;let diff=v-old;if(diff){m.stock=v;db.moves.push({type:'AJUSTE',code,desc:m.desc,qty:Math.abs(diff),date:today(),user:'Inventário',loc:m.shelf,tue:'',os:'',reason:'Inventário',note:`Saldo ajustado de ${old} para ${v}`});save()}};
+window.delEmp=i=>{if(confirm('Excluir funcionário?')){db.employees.splice(i,1);save()}};window.delLoc=i=>{if(confirm('Excluir local?')){db.locations.splice(i,1);save()}};
+$('saveEmp').onclick=()=>{let n=$('empName').value.trim();if(!n)return;db.employees.push({name:n,role:$('empRole').value});$('empName').value='';save()};
+$('saveLoc').onclick=()=>{let n=$('locName').value.trim();if(!n)return;db.locations.push({name:n,type:$('locType').value});$('locName').value='';save()};
+$('matSearch').oninput=render;$('moveSearch').oninput=render;
+function report(){let s=$('rStart').value,e=$('rEnd').value,t=$('rType').value,u=$('rTue').value.toLowerCase();lastReport=db.moves.filter(m=>(!s||m.date>=s)&&(!e||m.date<=e)&&(!t||m.type===t)&&(!u||m.tue.toLowerCase().includes(u)));let map={};lastReport.forEach(m=>{let k=m.code;map[k]??={desc:m.desc,code:k,q:0};map[k].q+=m.type==='SAÍDA'?m.qty:-m.qty});$('report').innerHTML=`<p class=notice>${lastReport.length} movimentações encontradas.</p><table><tr><th>Código</th><th>Descrição</th><th>Consumo líquido</th></tr>${Object.values(map).map(x=>`<tr><td>${esc(x.code)}</td><td>${esc(x.desc)}</td><td>${x.q}</td></tr>`).join('')}</table>`}
+$('runReport').onclick=report;
+$('exportReport').onclick=()=>csv(lastReport,'relatorio_consumo.csv');
+$('exportAll').onclick=()=>csv(db.moves,'movimentacoes_estoque.csv');
+function csv(arr,name){let rows=[['Tipo','Data','Código','Descrição','Quantidade','Responsável','Local','TUE','OS','Motivo','Observação'],...arr.map(m=>[m.type,m.date,m.code,m.desc,m.qty,m.user,m.loc,m.tue,m.os,m.reason,m.note])];let text=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')).join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\\ufeff'+text],{type:'text/csv'}));a.download=name;a.click()}
+$('backup').onclick=()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='backup_almoxarifado.json';a.click()};
+$('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();alert('Backup restaurado.')}catch(x){alert('Arquivo inválido.')}};r.readAsText(f)};
+$('wipe').onclick=()=>{if(confirm('APAGAR TODOS OS DADOS? Faça backup antes.')){db={materials:{},moves:[],employees:[],locations:[]};save()}};
+render();
+</script>
+<script src="config.js"></script>
+<script>
+const CFG=window.ESTOQUE_CONFIG||{};
+let cloud=null, cloudUser=null;
+async function initCloud(){
+ if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY){
+  $('cloudStatus').textContent='Modo local — preencha config.js para ativar a nuvem';
+  $('cloudMsg').textContent='O aplicativo funciona localmente até a configuração do Supabase.';
+  return;
+ }
+ cloud=supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
+ const {data:{session}}=await cloud.auth.getSession();
+ if(session){cloudUser=session.user; $('cloudLogin').classList.add('hidden'); await syncCloud();}
+}
+$('cloudLoginBtn').onclick=async()=>{
+ if(!cloud)return $('cloudMsg').textContent='Configure o Supabase primeiro.';
+ const {data,error}=await cloud.auth.signInWithPassword({email:$('cloudEmail').value,password:$('cloudPass').value});
+ if(error)return $('cloudMsg').textContent=error.message;
+ cloudUser=data.user;$('cloudLogin').classList.add('hidden');await syncCloud();
+};
+$('cloudSignupBtn').onclick=async()=>{
+ if(!cloud)return $('cloudMsg').textContent='Configure o Supabase primeiro.';
+ const {error}=await cloud.auth.signUp({email:$('cloudEmail').value,password:$('cloudPass').value});
+ $('cloudMsg').textContent=error?error.message:'Conta criada. Confirme o e-mail se necessário.';
+};
+$('cloudLogout').onclick=async()=>{if(cloud)await cloud.auth.signOut();location.reload()};
+$('cloudSync').onclick=syncCloud;
+
+async function syncCloud(){
+ if(!cloud||!cloudUser)return;
+ $('cloudStatus').textContent='Sincronizando...';
+ const [a,b,c,d]=await Promise.all([
+  cloud.from('materials').select('*').order('description'),
+  cloud.from('employees').select('*').eq('active',true).order('name'),
+  cloud.from('locations').select('*').eq('active',true).order('name'),
+  cloud.from('movement_history').select('*').order('created_at',{ascending:false}).limit(500)
+ ]);
+ if(a.error){$('cloudStatus').textContent=a.error.message;return}
+ db.materials={};(a.data||[]).forEach(m=>db.materials[m.code]=m);
+ db.employees=(b.data||[]);db.locations=(c.data||[]);db.moves=(d.data||[]);
+ persist();$('cloudStatus').textContent='☁️ Sincronizado — '+new Date().toLocaleString('pt-BR');
+}
+
+const oldSaveMat=$('saveMat').onclick;
+$('saveMat').onclick=async()=>{
+ if(!cloud||!cloudUser)return oldSaveMat();
+ const c=$('code').value.trim(),d=$('desc').value.trim();
+ if(!c||!d)return alert('Informe código e descrição.');
+ const m=db.materials[c]||{code:c,stock:0};
+ Object.assign(m,{desc:d,unit:$('unit').value,min:Number($('min').value)||0,shelf:$('shelf').value.trim(),supplier:$('supplier').value.trim(),photo:photoData||m.photo||null});
+ const {error}=await cloud.from('materials').upsert({
+  code:m.code,description:m.desc,unit:m.unit,min_stock:m.min,stock:m.stock,shelf:m.shelf||'',supplier:m.supplier||'',photo:m.photo||null
+ },{onConflict:'code'});
+ if(error)return alert(error.message);
+ await syncCloud();alert('Material salvo na nuvem.');
+};
+
+const oldSaveMove=$('saveMove').onclick;
+$('saveMove').onclick=async()=>{
+ if(!cloud||!cloudUser)return oldSaveMove();
+ const code=$('mcode').value.trim(),m=db.materials[code],q=Number($('mqty').value);
+ if(!m)return alert('Cadastre o material primeiro.');
+ if(q<1)return alert('Quantidade inválida.');
+ if(moveType==='SAÍDA'&&q>m.stock)return alert('Estoque insuficiente.');
+ const ei=$('employee').value,li=$('application').value;
+ const emp=ei!==''?db.employees[ei]:null,loc=li!==''?db.locations[li]:null;
+ const {error}=await cloud.rpc('register_movement',{
+  p_type:moveType,p_material_id:m.id,p_quantity:q,p_employee_id:emp?.id||null,
+  p_location_id:loc?.id||null,p_tue:$('tue').value.trim(),p_work_order:$('os').value.trim(),
+  p_reason:$('reason').value,p_note:$('note').value.trim()
+ });
+ if(error)return alert(error.message);
+ await syncCloud();alert('Movimentação registrada na nuvem.');
+};
+
+initCloud();
+</script></body></html>
