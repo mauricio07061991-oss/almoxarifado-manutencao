@@ -1,4 +1,4 @@
 window.CONFIGURACAO_DE_ESTOQUE = {
-  SUPABASE_URL: 
-  SUPABASE_ANON_KEY: 
+  SUPABASE_URL: "https://hosmrevndhyjvcxxpoxd.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_dBQyCJ4Cocu6xXHF23s0BA_Q5uUJ--t"
 };
