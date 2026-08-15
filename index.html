@@ -238,7 +238,75 @@ render();
 </script>
 <script src="config.js"></script>
 <script>
-const CFG = window.CONFIGURACAO_DE_ESTOQUE || window.ESTOQUE_CONFIG || {};
+const CFG = window.CONFIGURACAO_DE_ESTOQUE;
+
+let cloud = null;
+let cloudUser = null;
+
+async function initCloud() {
+
+  if (
+    !CFG ||
+    !CFG.SUPABASE_URL ||
+    !CFG.SUPABASE_ANON_KEY ||
+    CFG.SUPABASE_URL.includes("SUA_URL") ||
+    CFG.SUPABASE_ANON_KEY.includes("SUA_CHAVE")
+  ) {
+    document.getElementById("cloudStatus").textContent =
+      "Supabase não configurado";
+
+    document.getElementById("cloudMsg").textContent =
+      "Verifique o arquivo config.js.";
+
+    return;
+  }
+
+  try {
+
+    cloud = supabase.createClient(
+      CFG.SUPABASE_URL,
+      CFG.SUPABASE_ANON_KEY
+    );
+
+    const { data, error } =
+      await cloud.auth.getSession();
+
+    if (error) {
+      document.getElementById("cloudMsg").textContent =
+        error.message;
+
+      return;
+    }
+
+    if (data.session) {
+      cloudUser = data.session.user;
+
+      document.getElementById("cloudLogin").classList.add("hidden");
+
+      document.getElementById("cloudUser").textContent =
+        cloudUser.email || "";
+
+      document.getElementById("cloudLogout").classList.remove("hidden");
+    }
+
+    document.getElementById("cloudStatus").textContent =
+      "Supabase conectado";
+
+    document.getElementById("cloudMsg").textContent =
+      "Sistema conectado à nuvem.";
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    document.getElementById("cloudStatus").textContent =
+      "Erro na conexão";
+
+    document.getElementById("cloudMsg").textContent =
+      erro.message || "Não foi possível conectar ao Supabase.";
+  }
+}
+</script>
 let cloud=null, cloudUser=null;
 async function initCloud(){
  const CFG = window.CONFIGURACAO_DE_ESTOQUE || window.ESTOQUE_CONFIG || {};
