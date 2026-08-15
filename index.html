@@ -237,7 +237,7 @@ render();
 const CFG = window.CONFIGURACAO_DE_ESTOQUE || window.ESTOQUE_CONFIG || {};
 let cloud=null, cloudUser=null;
 async function initCloud(){
- if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY){
+ const CFG = window.CONFIGURACAO_DE_ESTOQUE || window.ESTOQUE_CONFIG || {};
   $('cloudStatus').textContent='Modo local — preencha config.js para ativar a nuvem';
   $('cloudMsg').textContent='O aplicativo funciona localmente até a configuração do Supabase.';
   return;
