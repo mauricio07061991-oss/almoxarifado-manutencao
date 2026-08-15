@@ -234,7 +234,7 @@ render();
 </script>
 <script src="config.js"></script>
 <script>
-const CFG=window.ESTOQUE_CONFIG||{};
+const CFG = window.CONFIGURACAO_DE_ESTOQUE || window.ESTOQUE_CONFIG || {};
 let cloud=null, cloudUser=null;
 async function initCloud(){
  if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY){
