@@ -11,60 +11,60 @@
 <script src="config.js"></script>
 
 <style>
-*{
-  box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:Arial,sans-serif;
   background:#eef2f7;
-  color:#172033
+  color:#172033;
 }
 
 header{
   background:#0f172a;
   color:#fff;
-  padding:18px
+  padding:20px 16px;
 }
 
 header h1{
   margin:0;
-  font-size:24px
+  font-size:24px;
 }
 
 header p{
-  margin:6px 0 0;
-  color:#cbd5e1
+  margin:7px 0 0;
+  color:#cbd5e1;
 }
 
 main{
-  max-width:1000px;
+  max-width:1100px;
   margin:auto;
-  padding:16px
+  padding:16px;
 }
 
 .card{
   background:#fff;
-  border-radius:14px;
+  border-radius:16px;
   padding:18px;
   margin-bottom:16px;
-  box-shadow:0 2px 10px #00000012
+  box-shadow:0 3px 14px #00000012;
 }
 
 h2{
-  margin-top:0
+  margin-top:0;
 }
 
-input,
-select,
-button{
+input,select,button{
   width:100%;
-  padding:12px;
-  border-radius:9px;
+  padding:13px;
+  border-radius:10px;
   border:1px solid #cbd5e1;
   font-size:15px;
-  margin-top:8px
+  margin-top:8px;
+}
+
+input:focus,select:focus{
+  outline:2px solid #94a3b8;
 }
 
 button{
@@ -72,112 +72,182 @@ button{
   color:#fff;
   border:0;
   font-weight:bold;
-  cursor:pointer
+  cursor:pointer;
 }
 
 button.secondary{
   background:#e2e8f0;
-  color:#172033
+  color:#172033;
+}
+
+button.success{
+  background:#166534;
+}
+
+button.danger{
+  background:#991b1b;
 }
 
 .grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px
+  gap:12px;
 }
 
 .stat{
   background:#f8fafc;
-  border-radius:12px;
-  padding:18px;
-  text-align:center
+  border-radius:14px;
+  padding:20px;
+  text-align:center;
 }
 
 .stat b{
   display:block;
-  font-size:28px;
-  margin-bottom:5px
+  font-size:30px;
+  margin-bottom:5px;
 }
 
 .tabs{
   display:flex;
   gap:8px;
-  overflow:auto;
-  margin-bottom:16px
+  overflow-x:auto;
+  margin-bottom:16px;
 }
 
 .tabs button{
   width:auto;
-  white-space:nowrap
+  white-space:nowrap;
+  padding:13px 18px;
 }
 
 .tabs button.active{
   background:#0f172a;
-  color:#fff
+  color:#fff;
 }
 
 table{
   width:100%;
-  border-collapse:collapse
+  border-collapse:collapse;
 }
 
-th,
-td{
-  padding:10px;
+th,td{
+  padding:11px 9px;
   border-bottom:1px solid #e2e8f0;
-  text-align:left
+  text-align:left;
+  white-space:nowrap;
 }
 
 th{
-  background:#f8fafc
+  background:#f8fafc;
 }
 
 .hidden{
-  display:none!important
+  display:none!important;
 }
 
 .msg{
-  padding:10px;
-  border-radius:8px;
+  padding:12px;
+  border-radius:10px;
   background:#f1f5f9;
-  margin-top:10px
+  margin-top:10px;
 }
 
-.danger{
+.danger-msg{
   background:#fee2e2;
-  color:#991b1b
+  color:#991b1b;
 }
 
-.success{
+.success-msg{
   background:#dcfce7;
-  color:#166534
-}
-
-.status-baixo{
-  color:#b91c1c;
-  font-weight:bold
-}
-
-.status-ok{
   color:#166534;
-  font-weight:bold
+}
+
+.warning-msg{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.user-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.user-box button{
+  width:auto;
+  min-width:100px;
+  margin:0;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.badge-ok{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge-baixo{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge-entrada{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge-saida{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.form-title{
+  margin-bottom:5px;
+}
+
+.small{
+  font-size:13px;
+  color:#64748b;
+}
+
+hr{
+  border:0;
+  border-top:1px solid #e2e8f0;
+  margin:22px 0;
 }
 
 @media(max-width:700px){
+
   .grid{
-    grid-template-columns:1fr
+    grid-template-columns:1fr;
   }
 
   .card{
-    padding:14px
-  }
-
-  table{
-    font-size:13px
+    padding:15px;
   }
 
   header h1{
-    font-size:20px
+    font-size:21px;
+  }
+
+  table{
+    font-size:13px;
+  }
+
+  .user-box{
+    display:block;
+  }
+
+  .user-box button{
+    width:100%;
+    margin-top:10px;
   }
 }
 </style>
@@ -192,6 +262,8 @@ th{
 
 <main>
 
+<!-- LOGIN -->
+
 <section id="loginCard" class="card">
 
   <h2>🔐 Acesso ao estoque</h2>
@@ -200,12 +272,14 @@ th{
     id="email"
     type="email"
     placeholder="E-mail"
+    autocomplete="email"
   >
 
   <input
     id="senha"
     type="password"
     placeholder="Senha"
+    autocomplete="current-password"
   >
 
   <button id="entrar">
@@ -221,39 +295,47 @@ th{
 </section>
 
 
+<!-- SISTEMA -->
+
 <section id="app" class="hidden">
 
   <div class="card">
 
-    <strong id="usuario"></strong>
+    <div class="user-box">
 
-    <button id="sair" class="secondary">
-      Sair
-    </button>
+      <strong id="usuario">
+        👤 Usuário
+      </strong>
+
+      <button id="sair" class="secondary">
+        Sair
+      </button>
+
+    </div>
 
   </div>
 
+
+  <!-- ABAS -->
 
   <div class="tabs">
 
     <button
       class="active"
-      data-tab="resumo">
+      data-tab="resumo"
+    >
       Resumo
     </button>
 
-    <button
-      data-tab="materiais">
+    <button data-tab="materiais">
       Materiais
     </button>
 
-    <button
-      data-tab="movimentos">
+    <button data-tab="movimentos">
       Entrada/Saída
     </button>
 
-    <button
-      data-tab="inventario">
+    <button data-tab="inventario">
       Inventário
     </button>
 
@@ -264,7 +346,8 @@ th{
 
   <section
     id="resumo"
-    class="tab card">
+    class="tab card"
+  >
 
     <h2>Visão geral</h2>
 
@@ -287,9 +370,8 @@ th{
 
     </div>
 
-    <div
-      id="alertas"
-      class="msg">
+    <div id="alertas" class="msg">
+      Carregando estoque...
     </div>
 
   </section>
@@ -299,9 +381,10 @@ th{
 
   <section
     id="materiais"
-    class="tab card hidden">
+    class="tab card hidden"
+  >
 
-    <h2>Cadastro de material</h2>
+    <h2>📦 Cadastro de material</h2>
 
     <input
       id="codigo"
@@ -322,7 +405,6 @@ th{
       id="minimo"
       type="number"
       min="0"
-      step="0.01"
       placeholder="Estoque mínimo"
     >
 
@@ -335,25 +417,20 @@ th{
     <hr>
 
     <h2>Materiais cadastrados</h2>
-    <input
-  id="pesquisaMaterial"
-  type="search"
-  placeholder="🔎 Pesquisar por código ou descrição..."
->
 
     <div style="overflow:auto">
 
       <table>
 
         <thead>
-
           <tr>
             <th>Código</th>
             <th>Descrição</th>
+            <th>Unidade</th>
             <th>Estoque</th>
             <th>Mínimo</th>
+            <th>Status</th>
           </tr>
-
         </thead>
 
         <tbody id="listaMateriais"></tbody>
@@ -369,18 +446,16 @@ th{
 
   <section
     id="movimentos"
-    class="tab card hidden">
+    class="tab card hidden"
+  >
 
-    <h2>Registrar entrada ou saída</h2>
+    <h2>🔄 Registrar entrada ou saída</h2>
 
     <select id="materialMovimento">
-
       <option value="">
         Selecione o material
       </option>
-
     </select>
-
 
     <select id="tipoMovimento">
 
@@ -394,7 +469,6 @@ th{
 
     </select>
 
-
     <input
       id="quantidade"
       type="number"
@@ -403,18 +477,15 @@ th{
       placeholder="Quantidade"
     >
 
-
     <input
       id="tue"
       placeholder="TUE / composição (opcional)"
     >
 
-
     <input
       id="observacao"
       placeholder="Observação (opcional)"
     >
-
 
     <button id="registrarMovimento">
       Registrar movimento
@@ -438,6 +509,7 @@ th{
             <th>Material</th>
             <th>Qtd.</th>
             <th>TUE</th>
+            <th>Observação</th>
           </tr>
 
         </thead>
@@ -455,9 +527,10 @@ th{
 
   <section
     id="inventario"
-    class="tab card hidden">
+    class="tab card hidden"
+  >
 
-    <h2>Inventário</h2>
+    <h2>📋 Inventário</h2>
 
     <div style="overflow:auto">
 
@@ -470,6 +543,7 @@ th{
             <th>Descrição</th>
             <th>Unidade</th>
             <th>Estoque</th>
+            <th>Mínimo</th>
             <th>Status</th>
           </tr>
 
@@ -490,7 +564,11 @@ th{
 
 <script>
 
-(() => {
+(()=>{
+
+  /* =========================
+     CONFIGURAÇÃO
+  ========================= */
 
   const cfg =
     window.CONFIGURACAO_DE_ESTOQUE || {};
@@ -502,8 +580,10 @@ th{
   const supabaseKey =
     cfg.SUPABASE_ANON_KEY;
 
-  const $ =
-    id => document.getElementById(id);
+
+  const $ = id =>
+    document.getElementById(id);
+
 
   let sb = null;
 
@@ -512,27 +592,41 @@ th{
   let movimentos = [];
 
 
-  function msg(id,text,ok=false){
+  /* =========================
+     MENSAGENS
+  ========================= */
+
+  function msg(id,text,tipo="danger"){
 
     const elemento = $(id);
 
     if(!elemento) return;
 
     elemento.className =
-      'msg ' +
-      (ok ? 'success' : 'danger');
+      "msg " +
+      (
+        tipo === "success"
+        ? "success-msg"
+        :
+        tipo === "warning"
+        ? "warning-msg"
+        :
+        "danger-msg"
+      );
 
     elemento.textContent = text;
   }
 
 
-  /* VERIFICA CONFIGURAÇÃO */
+  /* =========================
+     CONFIGURAÇÃO
+  ========================= */
 
   if(!supabaseUrl || !supabaseKey){
 
     msg(
-      'loginMsg',
-      'Configuração do Supabase não encontrada. Verifique o arquivo config.js.'
+      "loginMsg",
+      "Configuração do Supabase não encontrada. Verifique o arquivo config.js."
     );
 
     return;
@@ -546,76 +640,80 @@ th{
     );
 
 
-  /* SESSÃO */
+  /* =========================
+     SESSÃO
+  ========================= */
 
   async function atualizarSessao(){
 
     const {
-      data:{
-        session
-      }
+      data:{session}
     } =
       await sb.auth.getSession();
 
 
     if(session){
 
-      $('loginCard')
+      $("loginCard")
         .classList
-        .add('hidden');
+        .add("hidden");
 
-      $('app')
+      $("app")
         .classList
-        .remove('hidden');
+        .remove("hidden");
 
-      $('usuario').textContent =
-        '👤 ' +
-        (session.user.email || '');
+      $("usuario").textContent =
+        "👤 " +
+        (session.user.email || "Usuário");
 
       await carregarTudo();
 
     }else{
 
-      $('loginCard')
+      $("loginCard")
         .classList
-        .remove('hidden');
+        .remove("hidden");
 
-      $('app')
+      $("app")
         .classList
-        .add('hidden');
+        .add("hidden");
 
     }
 
   }
 
 
-  /* LOGIN */
+  /* =========================
+     LOGIN
+  ========================= */
 
   async function entrar(){
 
     const email =
-      $('email').value.trim();
+      $("email")
+      .value
+      .trim();
 
     const senha =
-      $('senha').value;
+      $("senha")
+      .value;
 
 
     if(!email || !senha){
 
-      return msg(
-        'loginMsg',
-        'Informe e-mail e senha.'
+      msg(
+        "loginMsg",
+        "Informe e-mail e senha."
       );
 
+      return;
     }
 
 
-    const {
-      error
-    } =
+    const {error} =
       await sb.auth.signInWithPassword({
 
-        email,
+        email:email,
 
         password:senha
 
@@ -624,48 +722,57 @@ th{
 
     if(error){
 
-      return msg(
-        'loginMsg',
+      msg(
+        "loginMsg",
         error.message
       );
 
+      return;
     }
 
 
-    $('loginMsg').textContent='';
+    $("loginMsg").textContent =
+      "";
 
     await atualizarSessao();
 
   }
 
 
-  /* CRIAR CONTA */
+  /* =========================
+     CRIAR CONTA
+  ========================= */
 
   async function criarConta(){
 
     const email =
-      $('email').value.trim();
+      $("email")
+      .value
+      .trim();
 
     const senha =
-      $('senha').value;
+      $("senha")
+      .value;
 
 
-    if(!email || senha.length < 6){
+    if(
+      !email ||
+      senha.length < 6
+    ){
 
-      return msg(
-        'loginMsg',
-        'Informe um e-mail e uma senha com pelo menos 6 caracteres.'
+      msg(
+        "loginMsg",
+        "Informe um e-mail e uma senha com pelo menos 6 caracteres."
       );
 
+      return;
     }
 
 
-    const {
-      error
-    } =
+    const {error} =
       await sb.auth.signUp({
 
-        email,
+        email:email,
 
         password:senha
 
@@ -674,24 +781,27 @@ th{
 
     if(error){
 
-      return msg(
-        'loginMsg',
+      msg(
+        "loginMsg",
         error.message
       );
 
+      return;
     }
 
 
     msg(
-      'loginMsg',
-      'Conta criada. Se o Supabase solicitar confirmação por e-mail, confirme antes de entrar.',
-      true
+      "loginMsg",
+      "Conta criada. Se o Supabase solicitar confirmação por e-mail, confirme antes de entrar.",
+      "success"
     );
 
   }
 
 
-  /* CARREGAR TUDO */
+  /* =========================
+     CARREGAR TUDO
+  ========================= */
 
   async function carregarTudo(){
 
@@ -704,7 +814,9 @@ th{
   }
 
 
-  /* MATERIAIS */
+  /* =========================
+     MATERIAIS
+  ========================= */
 
   async function carregarMateriais(){
 
@@ -713,21 +825,22 @@ th{
       error
     } =
       await sb
-      .from('materiais')
-      .select('*')
-      .order('descricao');
+        .from("materiais")
+        .select("*")
+        .order("descricao");
 
 
     if(error){
 
       console.error(error);
 
-      return msg(
-        'materialMsg',
-        'Erro ao carregar materiais: ' +
+      msg(
+        "materialMsg",
+        "Erro ao carregar materiais: " +
         error.message
       );
 
+      return;
     }
 
 
@@ -737,92 +850,99 @@ th{
   }
 
 
-  /* CADASTRAR MATERIAL */
+  /* =========================
+     CADASTRAR MATERIAL
+  ========================= */
 
   async function salvarMaterial(){
 
     const codigo =
-      $('codigo')
+      $("codigo")
       .value
       .trim();
 
     const descricao =
-      $('descricao')
+      $("descricao")
       .value
       .trim();
 
     const unidade =
-      $('unidade')
+      $("unidade")
       .value
       .trim() ||
-      'UN';
+      "UN";
 
     const minimo =
       Number(
-        $('minimo').value || 0
+        $("minimo")
+        .value || 0
       );
 
 
     if(!codigo || !descricao){
 
-      return msg(
-        'materialMsg',
-        'Código e descrição são obrigatórios.'
+      msg(
+        "materialMsg",
+        "Código e descrição são obrigatórios."
       );
 
+      return;
     }
 
 
     if(minimo < 0){
 
-      return msg(
-        'materialMsg',
-        'O estoque mínimo não pode ser negativo.'
+      msg(
+        "materialMsg",
+        "O estoque mínimo não pode ser negativo."
       );
 
+      return;
     }
 
 
-    const {
-      error
-    } =
+    const {error} =
       await sb
-      .from('materiais')
-      .insert({
+        .from("materiais")
+        .insert({
 
-        codigo,
+          codigo,
+          descricao,
+          unidade,
+          quantidade:0,
+          minimo
 
-        descricao,
-
-        unidade,
-
-        quantidade:0,
-
-        minimo
-
-      });
+        });
 
 
     if(error){
 
-      return msg(
-        'materialMsg',
+      msg(
+        "materialMsg",
         error.message
       );
 
+      return;
     }
 
 
-    $('codigo').value='';
-    $('descricao').value='';
-    $('unidade').value='';
-    $('minimo').value='';
+    $("codigo").value =
+      "";
+
+    $("descricao").value =
+      "";
+
+    $("unidade").value =
+      "";
+
+    $("minimo").value =
+      "";
 
 
     msg(
-      'materialMsg',
-      'Material cadastrado com sucesso.',
-      true
+      "materialMsg",
+      "Material cadastrado com sucesso.",
+      "success"
     );
 
 
@@ -831,19 +951,24 @@ th{
   }
 
 
-  /* REGISTRAR MOVIMENTO */
+  /* =========================
+     REGISTRAR MOVIMENTO
+  ========================= */
 
   async function registrarMovimento(){
 
     const material_id =
-      $('materialMovimento').value;
+      $("materialMovimento")
+      .value;
 
     const tipo =
-      $('tipoMovimento').value;
+      $("tipoMovimento")
+      .value;
 
     const quantidade =
       Number(
-        $('quantidade').value
+        $("quantidade")
+        .value
       );
 
 
@@ -852,81 +977,119 @@ th{
       quantidade <= 0
     ){
 
-      return msg(
-        'movMsg',
-        'Selecione o material e informe uma quantidade válida.'
+      msg(
+        "movMsg",
+        "Selecione o material e informe uma quantidade válida."
       );
 
+      return;
+    }
+
+
+    const material =
+      materiais.find(
+        m => String(m.id) === String(material_id)
+      );
+
+
+    if(!material){
+
+      msg(
+        "movMsg",
+        "Material não encontrado."
+      );
+
+      return;
     }
 
 
     /*
-      IMPORTANTE:
+      BLOQUEIO NO FRONT-END
 
-      A tabela movimentos possui:
-
-      id
-      material_id
-      tipo
-      quantidade
-      tue
-      observacao
-      data
-
-      Portanto NÃO enviamos usuario_id.
+      O banco também deve continuar
+      protegendo o estoque através da
+      função processar_movimento().
     */
 
+    if(
+      tipo === "saida" &&
+      quantidade >
+      Number(material.quantidade || 0)
+    ){
+
+      msg(
+        "movMsg",
+        "Estoque insuficiente. Estoque atual: " +
+        Number(material.quantidade || 0) +
+        ", quantidade solicitada: " +
+        quantidade
+      );
+
+      return;
+    }
+
+
     const {
-      error
+      data:{user}
     } =
+      await sb.auth.getUser();
+
+
+    const {error} =
       await sb
-      .from('movimentos')
-      .insert({
+        .from("movimentos")
+        .insert({
 
-        material_id,
+          material_id,
 
-        tipo,
+          tipo,
 
-        quantidade,
+          quantidade,
 
-        tue:
-          $('tue')
-          .value
-          .trim() ||
-          null,
+          tue:
+            $("tue")
+            .value
+            .trim() ||
+            null,
 
-        observacao:
-          $('observacao')
-          .value
-          .trim() ||
-          null
+          observacao:
+            $("observacao")
+            .value
+            .trim() ||
+            null,
 
-      });
+          usuario_id:
+            user?.id ||
+            null
+
+        });
 
 
     if(error){
 
-      console.error(error);
-
-      return msg(
-        'movMsg',
+      msg(
+        "movMsg",
         error.message
       );
 
+      return;
     }
 
 
-    $('quantidade').value='';
+    $("quantidade").value =
+      "";
 
-    $('tue').value='';
+    $("tue").value =
+      "";
 
-    $('observacao').value='';
+    $("observacao").value =
+      "";
 
 
     msg(
-      'movMsg',
-      'Movimento registrado com sucesso.',
-      true
+      "movMsg",
+      "Movimento registrado com sucesso.",
+      "success"
     );
 
 
@@ -935,7 +1098,9 @@ th{
   }
 
 
-  /* CARREGAR MOVIMENTOS */
+  /* =========================
+     MOVIMENTOS
+  ========================= */
 
   async function carregarMovimentos(){
 
@@ -944,40 +1109,22 @@ th{
       error
     } =
       await sb
-      .from('movimentos')
-      .select(`
-        id,
-        data,
-        tipo,
-        quantidade,
-        tue,
-        material_id,
-        materiais(
-          codigo,
-          descricao
+        .from("movimentos")
+        .select(
+          "id,data,tipo,quantidade,tue,observacao,material_id,materiais(codigo,descricao)"
         )
-      `)
-      .order(
-        'data',
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
+        .order(
+          "data",
+          {ascending:false}
+        )
+        .limit(100);
 
 
     if(error){
 
       console.error(error);
 
-      msg(
-        'movMsg',
-        'Erro ao carregar movimentos: ' +
-        error.message
-      );
-
       return;
-
     }
 
 
@@ -987,7 +1134,9 @@ th{
   }
 
 
-  /* RENDERIZAR */
+  /* =========================
+     RENDERIZAÇÃO
+  ========================= */
 
   function renderizar(){
 
@@ -995,9 +1144,7 @@ th{
       materiais.reduce(
         (s,m) =>
           s +
-          Number(
-            m.quantidade || 0
-          ),
+          Number(m.quantidade || 0),
         0
       );
 
@@ -1011,68 +1158,45 @@ th{
       );
 
 
-    $('qtdMateriais')
+    $("qtdMateriais")
       .textContent =
       materiais.length;
 
 
-    $('qtdEstoque')
+    $("qtdEstoque")
       .textContent =
       estoque;
 
 
-    $('qtdBaixo')
+    $("qtdBaixo")
       .textContent =
       baixos.length;
 
 
-    $('alertas')
-      .textContent =
-      baixos.length
-      ?
-      '⚠️ ' +
-      baixos.length +
-      ' material(is) estão no estoque mínimo ou abaixo.'
-      :
-      '✅ Nenhum material abaixo do estoque mínimo.';
+    if(baixos.length){
+
+      $("alertas").className =
+        "msg warning-msg";
+
+      $("alertas").textContent =
+        "⚠️ " +
+        baixos.length +
+        " material(is) estão no estoque mínimo ou abaixo.";
+
+    }else{
+
+      $("alertas").className =
+        "msg success-msg";
+
+      $("alertas").textContent =
+        "✅ Nenhum material abaixo do estoque mínimo.";
+
+    }
 
 
     /* MATERIAIS */
 
-    $('listaMateriais')
-      .innerHTML =
-      materiais
-      .map(m => `
-
-        <tr>
-
-          <td>
-            ${esc(m.codigo)}
-          </td>
-
-          <td>
-            ${esc(m.descricao)}
-          </td>
-
-          <td>
-            ${Number(m.quantidade || 0)}
-            ${esc(m.unidade || '')}
-          </td>
-
-          <td>
-            ${Number(m.minimo || 0)}
-          </td>
-
-        </tr>
-
-      `)
-      .join('');
-
-
-    /* INVENTÁRIO */
-
-    $('listaInventario')
-      .innerHTML =
+    $("listaMateriais").innerHTML =
       materiais
       .map(m => {
 
@@ -1095,28 +1219,32 @@ th{
             </td>
 
             <td>
-              ${esc(m.unidade || '')}
+              ${esc(m.unidade || "UN")}
             </td>
 
             <td>
               ${Number(m.quantidade || 0)}
             </td>
 
-            <td class="${
-              baixo
-              ?
-              'status-baixo'
-              :
-              'status-ok'
-            }">
+            <td>
+              ${Number(m.minimo || 0)}
+            </td>
 
-              ${
+            <td>
+
+              <span class="badge ${
                 baixo
-                ?
-                '⚠️ BAIXO'
-                :
-                '✅ OK'
-              }
+                ? "badge-baixo"
+                : "badge-ok"
+              }">
+
+                ${
+                  baixo
+                  ? "⚠️ BAIXO"
+                  : "✅ OK"
+                }
+
+              </span>
 
             </td>
 
@@ -1125,218 +1253,184 @@ th{
         `;
 
       })
-      .join('');
+      .join("");
 
 
-    /* SELECT DE MATERIAL */
+    /* INVENTÁRIO */
 
-    $('materialMovimento')
-      .innerHTML =
+    $("listaInventario").innerHTML =
+      materiais
+      .map(m => {
+
+        const baixo =
+          Number(m.quantidade || 0)
+          <=
+          Number(m.minimo || 0);
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${esc(m.codigo)}
+            </td>
+
+            <td>
+              ${esc(m.descricao)}
+            </td>
+
+            <td>
+              ${esc(m.unidade || "UN")}
+            </td>
+
+            <td>
+              ${Number(m.quantidade || 0)}
+            </td>
+
+            <td>
+              ${Number(m.minimo || 0)}
+            </td>
+
+            <td>
+
+              <span class="badge ${
+                baixo
+                ? "badge-baixo"
+                : "badge-ok"
+              }">
+
+                ${
+                  baixo
+                  ? "⚠️ BAIXO"
+                  : "✅ OK"
+                }
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      })
+      .join("");
+
+
+    /* SELECT DE MATERIAIS */
+
+    $("materialMovimento").innerHTML =
       '<option value="">Selecione o material</option>' +
 
       materiais
       .map(m => `
 
-        <option value="${m.id}">
+        <option value="${esc(m.id)}">
 
           ${esc(m.codigo)}
           —
           ${esc(m.descricao)}
 
+          — Estoque:
+          ${Number(m.quantidade || 0)}
+
         </option>
 
       `)
-      .join('');
+      .join("");
 
 
-    /* MOVIMENTOS */
+    /* HISTÓRICO */
 
-    $('listaMovimentos')
-      .innerHTML =
+    $("listaMovimentos").innerHTML =
       movimentos
-      .map(x => `
+      .map(x => {
 
-        <tr>
+        const entrada =
+          x.tipo === "entrada";
 
-          <td>
-            ${
-              x.data
-              ?
-              new Date(x.data)
-                .toLocaleString('pt-BR')
-              :
-              ''
-            }
-          </td>
 
-          <td>
+        return `
 
-            ${
-              x.tipo === 'entrada'
-              ?
-              '🟢 ENTRADA'
-              :
-              '🔴 SAÍDA'
-            }
+          <tr>
 
-          </td>
+            <td>
+              ${formatarData(x.data)}
+            </td>
 
-          <td>
-            ${esc(
-              x.materiais?.descricao || ''
-            )}
-          </td>
+            <td>
 
-          <td>
-            ${Number(x.quantidade || 0)}
-          </td>
+              <span class="badge ${
+                entrada
+                ? "badge-entrada"
+                : "badge-saida"
+              }">
 
-          <td>
-            ${esc(x.tue || '')}
-          </td>
+                ${
+                  entrada
+                  ? "🟢 ENTRADA"
+                  : "🔴 SAÍDA"
+                }
 
-        </tr>
+              </span>
 
-      `)
-      .join('');
+            </td>
+
+            <td>
+              ${esc(x.materiais?.descricao || "")}
+            </td>
+
+            <td>
+              ${Number(x.quantidade || 0)}
+            </td>
+
+            <td>
+              ${esc(x.tue || "")}
+            </td>
+
+            <td>
+              ${esc(x.observacao || "")}
+            </td>
+
+          </tr>
+
+        `;
+
+      })
+      .join("");
 
   }
 
 
-  /* SEGURANÇA */
+  /* =========================
+     DATA
+  ========================= */
+
+  function formatarData(data){
+
+    if(!data)
+      return "";
+
+    return new Date(data)
+      .toLocaleString(
+        "pt-BR"
+      );
+
+  }
+
+
+  /* =========================
+     SEGURANÇA HTML
+  ========================= */
 
   function esc(v){
 
-    return String(v ?? '')
+    return String(v ?? "")
       .replace(
         /[&<>"']/g,
-        c => ({
-
-          '&':'&amp;',
-
-          '<':'&lt;',
-
-          '>':'&gt;',
-
-          '"':'&quot;',
-
-          "'":'&#039;'
-
-        }[c])
-      );
-
-  }
-
-
-  /* EVENTOS */
-
-  $('entrar')
-    .onclick =
-    entrar;
-
-
-  $('criarConta')
-    .onclick =
-    criarConta;
-
-
-  $('sair')
-    .onclick =
-    async () => {
-
-      await sb.auth.signOut();
-
-      await atualizarSessao();
-
-    };
-
-
-  $('salvarMaterial')
-    .onclick =
-    salvarMaterial;
-
-  $('pesquisaMaterial').addEventListener('input', function () {
-  const termo = this.value.toLowerCase().trim();
-
-  const filtrados = materiais.filter(m =>
-    String(m.codigo || '').toLowerCase().includes(termo) ||
-    String(m.descricao || '').toLowerCase().includes(termo)
-  );
-
-  $('listaMateriais').innerHTML = filtrados.map(m => `
-    <tr>
-      <td>${esc(m.codigo)}</td>
-      <td>${esc(m.descricao)}</td>
-      <td>${Number(m.quantidade || 0)} ${esc(m.unidade || '')}</td>
-      <td>${Number(m.minimo || 0)}</td>
-    </tr>
-  `).join('');
-});
-
-
-  $('registrarMovimento')
-    .onclick =
-    registrarMovimento;
-
-
-  /* ABAS */
-
-  document
-    .querySelectorAll('.tabs button')
-    .forEach(btn => {
-
-      btn.onclick = () => {
-
-        document
-          .querySelectorAll('.tabs button')
-          .forEach(b =>
-            b.classList
-              .remove('active')
-          );
-
-
-        document
-          .querySelectorAll('.tab')
-          .forEach(t =>
-            t.classList
-              .add('hidden')
-          );
-
-
-        btn.classList
-          .add('active');
-
-
-        $(btn.dataset.tab)
-          .classList
-          .remove('hidden');
-
-      };
-
-    });
-
-
-  /* ALTERAÇÃO DE SESSÃO */
-
-  sb.auth.onAuthStateChange(
-    () => {
-
-      setTimeout(
-        atualizarSessao,
-        0
-      );
-
-    }
-  );
-
-
-  /* INICIALIZA */
-
-  atualizarSessao();
-
-})();
-
-</script>
-
-</body>
-</html>
+        c =>
+          ({
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":
