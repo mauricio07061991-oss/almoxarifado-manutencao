@@ -335,6 +335,11 @@ th{
     <hr>
 
     <h2>Materiais cadastrados</h2>
+    <input
+  id="pesquisaMaterial"
+  type="search"
+  placeholder="🔎 Pesquisar por código ou descrição..."
+>
 
     <div style="overflow:auto">
 
@@ -1249,6 +1254,24 @@ th{
   $('salvarMaterial')
     .onclick =
     salvarMaterial;
+
+  $('pesquisaMaterial').addEventListener('input', function () {
+  const termo = this.value.toLowerCase().trim();
+
+  const filtrados = materiais.filter(m =>
+    String(m.codigo || '').toLowerCase().includes(termo) ||
+    String(m.descricao || '').toLowerCase().includes(termo)
+  );
+
+  $('listaMateriais').innerHTML = filtrados.map(m => `
+    <tr>
+      <td>${esc(m.codigo)}</td>
+      <td>${esc(m.descricao)}</td>
+      <td>${Number(m.quantidade || 0)} ${esc(m.unidade || '')}</td>
+      <td>${Number(m.minimo || 0)}</td>
+    </tr>
+  `).join('');
+});
 
 
   $('registrarMovimento')
