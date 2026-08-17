@@ -1,29 +1,1319 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f172a">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+
 <title>Almoxarifado — Manutenção</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef2f7;color:#172033}header{background:#0f172a;color:#fff;padding:18px}header h1{margin:0;font-size:24px}header p{margin:6px 0 0;color:#cbd5e1}main{max-width:1000px;margin:auto;padding:16px}.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 2px 10px #00000012}h2{margin-top:0}input,select,button{width:100%;padding:12px;border-radius:9px;border:1px solid #cbd5e1;font-size:15px;margin-top:8px}button{background:#0f172a;color:#fff;border:0;font-weight:bold;cursor:pointer}button.secondary{background:#e2e8f0;color:#172033}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f8fafc;border-radius:12px;padding:18px;text-align:center}.stat b{display:block;font-size:28px}.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:16px}.tabs button{width:auto;white-space:nowrap}.tabs button.active{background:#0f172a;color:#fff}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left}.hidden{display:none!important}.msg{padding:10px;border-radius:8px;background:#f1f5f9;margin-top:10px}.danger{background:#fee2e2;color:#991b1b}.success{background:#dcfce7;color:#166534}@media(max-width:700px){.grid{grid-template-columns:1fr}.card{padding:14px}table{font-size:13px}}
-</style></head>
-<body><header><h1>📦 Almoxarifado — Manutenção</h1><p>Controle de peças, estoque, entradas e saídas</p></header><main>
-<section id="loginCard" class="card"><h2>🔐 Acesso ao estoque</h2><input id="email" type="email" placeholder="E-mail"><input id="senha" type="password" placeholder="Senha"><button id="entrar">Entrar</button><button id="criarConta" class="secondary">Criar conta</button><div id="loginMsg"></div></section>
-<section id="app" class="hidden"><div class="card"><strong id="usuario"></strong><button id="sair" class="secondary">Sair</button></div>
-<div class="tabs"><button class="active" data-tab="resumo">Resumo</button><button data-tab="materiais">Materiais</button><button data-tab="movimentos">Entrada/Saída</button><button data-tab="inventario">Inventário</button></div>
-<section id="resumo" class="tab card"><h2>Visão geral</h2><div class="grid"><div class="stat"><b id="qtdMateriais">0</b>Materiais cadastrados</div><div class="stat"><b id="qtdEstoque">0</b>Itens em estoque</div><div class="stat"><b id="qtdBaixo">0</b>Estoque baixo</div></div><div id="alertas" class="msg"></div></section>
-<section id="materiais" class="tab card hidden"><h2>Cadastro de material</h2><input id="codigo" placeholder="Código"><input id="descricao" placeholder="Descrição"><input id="unidade" placeholder="Unidade (UN, KG, M...)"><input id="minimo" type="number" min="0" placeholder="Estoque mínimo"><button id="salvarMaterial">Cadastrar material</button><div id="materialMsg"></div><hr><h2>Materiais cadastrados</h2><div style="overflow:auto"><table><thead><tr><th>Código</th><th>Descrição</th><th>Estoque</th><th>Mínimo</th></tr></thead><tbody id="listaMateriais"></tbody></table></div></section>
-<section id="movimentos" class="tab card hidden"><h2>Registrar entrada ou saída</h2><select id="materialMovimento"></select><select id="tipoMovimento"><option value="entrada">Entrada</option><option value="saida">Saída</option></select><input id="quantidade" type="number" min="0.01" step="0.01" placeholder="Quantidade"><input id="tue" placeholder="TUE / composição (opcional)"><input id="observacao" placeholder="Observação (opcional)"><button id="registrarMovimento">Registrar movimento</button><div id="movMsg"></div><hr><h2>Últimos movimentos</h2><div style="overflow:auto"><table><thead><tr><th>Data</th><th>Tipo</th><th>Material</th><th>Qtd.</th><th>TUE</th></tr></thead><tbody id="listaMovimentos"></tbody></table></div></section>
-<section id="inventario" class="tab card hidden"><h2>Inventário</h2><div style="overflow:auto"><table><thead><tr><th>Código</th><th>Descrição</th><th>Unidade</th><th>Estoque</th><th>Status</th></tr></thead><tbody id="listaInventario"></tbody></table></div></section></section></main>
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#eef2f7;
+  color:#172033
+}
+
+header{
+  background:#0f172a;
+  color:#fff;
+  padding:18px
+}
+
+header h1{
+  margin:0;
+  font-size:24px
+}
+
+header p{
+  margin:6px 0 0;
+  color:#cbd5e1
+}
+
+main{
+  max-width:1000px;
+  margin:auto;
+  padding:16px
+}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 10px #00000012
+}
+
+h2{
+  margin-top:0
+}
+
+input,
+select,
+button{
+  width:100%;
+  padding:12px;
+  border-radius:9px;
+  border:1px solid #cbd5e1;
+  font-size:15px;
+  margin-top:8px
+}
+
+button{
+  background:#0f172a;
+  color:#fff;
+  border:0;
+  font-weight:bold;
+  cursor:pointer
+}
+
+button.secondary{
+  background:#e2e8f0;
+  color:#172033
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px
+}
+
+.stat{
+  background:#f8fafc;
+  border-radius:12px;
+  padding:18px;
+  text-align:center
+}
+
+.stat b{
+  display:block;
+  font-size:28px;
+  margin-bottom:5px
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin-bottom:16px
+}
+
+.tabs button{
+  width:auto;
+  white-space:nowrap
+}
+
+.tabs button.active{
+  background:#0f172a;
+  color:#fff
+}
+
+table{
+  width:100%;
+  border-collapse:collapse
+}
+
+th,
+td{
+  padding:10px;
+  border-bottom:1px solid #e2e8f0;
+  text-align:left
+}
+
+th{
+  background:#f8fafc
+}
+
+.hidden{
+  display:none!important
+}
+
+.msg{
+  padding:10px;
+  border-radius:8px;
+  background:#f1f5f9;
+  margin-top:10px
+}
+
+.danger{
+  background:#fee2e2;
+  color:#991b1b
+}
+
+.success{
+  background:#dcfce7;
+  color:#166534
+}
+
+.status-baixo{
+  color:#b91c1c;
+  font-weight:bold
+}
+
+.status-ok{
+  color:#166534;
+  font-weight:bold
+}
+
+@media(max-width:700px){
+  .grid{
+    grid-template-columns:1fr
+  }
+
+  .card{
+    padding:14px
+  }
+
+  table{
+    font-size:13px
+  }
+
+  header h1{
+    font-size:20px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📦 Almoxarifado — Manutenção</h1>
+  <p>Controle de peças, estoque, entradas e saídas</p>
+</header>
+
+<main>
+
+<section id="loginCard" class="card">
+
+  <h2>🔐 Acesso ao estoque</h2>
+
+  <input
+    id="email"
+    type="email"
+    placeholder="E-mail"
+  >
+
+  <input
+    id="senha"
+    type="password"
+    placeholder="Senha"
+  >
+
+  <button id="entrar">
+    Entrar
+  </button>
+
+  <button id="criarConta" class="secondary">
+    Criar conta
+  </button>
+
+  <div id="loginMsg"></div>
+
+</section>
+
+
+<section id="app" class="hidden">
+
+  <div class="card">
+
+    <strong id="usuario"></strong>
+
+    <button id="sair" class="secondary">
+      Sair
+    </button>
+
+  </div>
+
+
+  <div class="tabs">
+
+    <button
+      class="active"
+      data-tab="resumo">
+      Resumo
+    </button>
+
+    <button
+      data-tab="materiais">
+      Materiais
+    </button>
+
+    <button
+      data-tab="movimentos">
+      Entrada/Saída
+    </button>
+
+    <button
+      data-tab="inventario">
+      Inventário
+    </button>
+
+  </div>
+
+
+  <!-- RESUMO -->
+
+  <section
+    id="resumo"
+    class="tab card">
+
+    <h2>Visão geral</h2>
+
+    <div class="grid">
+
+      <div class="stat">
+        <b id="qtdMateriais">0</b>
+        Materiais cadastrados
+      </div>
+
+      <div class="stat">
+        <b id="qtdEstoque">0</b>
+        Itens em estoque
+      </div>
+
+      <div class="stat">
+        <b id="qtdBaixo">0</b>
+        Estoque baixo
+      </div>
+
+    </div>
+
+    <div
+      id="alertas"
+      class="msg">
+    </div>
+
+  </section>
+
+
+  <!-- MATERIAIS -->
+
+  <section
+    id="materiais"
+    class="tab card hidden">
+
+    <h2>Cadastro de material</h2>
+
+    <input
+      id="codigo"
+      placeholder="Código"
+    >
+
+    <input
+      id="descricao"
+      placeholder="Descrição"
+    >
+
+    <input
+      id="unidade"
+      placeholder="Unidade (UN, KG, M...)"
+    >
+
+    <input
+      id="minimo"
+      type="number"
+      min="0"
+      step="0.01"
+      placeholder="Estoque mínimo"
+    >
+
+    <button id="salvarMaterial">
+      Cadastrar material
+    </button>
+
+    <div id="materialMsg"></div>
+
+    <hr>
+
+    <h2>Materiais cadastrados</h2>
+
+    <div style="overflow:auto">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Estoque</th>
+            <th>Mínimo</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="listaMateriais"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- MOVIMENTOS -->
+
+  <section
+    id="movimentos"
+    class="tab card hidden">
+
+    <h2>Registrar entrada ou saída</h2>
+
+    <select id="materialMovimento">
+
+      <option value="">
+        Selecione o material
+      </option>
+
+    </select>
+
+
+    <select id="tipoMovimento">
+
+      <option value="entrada">
+        Entrada
+      </option>
+
+      <option value="saida">
+        Saída
+      </option>
+
+    </select>
+
+
+    <input
+      id="quantidade"
+      type="number"
+      min="0.01"
+      step="0.01"
+      placeholder="Quantidade"
+    >
+
+
+    <input
+      id="tue"
+      placeholder="TUE / composição (opcional)"
+    >
+
+
+    <input
+      id="observacao"
+      placeholder="Observação (opcional)"
+    >
+
+
+    <button id="registrarMovimento">
+      Registrar movimento
+    </button>
+
+    <div id="movMsg"></div>
+
+    <hr>
+
+    <h2>Últimos movimentos</h2>
+
+    <div style="overflow:auto">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Material</th>
+            <th>Qtd.</th>
+            <th>TUE</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="listaMovimentos"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- INVENTÁRIO -->
+
+  <section
+    id="inventario"
+    class="tab card hidden">
+
+    <h2>Inventário</h2>
+
+    <div style="overflow:auto">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Unidade</th>
+            <th>Estoque</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="listaInventario"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+</main>
+
+
 <script>
-(()=>{const cfg=window.CONFIGURACAO_DE_ESTOQUE||{};const supabaseUrl=cfg.SUPABASE_URL||cfg.URL_SUPABASE;const supabaseKey=cfg.SUPABASE_ANON_KEY;const $=id=>document.getElementById(id);let sb=null,materiais=[];window.movimentos=[];function msg(id,text,ok=false){$(id).className='msg '+(ok?'success':'danger');$(id).textContent=text}if(!supabaseUrl||!supabaseKey){msg('loginMsg','Configuração do Supabase não encontrada. Verifique o arquivo config.js.');return}sb=window.supabase.createClient(supabaseUrl,supabaseKey);
-async function atualizarSessao(){const {data:{session}}=await sb.auth.getSession();if(session){$('loginCard').classList.add('hidden');$('app').classList.remove('hidden');$('usuario').textContent='👤 '+(session.user.email||'');await carregarTudo()}else{$('loginCard').classList.remove('hidden');$('app').classList.add('hidden')}}
-async function entrar(){const email=$('email').value.trim(),senha=$('senha').value;if(!email||!senha)return msg('loginMsg','Informe e-mail e senha.');const {error}=await sb.auth.signInWithPassword({email,password:senha});if(error)return msg('loginMsg',error.message);$('loginMsg').textContent='';await atualizarSessao()}
-async function criarConta(){const email=$('email').value.trim(),senha=$('senha').value;if(!email||senha.length<6)return msg('loginMsg','Informe um e-mail e uma senha com pelo menos 6 caracteres.');const {error}=await sb.auth.signUp({email,password:senha});if(error)return msg('loginMsg',error.message);msg('loginMsg','Conta criada. Se o Supabase solicitar confirmação por e-mail, confirme antes de entrar.',true)}
-async function carregarTudo(){await carregarMateriais();await carregarMovimentos();renderizar()}async function carregarMateriais(){const {data,error}=await sb.from('materiais').select('*').order('descricao');if(error){console.error(error);return msg('materialMsg','Erro ao carregar materiais: '+error.message)}materiais=data||[]}
-async function salvarMaterial(){const codigo=$('codigo').value.trim(),descricao=$('descricao').value.trim(),unidade=$('unidade').value.trim()||'UN',minimo=Number($('minimo').value||0);if(!codigo||!descricao)return msg('materialMsg','Código e descrição são obrigatórios.');const {error}=await sb.from('materiais').insert({codigo,descricao,unidade,minimo});if(error)return msg('materialMsg',error.message);$('codigo').value='';$('descricao').value='';$('unidade').value='';$('minimo').value='';msg('materialMsg','Material cadastrado com sucesso.',true);await carregarTudo()}
-async function registrarMovimento(){const material_id=$('materialMovimento').value,tipo=$('tipoMovimento').value,quantidade=Number($('quantidade').value);if(!material_id||quantidade<=0)return msg('movMsg','Selecione o material e informe uma quantidade válida.');const {data:{user}}=await sb.auth.getUser();const {error}=await sb.from('movimentos').insert({material_id,tipo,quantidade,tue:$('tue').value.trim()||null,observacao:$('observacao').value.trim()||null,usuario_id:user?.id||null});if(error)return msg('movMsg',error.message);$('quantidade').value='';$('tue').value='';$('observacao').value='';msg('movMsg','Movimento registrado com sucesso.',true);await carregarTudo()}
-async function carregarMovimentos(){const {data,error}=await sb.from('movimentos').select('id,data,tipo,quantidade,tue,material_id,materiais(codigo,descricao)').order('data',{ascending:false}).limit(100);if(error){console.error(error);return}window.movimentos=data||[]}
-function renderizar(){const estoque=materiais.reduce((s,m)=>s+Number(m.quantidade||0),0),baixos=materiais.filter(m=>Number(m.quantidade||0)<=Number(m.minimo||0));$('qtdMateriais').textContent=materiais.length;$('qtdEstoque').textContent=estoque;$('qtdBaixo').textContent=baixos.length;$('alertas').textContent=baixos.length?'⚠️ '+baixos.length+' material(is) estão no estoque mínimo ou abaixo.':'✅ Nenhum material abaixo do estoque mínimo.';$('listaMateriais').innerHTML=materiais.map(m=>`<tr><td>${esc(m.codigo)}</td><td>${esc(m.descricao)}</td><td>${Number(m.quantidade||0)} ${esc(m.unidade||'')}</td><td>${Number(m.minimo||0)}</td></tr>`).join('');$('listaInventario').innerHTML=materiais.map(m=>{const baixo=Number(m.quantidade||0)<=Number(m.minimo||0);return `<tr><td>${esc(m.codigo)}</td><td>${esc(m.descricao)}</td><td>${esc(m.unidade||'')}</td><td>${Number(m.quantidade||0)}</td><td>${baixo?'⚠️ BAIXO':'✅ OK'}</td></tr>`}).join('');$('materialMovimento').innerHTML='<option value="">Selecione o material</option>'+materiais.map(m=>`<option value="${m.id}">${esc(m.codigo)} — ${esc(m.descricao)}</option>`).join('');$('listaMovimentos').innerHTML=window.movimentos.map(x=>`<tr><td>${new Date(x.data).toLocaleString('pt-BR')}</td><td>${x.tipo==='entrada'?'ENTRADA':'SAÍDA'}</td><td>${esc(x.materiais?.descricao||'')}</td><td>${x.quantidade}</td><td>${esc(x.tue||'')}</td></tr>`).join('')}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}$('entrar').onclick=entrar;$('criarConta').onclick=criarConta;$('sair').onclick=async()=>{await sb.auth.signOut();await atualizarSessao()};$('salvarMaterial').onclick=salvarMaterial;$('registrarMovimento').onclick=registrarMovimento;document.querySelectorAll('.tabs button').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));btn.classList.add('active');$(btn.dataset.tab).classList.remove('hidden')}});sb.auth.onAuthStateChange(()=>atualizarSessao());atualizarSessao()})();
-</script></body></html>
+
+(() => {
+
+  const cfg =
+    window.CONFIGURACAO_DE_ESTOQUE || {};
+
+  const supabaseUrl =
+    cfg.SUPABASE_URL ||
+    cfg.URL_SUPABASE;
+
+  const supabaseKey =
+    cfg.SUPABASE_ANON_KEY;
+
+  const $ =
+    id => document.getElementById(id);
+
+  let sb = null;
+
+  let materiais = [];
+
+  let movimentos = [];
+
+
+  function msg(id,text,ok=false){
+
+    const elemento = $(id);
+
+    if(!elemento) return;
+
+    elemento.className =
+      'msg ' +
+      (ok ? 'success' : 'danger');
+
+    elemento.textContent = text;
+  }
+
+
+  /* VERIFICA CONFIGURAÇÃO */
+
+  if(!supabaseUrl || !supabaseKey){
+
+    msg(
+      'loginMsg',
+      'Configuração do Supabase não encontrada. Verifique o arquivo config.js.'
+    );
+
+    return;
+  }
+
+
+  sb =
+    window.supabase.createClient(
+      supabaseUrl,
+      supabaseKey
+    );
+
+
+  /* SESSÃO */
+
+  async function atualizarSessao(){
+
+    const {
+      data:{
+        session
+      }
+    } =
+      await sb.auth.getSession();
+
+
+    if(session){
+
+      $('loginCard')
+        .classList
+        .add('hidden');
+
+      $('app')
+        .classList
+        .remove('hidden');
+
+      $('usuario').textContent =
+        '👤 ' +
+        (session.user.email || '');
+
+      await carregarTudo();
+
+    }else{
+
+      $('loginCard')
+        .classList
+        .remove('hidden');
+
+      $('app')
+        .classList
+        .add('hidden');
+
+    }
+
+  }
+
+
+  /* LOGIN */
+
+  async function entrar(){
+
+    const email =
+      $('email').value.trim();
+
+    const senha =
+      $('senha').value;
+
+
+    if(!email || !senha){
+
+      return msg(
+        'loginMsg',
+        'Informe e-mail e senha.'
+      );
+
+    }
+
+
+    const {
+      error
+    } =
+      await sb.auth.signInWithPassword({
+
+        email,
+
+        password:senha
+
+      });
+
+
+    if(error){
+
+      return msg(
+        'loginMsg',
+        error.message
+      );
+
+    }
+
+
+    $('loginMsg').textContent='';
+
+    await atualizarSessao();
+
+  }
+
+
+  /* CRIAR CONTA */
+
+  async function criarConta(){
+
+    const email =
+      $('email').value.trim();
+
+    const senha =
+      $('senha').value;
+
+
+    if(!email || senha.length < 6){
+
+      return msg(
+        'loginMsg',
+        'Informe um e-mail e uma senha com pelo menos 6 caracteres.'
+      );
+
+    }
+
+
+    const {
+      error
+    } =
+      await sb.auth.signUp({
+
+        email,
+
+        password:senha
+
+      });
+
+
+    if(error){
+
+      return msg(
+        'loginMsg',
+        error.message
+      );
+
+    }
+
+
+    msg(
+      'loginMsg',
+      'Conta criada. Se o Supabase solicitar confirmação por e-mail, confirme antes de entrar.',
+      true
+    );
+
+  }
+
+
+  /* CARREGAR TUDO */
+
+  async function carregarTudo(){
+
+    await carregarMateriais();
+
+    await carregarMovimentos();
+
+    renderizar();
+
+  }
+
+
+  /* MATERIAIS */
+
+  async function carregarMateriais(){
+
+    const {
+      data,
+      error
+    } =
+      await sb
+      .from('materiais')
+      .select('*')
+      .order('descricao');
+
+
+    if(error){
+
+      console.error(error);
+
+      return msg(
+        'materialMsg',
+        'Erro ao carregar materiais: ' +
+        error.message
+      );
+
+    }
+
+
+    materiais =
+      data || [];
+
+  }
+
+
+  /* CADASTRAR MATERIAL */
+
+  async function salvarMaterial(){
+
+    const codigo =
+      $('codigo')
+      .value
+      .trim();
+
+    const descricao =
+      $('descricao')
+      .value
+      .trim();
+
+    const unidade =
+      $('unidade')
+      .value
+      .trim() ||
+      'UN';
+
+    const minimo =
+      Number(
+        $('minimo').value || 0
+      );
+
+
+    if(!codigo || !descricao){
+
+      return msg(
+        'materialMsg',
+        'Código e descrição são obrigatórios.'
+      );
+
+    }
+
+
+    if(minimo < 0){
+
+      return msg(
+        'materialMsg',
+        'O estoque mínimo não pode ser negativo.'
+      );
+
+    }
+
+
+    const {
+      error
+    } =
+      await sb
+      .from('materiais')
+      .insert({
+
+        codigo,
+
+        descricao,
+
+        unidade,
+
+        quantidade:0,
+
+        minimo
+
+      });
+
+
+    if(error){
+
+      return msg(
+        'materialMsg',
+        error.message
+      );
+
+    }
+
+
+    $('codigo').value='';
+    $('descricao').value='';
+    $('unidade').value='';
+    $('minimo').value='';
+
+
+    msg(
+      'materialMsg',
+      'Material cadastrado com sucesso.',
+      true
+    );
+
+
+    await carregarTudo();
+
+  }
+
+
+  /* REGISTRAR MOVIMENTO */
+
+  async function registrarMovimento(){
+
+    const material_id =
+      $('materialMovimento').value;
+
+    const tipo =
+      $('tipoMovimento').value;
+
+    const quantidade =
+      Number(
+        $('quantidade').value
+      );
+
+
+    if(
+      !material_id ||
+      quantidade <= 0
+    ){
+
+      return msg(
+        'movMsg',
+        'Selecione o material e informe uma quantidade válida.'
+      );
+
+    }
+
+
+    /*
+      IMPORTANTE:
+
+      A tabela movimentos possui:
+
+      id
+      material_id
+      tipo
+      quantidade
+      tue
+      observacao
+      data
+
+      Portanto NÃO enviamos usuario_id.
+    */
+
+    const {
+      error
+    } =
+      await sb
+      .from('movimentos')
+      .insert({
+
+        material_id,
+
+        tipo,
+
+        quantidade,
+
+        tue:
+          $('tue')
+          .value
+          .trim() ||
+          null,
+
+        observacao:
+          $('observacao')
+          .value
+          .trim() ||
+          null
+
+      });
+
+
+    if(error){
+
+      console.error(error);
+
+      return msg(
+        'movMsg',
+        error.message
+      );
+
+    }
+
+
+    $('quantidade').value='';
+
+    $('tue').value='';
+
+    $('observacao').value='';
+
+
+    msg(
+      'movMsg',
+      'Movimento registrado com sucesso.',
+      true
+    );
+
+
+    await carregarTudo();
+
+  }
+
+
+  /* CARREGAR MOVIMENTOS */
+
+  async function carregarMovimentos(){
+
+    const {
+      data,
+      error
+    } =
+      await sb
+      .from('movimentos')
+      .select(`
+        id,
+        data,
+        tipo,
+        quantidade,
+        tue,
+        material_id,
+        materiais(
+          codigo,
+          descricao
+        )
+      `)
+      .order(
+        'data',
+        {
+          ascending:false
+        }
+      )
+      .limit(100);
+
+
+    if(error){
+
+      console.error(error);
+
+      msg(
+        'movMsg',
+        'Erro ao carregar movimentos: ' +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    movimentos =
+      data || [];
+
+  }
+
+
+  /* RENDERIZAR */
+
+  function renderizar(){
+
+    const estoque =
+      materiais.reduce(
+        (s,m) =>
+          s +
+          Number(
+            m.quantidade || 0
+          ),
+        0
+      );
+
+
+    const baixos =
+      materiais.filter(
+        m =>
+          Number(m.quantidade || 0)
+          <=
+          Number(m.minimo || 0)
+      );
+
+
+    $('qtdMateriais')
+      .textContent =
+      materiais.length;
+
+
+    $('qtdEstoque')
+      .textContent =
+      estoque;
+
+
+    $('qtdBaixo')
+      .textContent =
+      baixos.length;
+
+
+    $('alertas')
+      .textContent =
+      baixos.length
+      ?
+      '⚠️ ' +
+      baixos.length +
+      ' material(is) estão no estoque mínimo ou abaixo.'
+      :
+      '✅ Nenhum material abaixo do estoque mínimo.';
+
+
+    /* MATERIAIS */
+
+    $('listaMateriais')
+      .innerHTML =
+      materiais
+      .map(m => `
+
+        <tr>
+
+          <td>
+            ${esc(m.codigo)}
+          </td>
+
+          <td>
+            ${esc(m.descricao)}
+          </td>
+
+          <td>
+            ${Number(m.quantidade || 0)}
+            ${esc(m.unidade || '')}
+          </td>
+
+          <td>
+            ${Number(m.minimo || 0)}
+          </td>
+
+        </tr>
+
+      `)
+      .join('');
+
+
+    /* INVENTÁRIO */
+
+    $('listaInventario')
+      .innerHTML =
+      materiais
+      .map(m => {
+
+        const baixo =
+          Number(m.quantidade || 0)
+          <=
+          Number(m.minimo || 0);
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${esc(m.codigo)}
+            </td>
+
+            <td>
+              ${esc(m.descricao)}
+            </td>
+
+            <td>
+              ${esc(m.unidade || '')}
+            </td>
+
+            <td>
+              ${Number(m.quantidade || 0)}
+            </td>
+
+            <td class="${
+              baixo
+              ?
+              'status-baixo'
+              :
+              'status-ok'
+            }">
+
+              ${
+                baixo
+                ?
+                '⚠️ BAIXO'
+                :
+                '✅ OK'
+              }
+
+            </td>
+
+          </tr>
+
+        `;
+
+      })
+      .join('');
+
+
+    /* SELECT DE MATERIAL */
+
+    $('materialMovimento')
+      .innerHTML =
+      '<option value="">Selecione o material</option>' +
+
+      materiais
+      .map(m => `
+
+        <option value="${m.id}">
+
+          ${esc(m.codigo)}
+          —
+          ${esc(m.descricao)}
+
+        </option>
+
+      `)
+      .join('');
+
+
+    /* MOVIMENTOS */
+
+    $('listaMovimentos')
+      .innerHTML =
+      movimentos
+      .map(x => `
+
+        <tr>
+
+          <td>
+            ${
+              x.data
+              ?
+              new Date(x.data)
+                .toLocaleString('pt-BR')
+              :
+              ''
+            }
+          </td>
+
+          <td>
+
+            ${
+              x.tipo === 'entrada'
+              ?
+              '🟢 ENTRADA'
+              :
+              '🔴 SAÍDA'
+            }
+
+          </td>
+
+          <td>
+            ${esc(
+              x.materiais?.descricao || ''
+            )}
+          </td>
+
+          <td>
+            ${Number(x.quantidade || 0)}
+          </td>
+
+          <td>
+            ${esc(x.tue || '')}
+          </td>
+
+        </tr>
+
+      `)
+      .join('');
+
+  }
+
+
+  /* SEGURANÇA */
+
+  function esc(v){
+
+    return String(v ?? '')
+      .replace(
+        /[&<>"']/g,
+        c => ({
+
+          '&':'&amp;',
+
+          '<':'&lt;',
+
+          '>':'&gt;',
+
+          '"':'&quot;',
+
+          "'":'&#039;'
+
+        }[c])
+      );
+
+  }
+
+
+  /* EVENTOS */
+
+  $('entrar')
+    .onclick =
+    entrar;
+
+
+  $('criarConta')
+    .onclick =
+    criarConta;
+
+
+  $('sair')
+    .onclick =
+    async () => {
+
+      await sb.auth.signOut();
+
+      await atualizarSessao();
+
+    };
+
+
+  $('salvarMaterial')
+    .onclick =
+    salvarMaterial;
+
+
+  $('registrarMovimento')
+    .onclick =
+    registrarMovimento;
+
+
+  /* ABAS */
+
+  document
+    .querySelectorAll('.tabs button')
+    .forEach(btn => {
+
+      btn.onclick = () => {
+
+        document
+          .querySelectorAll('.tabs button')
+          .forEach(b =>
+            b.classList
+              .remove('active')
+          );
+
+
+        document
+          .querySelectorAll('.tab')
+          .forEach(t =>
+            t.classList
+              .add('hidden')
+          );
+
+
+        btn.classList
+          .add('active');
+
+
+        $(btn.dataset.tab)
+          .classList
+          .remove('hidden');
+
+      };
+
+    });
+
+
+  /* ALTERAÇÃO DE SESSÃO */
+
+  sb.auth.onAuthStateChange(
+    () => {
+
+      setTimeout(
+        atualizarSessao,
+        0
+      );
+
+    }
+  );
+
+
+  /* INICIALIZA */
+
+  atualizarSessao();
+
+})();
+
+</script>
+
+</body>
+</html>
