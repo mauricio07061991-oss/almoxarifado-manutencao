@@ -1427,10 +1427,52 @@ hr{
   function esc(v){
 
     return String(v ?? "")
-      .replace(
-        /[&<>"']/g,
-        c =>
-          ({
-            "&":"&amp;",
-            "<":"&lt;",
-            ">":
+        .replace(
+            /[&<>"']/g,
+            c => ({
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+            }[c])
+        );
+}
+
+$('entrar').onclick = entrar;
+$('criarConta').onclick = criarConta;
+
+$('sair').onclick = async () => {
+    await sb.auth.signOut();
+    await atualizarSessao();
+};
+
+$('salvarMaterial').onclick = salvarMaterial;
+$('registrarMovimento').onclick = registrarMovimento;
+
+document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.onclick = () => {
+
+        document.querySelectorAll('.tabs button')
+            .forEach(b => b.classList.remove('active'));
+
+        document.querySelectorAll('.tab')
+            .forEach(t => t.classList.add('hidden'));
+
+        btn.classList.add('active');
+
+        $(btn.dataset.tab)
+            .classList.remove('hidden');
+    };
+});
+
+sb.auth.onAuthStateChange(() => {
+    atualizarSessao();
+});
+
+atualizarSessao();
+
+})();
+</script>
+</body>
+</html>
