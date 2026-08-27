@@ -462,6 +462,16 @@ hr{
       </option>
     </select>
 
+<button type="button" id="btnLerCodigoMovimento">
+  📷 Ler código de barras
+</button>
+
+<div id="leitorCodigoMovimento"
+     style="display:none; margin-top:10px;">
+</div>
+
+<div id="msgCodigoMovimento"></div>
+    
     <input type="hidden" id="tipoMovimento" value="">
 
 <div style="display:flex;gap:10px;margin:10px 0;">
@@ -1495,6 +1505,7 @@ const areaLeitor = document.getElementById('leitorCodigoBarras');
 let leitorCodigo = null;
 
 botaoLeitor.addEventListener('click', async () => {
+
   if (typeof Html5Qrcode === 'undefined') {
     alert('Leitor de código de barras não carregado.');
     return;
@@ -1507,40 +1518,62 @@ botaoLeitor.addEventListener('click', async () => {
   }
 
   try {
-    const cameras = await Html5Qrcode.getCameras();
-
-    if (!cameras || cameras.length === 0) {
-      alert('Nenhuma câmera encontrada.');
-      return;
-    }
-
-    const cameraId = cameras[0].id;
 
     await leitorCodigo.start(
-      cameraId,
+      {
+        facingMode: "environment"
+      },
       {
         fps: 10,
-        qrbox: { width: 280, height: 120 }
+        qrbox: {
+          width: 300,
+          height: 120
+        }
       },
+
       async (codigoLido) => {
 
         campoCodigo.value = codigoLido;
 
-        await leitorCodigo.stop();
 
+        const materialEncontrado = materiais.find(
+    m => String(m.codigo).trim() === String(codigoLido).trim()
+);
+
+if (materialEncontrado) {
+    $("#materialMovimento")
+        .val(String(materialEncontrado.id))
+        .trigger("change");
+} else {
+    alert("Material não encontrado para o código: " + codigoLido);
+}
+await leitorCodigo.stop();
         areaLeitor.style.display = 'none';
 
         alert('Código lido com sucesso: ' + codigoLido);
       },
+
       () => {
-        // Ignora erros de leitura enquanto procura o código
+        // Continua procurando o código
       }
     );
 
   } catch (erro) {
+
     console.error(erro);
-    alert('Não foi possível acessar a câmera. Verifique a permissão da câmera.');
+
+    try {
+      await leitorCodigo.stop();
+    } catch (e) {}
+
+    areaLeitor.style.display = 'none';
+
+    alert(
+      'Não foi possível acessar a câmera traseira. ' +
+      'Verifique a permissão da câmera no celular.'
+    );
   }
+
 });
 </script>
   
