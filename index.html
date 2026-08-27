@@ -457,17 +457,25 @@ hr{
       </option>
     </select>
 
-    <select id="tipoMovimento">
+    <input type="hidden" id="tipoMovimento" value="">
 
-      <option value="entrada">
-        Entrada
-      </option>
+<div style="display:flex;gap:10px;margin:10px 0;">
 
-      <option value="saida">
-        Saída
-      </option>
+  <button
+    type="button"
+    id="btnEntrada"
+    onclick="document.getElementById('tipoMovimento').value='entrada'; this.style.opacity='1'; document.getElementById('btnSaida').style.opacity='0.5';">
+    🟢 Entrada
+  </button>
 
-    </select>
+  <button
+    type="button"
+    id="btnSaida"
+    onclick="document.getElementById('tipoMovimento').value='saida'; this.style.opacity='1'; document.getElementById('btnEntrada').style.opacity='0.5';">
+    🔴 Saída
+  </button>
+
+</div>
 
     <input
       id="quantidade"
