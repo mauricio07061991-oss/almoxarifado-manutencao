@@ -1487,5 +1487,62 @@ atualizarSessao();
 
 })();
 </script>
+<script>
+const botaoLeitor = document.getElementById('lerCodigoBarras');
+const campoCodigo = document.getElementById('codigo');
+const areaLeitor = document.getElementById('leitorCodigoBarras');
+
+let leitorCodigo = null;
+
+botaoLeitor.addEventListener('click', async () => {
+  if (typeof Html5Qrcode === 'undefined') {
+    alert('Leitor de código de barras não carregado.');
+    return;
+  }
+
+  areaLeitor.style.display = 'block';
+
+  if (!leitorCodigo) {
+    leitorCodigo = new Html5Qrcode('leitorCodigoBarras');
+  }
+
+  try {
+    const cameras = await Html5Qrcode.getCameras();
+
+    if (!cameras || cameras.length === 0) {
+      alert('Nenhuma câmera encontrada.');
+      return;
+    }
+
+    const cameraId = cameras[0].id;
+
+    await leitorCodigo.start(
+      cameraId,
+      {
+        fps: 10,
+        qrbox: { width: 280, height: 120 }
+      },
+      async (codigoLido) => {
+
+        campoCodigo.value = codigoLido;
+
+        await leitorCodigo.stop();
+
+        areaLeitor.style.display = 'none';
+
+        alert('Código lido com sucesso: ' + codigoLido);
+      },
+      () => {
+        // Ignora erros de leitura enquanto procura o código
+      }
+    );
+
+  } catch (erro) {
+    console.error(erro);
+    alert('Não foi possível acessar a câmera. Verifique a permissão da câmera.');
+  }
+});
+</script>
+  
 </body>
 </html>
