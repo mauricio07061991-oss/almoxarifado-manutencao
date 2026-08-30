@@ -7,8 +7,8 @@
 
 <title>Almoxarifado — Manutenção</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 <script src="config.js"></script>
 
 <style>
@@ -51,9 +51,7 @@ main{
   box-shadow:0 3px 14px #00000012;
 }
 
-h2{
-  margin-top:0;
-}
+h2{margin-top:0}
 
 input,select,button{
   width:100%;
@@ -62,10 +60,6 @@ input,select,button{
   border:1px solid #cbd5e1;
   font-size:15px;
   margin-top:8px;
-}
-
-input:focus,select:focus{
-  outline:2px solid #94a3b8;
 }
 
 button{
@@ -81,13 +75,8 @@ button.secondary{
   color:#172033;
 }
 
-button.success{
-  background:#166534;
-}
-
-button.danger{
-  background:#991b1b;
-}
+button.success{background:#166534}
+button.danger{background:#991b1b}
 
 .grid{
   display:grid;
@@ -138,13 +127,9 @@ th,td{
   white-space:nowrap;
 }
 
-th{
-  background:#f8fafc;
-}
+th{background:#f8fafc}
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important}
 
 .msg{
   padding:12px;
@@ -209,10 +194,6 @@ th{
   color:#991b1b;
 }
 
-.form-title{
-  margin-bottom:5px;
-}
-
 .small{
   font-size:13px;
   color:#64748b;
@@ -263,8 +244,6 @@ hr{
 
 <main>
 
-<!-- LOGIN -->
-
 <section id="loginCard" class="card">
 
   <h2>🔐 Acesso ao estoque</h2>
@@ -296,8 +275,6 @@ hr{
 </section>
 
 
-<!-- SISTEMA -->
-
 <section id="app" class="hidden">
 
   <div class="card">
@@ -317,14 +294,9 @@ hr{
   </div>
 
 
-  <!-- ABAS -->
-
   <div class="tabs">
 
-    <button
-      class="active"
-      data-tab="resumo"
-    >
+    <button class="active" data-tab="resumo">
       Resumo
     </button>
 
@@ -343,12 +315,7 @@ hr{
   </div>
 
 
-  <!-- RESUMO -->
-
-  <section
-    id="resumo"
-    class="tab card"
-  >
+  <section id="resumo" class="tab card">
 
     <h2>Visão geral</h2>
 
@@ -378,12 +345,7 @@ hr{
   </section>
 
 
-  <!-- MATERIAIS -->
-
-  <section
-    id="materiais"
-    class="tab card hidden"
-  >
+  <section id="materiais" class="tab card hidden">
 
     <h2>📦 Cadastro de material</h2>
 
@@ -391,11 +353,16 @@ hr{
       id="codigo"
       placeholder="Código"
     >
-<button type="button" id="lerCodigoBarras">
-  📷 Ler código de barras
-</button>
 
-<div id="leitorCodigoBarras" style="display:none; margin-top:10px;"></div>
+    <button type="button" id="lerCodigoBarras">
+      📷 Ler código de barras
+    </button>
+
+    <div
+      id="leitorCodigoBarras"
+      style="display:none;margin-top:10px;"
+    ></div>
+
     <input
       id="descricao"
       placeholder="Descrição"
@@ -428,6 +395,7 @@ hr{
       <table>
 
         <thead>
+
           <tr>
             <th>Código</th>
             <th>Descrição</th>
@@ -436,6 +404,7 @@ hr{
             <th>Mínimo</th>
             <th>Status</th>
           </tr>
+
         </thead>
 
         <tbody id="listaMateriais"></tbody>
@@ -447,50 +416,65 @@ hr{
   </section>
 
 
-  <!-- MOVIMENTOS -->
-
-  <section
-    id="movimentos"
-    class="tab card hidden"
-  >
+  <section id="movimentos" class="tab card hidden">
 
     <h2>🔄 Registrar entrada ou saída</h2>
 
     <select id="materialMovimento">
+
       <option value="">
         Selecione o material
       </option>
+
     </select>
 
-<button type="button" id="btnLerCodigoMovimento">
-  📷 Ler código de barras
-</button>
+    <button
+      type="button"
+      id="btnLerCodigoMovimento"
+    >
+      📷 Ler código de barras
+    </button>
 
-<div id="leitorCodigoMovimento"
-     style="display:none; margin-top:10px;">
-</div>
+    <div
+      id="leitorCodigoMovimento"
+      style="display:none;margin-top:10px;"
+    ></div>
 
-<div id="msgCodigoMovimento"></div>
-    
-    <input type="hidden" id="tipoMovimento" value="">
+    <div id="msgCodigoMovimento"></div>
 
-<div style="display:flex;gap:10px;margin:10px 0;">
+    <input
+      type="hidden"
+      id="tipoMovimento"
+      value=""
+    >
 
-  <button
-    type="button"
-    id="btnEntrada"
-    onclick="document.getElementById('tipoMovimento').value='entrada'; this.style.opacity='1'; document.getElementById('btnSaida').style.opacity='0.5';">
-    🟢 Entrada
-  </button>
+    <div style="display:flex;gap:10px;margin:10px 0;">
 
-  <button
-    type="button"
-    id="btnSaida"
-    onclick="document.getElementById('tipoMovimento').value='saida'; this.style.opacity='1'; document.getElementById('btnEntrada').style.opacity='0.5';">
-    🔴 Saída
-  </button>
+      <button
+        type="button"
+        id="btnEntrada"
+        onclick="
+          document.getElementById('tipoMovimento').value='entrada';
+          this.style.opacity='1';
+          document.getElementById('btnSaida').style.opacity='0.5';
+        "
+      >
+        🟢 Entrada
+      </button>
 
-</div>
+      <button
+        type="button"
+        id="btnSaida"
+        onclick="
+          document.getElementById('tipoMovimento').value='saida';
+          this.style.opacity='1';
+          document.getElementById('btnEntrada').style.opacity='0.5';
+        "
+      >
+        🔴 Saída
+      </button>
+
+    </div>
 
     <input
       id="quantidade"
@@ -546,12 +530,7 @@ hr{
   </section>
 
 
-  <!-- INVENTÁRIO -->
-
-  <section
-    id="inventario"
-    class="tab card hidden"
-  >
+  <section id="inventario" class="tab card hidden">
 
     <h2>📋 Inventário</h2>
 
@@ -589,993 +568,886 @@ hr{
 
 (()=>{
 
-  /* =========================
-     CONFIGURAÇÃO
-  ========================= */
+const cfg =
+  window.CONFIGURACAO_DE_ESTOQUE || {};
 
-  const cfg =
-    window.CONFIGURACAO_DE_ESTOQUE || {};
+const supabaseUrl =
+  cfg.SUPABASE_URL ||
+  cfg.URL_SUPABASE;
 
-  const supabaseUrl =
-    cfg.SUPABASE_URL ||
-    cfg.URL_SUPABASE;
+const supabaseKey =
+  cfg.SUPABASE_ANON_KEY;
 
-  const supabaseKey =
-    cfg.SUPABASE_ANON_KEY;
+const $ = id =>
+  document.getElementById(id);
 
+let sb = null;
 
-  const $ = id =>
-    document.getElementById(id);
+let materiais = [];
 
-
-  let sb = null;
-
-  let materiais = [];
-
-  let movimentos = [];
+let movimentos = [];
 
 
-  /* =========================
-     MENSAGENS
-  ========================= */
+function msg(id,text,tipo="danger"){
 
-  function msg(id,text,tipo="danger"){
+  const elemento = $(id);
 
-    const elemento = $(id);
+  if(!elemento) return;
 
-    if(!elemento) return;
+  elemento.className =
+    "msg " +
+    (
+      tipo === "success"
+      ? "success-msg"
+      :
+      tipo === "warning"
+      ? "warning-msg"
+      :
+      "danger-msg"
+    );
 
-    elemento.className =
-      "msg " +
-      (
-        tipo === "success"
-        ? "success-msg"
-        :
-        tipo === "warning"
-        ? "warning-msg"
-        :
-        "danger-msg"
-      );
+  elemento.textContent = text;
 
-    elemento.textContent = text;
+}
+
+
+if(!supabaseUrl || !supabaseKey){
+
+  msg(
+    "loginMsg",
+    "Configuração do Supabase não encontrada. Verifique o arquivo config.js."
+  );
+
+  return;
+}
+
+
+sb =
+  window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+  );
+
+
+async function atualizarSessao(){
+
+  const {
+    data:{session}
+  } =
+    await sb.auth.getSession();
+
+  if(session){
+
+    $("loginCard")
+      .classList
+      .add("hidden");
+
+    $("app")
+      .classList
+      .remove("hidden");
+
+    $("usuario").textContent =
+      "👤 " +
+      (session.user.email || "Usuário");
+
+    await carregarTudo();
+
+  }else{
+
+    $("loginCard")
+      .classList
+      .remove("hidden");
+
+    $("app")
+      .classList
+      .add("hidden");
+
   }
 
+}
 
-  /* =========================
-     CONFIGURAÇÃO
-  ========================= */
 
-  if(!supabaseUrl || !supabaseKey){
+async function entrar(){
+
+  const email =
+    $("email")
+    .value
+    .trim();
+
+  const senha =
+    $("senha")
+    .value;
+
+  if(!email || !senha){
 
     msg(
       "loginMsg",
-      "Configuração do Supabase não encontrada. Verifique o arquivo config.js."
+      "Informe e-mail e senha."
     );
 
     return;
   }
 
+  const {error} =
+    await sb.auth.signInWithPassword({
 
-  sb =
-    window.supabase.createClient(
-      supabaseUrl,
-      supabaseKey
-    );
+      email:email,
+      password:senha
 
+    });
 
-  /* =========================
-     SESSÃO
-  ========================= */
-
-  async function atualizarSessao(){
-
-    const {
-      data:{session}
-    } =
-      await sb.auth.getSession();
-
-
-    if(session){
-
-      $("loginCard")
-        .classList
-        .add("hidden");
-
-      $("app")
-        .classList
-        .remove("hidden");
-
-      $("usuario").textContent =
-        "👤 " +
-        (session.user.email || "Usuário");
-
-      await carregarTudo();
-
-    }else{
-
-      $("loginCard")
-        .classList
-        .remove("hidden");
-
-      $("app")
-        .classList
-        .add("hidden");
-
-    }
-
-  }
-
-
-  /* =========================
-     LOGIN
-  ========================= */
-
-  async function entrar(){
-
-    const email =
-      $("email")
-      .value
-      .trim();
-
-    const senha =
-      $("senha")
-      .value;
-
-
-    if(!email || !senha){
-
-      msg(
-        "loginMsg",
-        "Informe e-mail e senha."
-      );
-
-      return;
-    }
-
-
-    const {error} =
-      await sb.auth.signInWithPassword({
-
-        email:email,
-
-        password:senha
-
-      });
-
-
-    if(error){
-
-      msg(
-        "loginMsg",
-        error.message
-      );
-
-      return;
-    }
-
-
-    $("loginMsg").textContent =
-      "";
-
-    await atualizarSessao();
-
-  }
-
-
-  /* =========================
-     CRIAR CONTA
-  ========================= */
-
-  async function criarConta(){
-
-    const email =
-      $("email")
-      .value
-      .trim();
-
-    const senha =
-      $("senha")
-      .value;
-
-
-    if(
-      !email ||
-      senha.length < 6
-    ){
-
-      msg(
-        "loginMsg",
-        "Informe um e-mail e uma senha com pelo menos 6 caracteres."
-      );
-
-      return;
-    }
-
-
-    const {error} =
-      await sb.auth.signUp({
-
-        email:email,
-
-        password:senha
-
-      });
-
-
-    if(error){
-
-      msg(
-        "loginMsg",
-        error.message
-      );
-
-      return;
-    }
-
+  if(error){
 
     msg(
       "loginMsg",
-      "Conta criada. Se o Supabase solicitar confirmação por e-mail, confirme antes de entrar.",
-      "success"
+      error.message
     );
 
+    return;
   }
 
+  $("loginMsg").textContent = "";
 
-  /* =========================
-     CARREGAR TUDO
-  ========================= */
+  await atualizarSessao();
 
-  async function carregarTudo(){
+}
 
-    await carregarMateriais();
 
-    await carregarMovimentos();
+async function criarConta(){
 
-    renderizar();
+  const email =
+    $("email")
+    .value
+    .trim();
 
+  const senha =
+    $("senha")
+    .value;
+
+  if(
+    !email ||
+    senha.length < 6
+  ){
+
+    msg(
+      "loginMsg",
+      "Informe um e-mail e uma senha com pelo menos 6 caracteres."
+    );
+
+    return;
   }
 
+  const {error} =
+    await sb.auth.signUp({
 
-  /* =========================
-     MATERIAIS
-  ========================= */
+      email:email,
+      password:senha
 
-  async function carregarMateriais(){
+    });
 
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("materiais")
-        .select("*")
-        .order("descricao");
+  if(error){
 
+    msg(
+      "loginMsg",
+      error.message
+    );
 
-    if(error){
-
-      console.error(error);
-
-      msg(
-        "materialMsg",
-        "Erro ao carregar materiais: " +
-        error.message
-      );
-
-      return;
-    }
-
-
-    materiais =
-      data || [];
-
+    return;
   }
 
+  msg(
+    "loginMsg",
+    "Conta criada. Confirme o e-mail se o Supabase solicitar.",
+    "success"
+  );
 
-  /* =========================
-     CADASTRAR MATERIAL
-  ========================= */
-
-  async function salvarMaterial(){
-
-    const codigo =
-      $("codigo")
-      .value
-      .trim();
-
-    const descricao =
-      $("descricao")
-      .value
-      .trim();
-
-    const unidade =
-      $("unidade")
-      .value
-      .trim() ||
-      "UN";
-
-    const minimo =
-      Number(
-        $("minimo")
-        .value || 0
-      );
+}
 
 
-    if(!codigo || !descricao){
+async function carregarTudo(){
 
-      msg(
-        "materialMsg",
-        "Código e descrição são obrigatórios."
-      );
+  await carregarMateriais();
 
-      return;
-    }
+  await carregarMovimentos();
 
+  renderizar();
 
-    if(minimo < 0){
-
-      msg(
-        "materialMsg",
-        "O estoque mínimo não pode ser negativo."
-      );
-
-      return;
-    }
+}
 
 
-    const {error} =
-      await sb
-        .from("materiais")
-        .insert({
+async function carregarMateriais(){
 
-          codigo,
-          descricao,
-          unidade,
-          quantidade:0,
-          minimo
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from("materiais")
+      .select("*")
+      .order("descricao");
 
-        });
+  if(error){
 
-
-    if(error){
-
-      msg(
-        "materialMsg",
-        error.message
-      );
-
-      return;
-    }
-
-
-    $("codigo").value =
-      "";
-
-    $("descricao").value =
-      "";
-
-    $("unidade").value =
-      "";
-
-    $("minimo").value =
-      "";
-
+    console.error(error);
 
     msg(
       "materialMsg",
-      "Material cadastrado com sucesso.",
-      "success"
+      "Erro ao carregar materiais: " +
+      error.message
     );
 
-
-    await carregarTudo();
-
+    return;
   }
 
+  materiais = data || [];
 
-  /* =========================
-     REGISTRAR MOVIMENTO
-  ========================= */
-
-  async function registrarMovimento(){
-
-    const material_id =
-      $("materialMovimento")
-      .value;
-
-    const tipo =
-      $("tipoMovimento")
-      .value;
-
-    const quantidade =
-      Number(
-        $("quantidade")
-        .value
-      );
+}
 
 
-    if(
-      !material_id ||
-      quantidade <= 0
-    ){
+async function salvarMaterial(){
 
-      msg(
-        "movMsg",
-        "Selecione o material e informe uma quantidade válida."
-      );
+  const codigo =
+    $("codigo")
+    .value
+    .trim();
 
-      return;
-    }
+  const descricao =
+    $("descricao")
+    .value
+    .trim();
 
+  const unidade =
+    $("unidade")
+    .value
+    .trim() ||
+    "UN";
 
-    const material =
-      materiais.find(
-        m => String(m.id) === String(material_id)
-      );
+  const minimo =
+    Number(
+      $("minimo")
+      .value || 0
+    );
 
+  if(!codigo || !descricao){
 
-    if(!material){
+    msg(
+      "materialMsg",
+      "Código e descrição são obrigatórios."
+    );
 
-      msg(
-        "movMsg",
-        "Material não encontrado."
-      );
+    return;
+  }
 
-      return;
-    }
+  const {error} =
+    await sb
+      .from("materiais")
+      .insert({
 
+        codigo,
+        descricao,
+        unidade,
+        quantidade:0,
+        minimo
 
-    /*
-      BLOQUEIO NO FRONT-END
+      });
 
-      O banco também deve continuar
-      protegendo o estoque através da
-      função processar_movimento().
-    */
+  if(error){
 
-    if(
-      tipo === "saida" &&
-      quantidade >
-      Number(material.quantidade || 0)
-    ){
+    msg(
+      "materialMsg",
+      error.message
+    );
 
-      msg(
-        "movMsg",
-        "Estoque insuficiente. Estoque atual: " +
-        Number(material.quantidade || 0) +
-        ", quantidade solicitada: " +
-        quantidade
-      );
+    return;
+  }
 
-      return;
-    }
+  $("codigo").value = "";
+  $("descricao").value = "";
+  $("unidade").value = "";
+  $("minimo").value = "";
 
+  msg(
+    "materialMsg",
+    "Material cadastrado com sucesso.",
+    "success"
+  );
 
-    const {
-      data:{user}
-    } =
-      await sb.auth.getUser();
+  await carregarTudo();
 
-
-    const {error} =
-      await sb
-        .from("movimentos")
-        .insert({
-
-          material_id,
-
-          tipo,
-
-          quantidade,
-
-          tue:
-            $("tue")
-            .value
-            .trim() ||
-            null,
-
-          observacao:
-            $("observacao")
-            .value
-            .trim() ||
-            null,
-
-          usuario_id:
-            user?.id ||
-            null
-
-        });
+}
 
 
-    if(error){
+async function registrarMovimento(){
 
-      msg(
-        "movMsg",
-        error.message
-      );
+  const material_id =
+    $("materialMovimento")
+    .value;
 
-      return;
-    }
+  const tipo =
+    $("tipoMovimento")
+    .value;
 
+  const quantidade =
+    Number(
+      $("quantidade")
+      .value
+    );
 
-    $("quantidade").value =
-      "";
-
-    $("tue").value =
-      "";
-
-    $("observacao").value =
-      "";
-
+  if(
+    !material_id ||
+    quantidade <= 0 ||
+    !tipo
+  ){
 
     msg(
       "movMsg",
-      "Movimento registrado com sucesso.",
-      "success"
+      "Selecione o material, o tipo e informe uma quantidade válida."
     );
 
-
-    await carregarTudo();
-
+    return;
   }
 
+  const material =
+    materiais.find(
+      m =>
+        String(m.id) ===
+        String(material_id)
+    );
 
-  /* =========================
-     MOVIMENTOS
-  ========================= */
+  if(!material){
 
-  async function carregarMovimentos(){
+    msg(
+      "movMsg",
+      "Material não encontrado."
+    );
 
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("movimentos")
-        .select(
-          "id,data,tipo,quantidade,tue,observacao,material_id,materiais(codigo,descricao)"
-        )
-        .order(
-          "data",
-          {ascending:false}
-        )
-        .limit(100);
-
-
-    if(error){
-
-      console.error(error);
-
-      return;
-    }
-
-
-    movimentos =
-      data || [];
-
+    return;
   }
 
-
-  /* =========================
-     RENDERIZAÇÃO
-  ========================= */
-
-  function renderizar(){
-
-    const estoque =
-      materiais.reduce(
-        (s,m) =>
-          s +
-          Number(m.quantidade || 0),
-        0
-      );
-
-
-    const baixos =
-      materiais.filter(
-        m =>
-          Number(m.quantidade || 0)
-          <=
-          Number(m.minimo || 0)
-      );
-
-
-    $("qtdMateriais")
-      .textContent =
-      materiais.length;
-
-
-    $("qtdEstoque")
-      .textContent =
-      estoque;
-
-
-    $("qtdBaixo")
-      .textContent =
-      baixos.length;
-
-
-    if(baixos.length){
-
-      $("alertas").className =
-        "msg warning-msg";
-
-      $("alertas").textContent =
-        "⚠️ " +
-        baixos.length +
-        " material(is) estão no estoque mínimo ou abaixo.";
-
-    }else{
-
-      $("alertas").className =
-        "msg success-msg";
-
-      $("alertas").textContent =
-        "✅ Nenhum material abaixo do estoque mínimo.";
-
-    }
-
-
-    /* MATERIAIS */
-
-    $("listaMateriais").innerHTML =
-      materiais
-      .map(m => {
-
-        const baixo =
-          Number(m.quantidade || 0)
-          <=
-          Number(m.minimo || 0);
-
-
-        return `
-
-          <tr>
-
-            <td>
-              ${esc(m.codigo)}
-            </td>
-
-            <td>
-              ${esc(m.descricao)}
-            </td>
-
-            <td>
-              ${esc(m.unidade || "UN")}
-            </td>
-
-            <td>
-              ${Number(m.quantidade || 0)}
-            </td>
-
-            <td>
-              ${Number(m.minimo || 0)}
-            </td>
-
-            <td>
-
-              <span class="badge ${
-                baixo
-                ? "badge-baixo"
-                : "badge-ok"
-              }">
-
-                ${
-                  baixo
-                  ? "⚠️ BAIXO"
-                  : "✅ OK"
-                }
-
-              </span>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      })
-      .join("");
-
-
-    /* INVENTÁRIO */
-
-    $("listaInventario").innerHTML =
-      materiais
-      .map(m => {
-
-        const baixo =
-          Number(m.quantidade || 0)
-          <=
-          Number(m.minimo || 0);
-
-
-        return `
-
-          <tr>
-
-            <td>
-              ${esc(m.codigo)}
-            </td>
-
-            <td>
-              ${esc(m.descricao)}
-            </td>
-
-            <td>
-              ${esc(m.unidade || "UN")}
-            </td>
-
-            <td>
-              ${Number(m.quantidade || 0)}
-            </td>
-
-            <td>
-              ${Number(m.minimo || 0)}
-            </td>
-
-            <td>
-
-              <span class="badge ${
-                baixo
-                ? "badge-baixo"
-                : "badge-ok"
-              }">
-
-                ${
-                  baixo
-                  ? "⚠️ BAIXO"
-                  : "✅ OK"
-                }
-
-              </span>
-
-            </td>
-
-          </tr>
-
-        `;
-
-      })
-      .join("");
-
-
-    /* SELECT DE MATERIAIS */
-
-    $("materialMovimento").innerHTML =
-      '<option value="">Selecione o material</option>' +
-
-      materiais
-      .map(m => `
-
-        <option value="${esc(m.id)}">
-
-          ${esc(m.codigo)}
-          —
-          ${esc(m.descricao)}
-
-          — Estoque:
-          ${Number(m.quantidade || 0)}
-
-        </option>
-
-      `)
-      .join("");
-
-
-    /* HISTÓRICO */
-
-    $("listaMovimentos").innerHTML =
-      movimentos
-      .map(x => {
-
-        const entrada =
-          x.tipo === "entrada";
-
-
-        return `
-
-          <tr>
-
-            <td>
-              ${formatarData(x.data)}
-            </td>
-
-            <td>
-
-              <span class="badge ${
-                entrada
-                ? "badge-entrada"
-                : "badge-saida"
-              }">
-
-                ${
-                  entrada
-                  ? "🟢 ENTRADA"
-                  : "🔴 SAÍDA"
-                }
-
-              </span>
-
-            </td>
-
-            <td>
-              ${esc(x.materiais?.descricao || "")}
-            </td>
-
-            <td>
-              ${Number(x.quantidade || 0)}
-            </td>
-
-            <td>
-              ${esc(x.tue || "")}
-            </td>
-
-            <td>
-              ${esc(x.observacao || "")}
-            </td>
-
-          </tr>
-
-        `;
-
-      })
-      .join("");
-
+  if(
+    tipo === "saida" &&
+    quantidade >
+    Number(material.quantidade || 0)
+  ){
+
+    msg(
+      "movMsg",
+      "Estoque insuficiente. Estoque atual: " +
+      Number(material.quantidade || 0)
+    );
+
+    return;
   }
 
+  const {
+    data:{user}
+  } =
+    await sb.auth.getUser();
 
-  /* =========================
-     DATA
-  ========================= */
+  const {error} =
+    await sb
+      .from("movimentos")
+      .insert({
 
-  function formatarData(data){
+        material_id,
+        tipo,
+        quantidade,
 
-    if(!data)
-      return "";
+        tue:
+          $("tue")
+          .value
+          .trim() || null,
 
-    return new Date(data)
-      .toLocaleString(
-        "pt-BR"
-      );
+        observacao:
+          $("observacao")
+          .value
+          .trim() || null,
 
+        usuario_id:
+          user?.id || null
+
+      });
+
+  if(error){
+
+    msg(
+      "movMsg",
+      error.message
+    );
+
+    return;
   }
 
+  $("quantidade").value = "";
+  $("tue").value = "";
+  $("observacao").value = "";
 
-  /* =========================
-     SEGURANÇA HTML
-  ========================= */
+  msg(
+    "movMsg",
+    "Movimento registrado com sucesso.",
+    "success"
+  );
 
-  function esc(v){
+  await carregarTudo();
 
-    return String(v ?? "")
-        .replace(
-            /[&<>"']/g,
-            c => ({
-                "&":"&amp;",
-                "<":"&lt;",
-                ">":"&gt;",
-                '"':"&quot;",
-                "'":"&#039;"
-            }[c])
-        );
 }
 
-$('entrar').onclick = entrar;
-$('criarConta').onclick = criarConta;
 
-$('sair').onclick = async () => {
-    await sb.auth.signOut();
-    await atualizarSessao();
+async function carregarMovimentos(){
+
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from("movimentos")
+      .select(
+        "id,data,tipo,quantidade,tue,observacao,material_id,materiais(codigo,descricao)"
+      )
+      .order(
+        "data",
+        {ascending:false}
+      )
+      .limit(100);
+
+  if(error){
+
+    console.error(error);
+    return;
+
+  }
+
+  movimentos = data || [];
+
+}
+
+
+function renderizar(){
+
+  const estoque =
+    materiais.reduce(
+      (s,m) =>
+        s +
+        Number(m.quantidade || 0),
+      0
+    );
+
+  const baixos =
+    materiais.filter(
+      m =>
+        Number(m.quantidade || 0)
+        <=
+        Number(m.minimo || 0)
+    );
+
+  $("qtdMateriais")
+    .textContent =
+    materiais.length;
+
+  $("qtdEstoque")
+    .textContent =
+    estoque;
+
+  $("qtdBaixo")
+    .textContent =
+    baixos.length;
+
+
+  if(baixos.length){
+
+    $("alertas").className =
+      "msg warning-msg";
+
+    $("alertas").textContent =
+      "⚠️ " +
+      baixos.length +
+      " material(is) estão no estoque mínimo ou abaixo.";
+
+  }else{
+
+    $("alertas").className =
+      "msg success-msg";
+
+    $("alertas").textContent =
+      "✅ Nenhum material abaixo do estoque mínimo.";
+
+  }
+
+
+  $("listaMateriais").innerHTML =
+    materiais
+    .map(m => {
+
+      const baixo =
+        Number(m.quantidade || 0)
+        <=
+        Number(m.minimo || 0);
+
+      return `
+
+        <tr>
+
+          <td>${esc(m.codigo)}</td>
+
+          <td>${esc(m.descricao)}</td>
+
+          <td>${esc(m.unidade || "UN")}</td>
+
+          <td>${Number(m.quantidade || 0)}</td>
+
+          <td>${Number(m.minimo || 0)}</td>
+
+          <td>
+
+            <span class="badge ${
+              baixo
+              ? "badge-baixo"
+              : "badge-ok"
+            }">
+
+              ${
+                baixo
+                ? "⚠️ BAIXO"
+                : "✅ OK"
+              }
+
+            </span>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    })
+    .join("");
+
+
+  $("listaInventario").innerHTML =
+    materiais
+    .map(m => {
+
+      const baixo =
+        Number(m.quantidade || 0)
+        <=
+        Number(m.minimo || 0);
+
+      return `
+
+        <tr>
+
+          <td>${esc(m.codigo)}</td>
+
+          <td>${esc(m.descricao)}</td>
+
+          <td>${esc(m.unidade || "UN")}</td>
+
+          <td>${Number(m.quantidade || 0)}</td>
+
+          <td>${Number(m.minimo || 0)}</td>
+
+          <td>
+
+            <span class="badge ${
+              baixo
+              ? "badge-baixo"
+              : "badge-ok"
+            }">
+
+              ${
+                baixo
+                ? "⚠️ BAIXO"
+                : "✅ OK"
+              }
+
+            </span>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    })
+    .join("");
+
+
+  $("materialMovimento").innerHTML =
+    '<option value="">Selecione o material</option>' +
+
+    materiais
+    .map(m => `
+
+      <option value="${esc(m.id)}">
+
+        ${esc(m.codigo)}
+        —
+        ${esc(m.descricao)}
+        —
+        Estoque:
+        ${Number(m.quantidade || 0)}
+
+      </option>
+
+    `)
+    .join("");
+
+
+  $("listaMovimentos").innerHTML =
+    movimentos
+    .map(x => {
+
+      const entrada =
+        x.tipo === "entrada";
+
+      return `
+
+        <tr>
+
+          <td>
+            ${formatarData(x.data)}
+          </td>
+
+          <td>
+
+            <span class="badge ${
+              entrada
+              ? "badge-entrada"
+              : "badge-saida"
+            }">
+
+              ${
+                entrada
+                ? "🟢 ENTRADA"
+                : "🔴 SAÍDA"
+              }
+
+            </span>
+
+          </td>
+
+          <td>
+            ${esc(x.materiais?.descricao || "")}
+          </td>
+
+          <td>
+            ${Number(x.quantidade || 0)}
+          </td>
+
+          <td>
+            ${esc(x.tue || "")}
+          </td>
+
+          <td>
+            ${esc(x.observacao || "")}
+          </td>
+
+        </tr>
+
+      `;
+
+    })
+    .join("");
+
+}
+
+
+function formatarData(data){
+
+  if(!data)
+    return "";
+
+  return new Date(data)
+    .toLocaleString("pt-BR");
+
+}
+
+
+function esc(v){
+
+  return String(v ?? "")
+    .replace(
+      /[&<>"']/g,
+      c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[c])
+    );
+
+}
+
+
+$("entrar").onclick = entrar;
+
+$("criarConta").onclick = criarConta;
+
+$("sair").onclick = async () => {
+
+  await sb.auth.signOut();
+
+  await atualizarSessao();
+
 };
 
-$('salvarMaterial').onclick = salvarMaterial;
-$('registrarMovimento').onclick = registrarMovimento;
 
-document.querySelectorAll('.tabs button').forEach(btn => {
+$("salvarMaterial").onclick =
+  salvarMaterial;
+
+$("registrarMovimento").onclick =
+  registrarMovimento;
+
+
+document
+  .querySelectorAll(".tabs button")
+  .forEach(btn => {
+
     btn.onclick = () => {
 
-        document.querySelectorAll('.tabs button')
-            .forEach(b => b.classList.remove('active'));
+      document
+        .querySelectorAll(".tabs button")
+        .forEach(b =>
+          b.classList.remove("active")
+        );
 
-        document.querySelectorAll('.tab')
-            .forEach(t => t.classList.add('hidden'));
+      document
+        .querySelectorAll(".tab")
+        .forEach(t =>
+          t.classList.add("hidden")
+        );
 
-        btn.classList.add('active');
+      btn.classList.add("active");
 
-        $(btn.dataset.tab)
-            .classList.remove('hidden');
+      $(btn.dataset.tab)
+        .classList
+        .remove("hidden");
+
     };
-});
+
+  });
+
 
 sb.auth.onAuthStateChange(() => {
-    atualizarSessao();
+  atualizarSessao();
 });
+
 
 atualizarSessao();
 
 })();
 </script>
+
+
 <script>
-const botaoLeitor = document.getElementById('lerCodigoBarras');
-const campoCodigo = document.getElementById('codigo');
-const areaLeitor = document.getElementById('leitorCodigoBarras');
+
+const botaoLeitor =
+  document.getElementById(
+    "lerCodigoBarras"
+  );
+
+const campoCodigo =
+  document.getElementById(
+    "codigo"
+  );
+
+const areaLeitor =
+  document.getElementById(
+    "leitorCodigoBarras"
+  );
 
 let leitorCodigo = null;
 
-botaoLeitor.addEventListener('click', async () => {
 
-  if (typeof Html5Qrcode === 'undefined') {
-    alert('Leitor de código de barras não carregado.');
-    return;
-  }
+botaoLeitor.addEventListener(
+  "click",
+  async () => {
 
-  areaLeitor.style.display = 'block';
+    if(
+      typeof Html5Qrcode ===
+      "undefined"
+    ){
 
-  if (!leitorCodigo) {
-    leitorCodigo = new Html5Qrcode('leitorCodigoBarras');
-  }
+      alert(
+        "Leitor de código de barras não carregado."
+      );
 
-  try {
+      return;
+    }
 
-    await leitorCodigo.start(
-      {
-        facingMode: "environment"
-      },
-      {
-        fps: 10,
-        qrbox: {
-          width: 300,
-          height: 120
-        }
-      },
+    areaLeitor.style.display =
+      "block";
 
-      async (codigoLido) => {
+    if(!leitorCodigo){
 
-        campoCodigo.value = codigoLido;
+      leitorCodigo =
+        new Html5Qrcode(
+          "leitorCodigoBarras"
+        );
 
+    }
 
-        const materialEncontrado = materiais.find(
-    m => String(m.codigo).trim() === String(codigoLido).trim()
+    try{
+
+      await leitorCodigo.start(
+
+        {
+          facingMode:"environment"
+        },
+
+        {
+          fps:10,
+
+          qrbox:{
+            width:300,
+            height:120
+          }
+        },
+
+        async codigoLido => {
+
+          campoCodigo.value =
+            codigoLido;
+
+          await leitorCodigo.stop();
+
+          areaLeitor.style.display =
+            "none";
+
+          alert(
+            "Código lido com sucesso: " +
+            codigoLido
+          );
+
+        },
+
+        () => {}
+
+      );
+
+    }catch(erro){
+
+      console.error(erro);
+
+      try{
+        await leitorCodigo.stop();
+      }catch(e){}
+
+    areaLeitor.style.display =
+  "none";
+
+alert(
+  "Não foi possível acessar a câmera. Verifique a permissão da câmera no celular."
 );
 
-if (materialEncontrado) {
-    $("#materialMovimento")
-        .val(String(materialEncontrado.id))
-        .trigger("change");
-} else {
-    alert("Material não encontrado para o código: " + codigoLido);
 }
-await leitorCodigo.stop();
-        areaLeitor.style.display = 'none';
 
-        alert('Código lido com sucesso: ' + codigoLido);
-      },
+}
 
-      () => {
-        // Continua procurando o código
-      }
-    );
+);
 
-  } catch (erro) {
-
-    console.error(erro);
-
-    try {
-      await leitorCodigo.stop();
-    } catch (e) {}
-
-    areaLeitor.style.display = 'none';
-
-    alert(
-      'Não foi possível acessar a câmera traseira. ' +
-      'Verifique a permissão da câmera no celular.'
-    );
-  }
-
-});
 </script>
-  
+
 </body>
 </html>
