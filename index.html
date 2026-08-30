@@ -2,3181 +2,1254 @@
 <html lang="pt-BR">
 
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1"
->
-
-<meta
-  name="theme-color"
-  content="#08295c"
->
-
-<title>Almoxarifado — Manutenção</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-
-<script src="config.js"></script>
-
-<style>
-
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-  background:#eef2f7;
-  color:#172033;
-}
-
-body{
-  min-height:100vh;
-}
-
-/* =========================
-   CABEÇALHO
-========================= */
-
-.topo-app{
-
-  background:#08295c;
-
-  color:white;
-
-  padding:
-    18px
-    16px
-    24px;
-
-  border-radius:
-    0
-    0
-    28px
-    28px;
-
-}
-
-.topo-linha{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:10px;
-
-}
-
-.menu-btn,
-.notificacao-btn{
-
-  width:48px;
-
-  height:48px;
-
-  margin:0;
-
-  padding:0;
-
-  border:0;
-
-  background:transparent;
-
-  color:white;
-
-  font-size:27px;
-
-  cursor:pointer;
-
-}
-
-.notificacao-btn{
-
-  position:relative;
-
-}
-
-.notificacao-btn b{
-
-  position:absolute;
-
-  top:0;
-
-  right:0;
-
-  min-width:21px;
-
-  height:21px;
-
-  padding:2px;
-
-  border-radius:50%;
-
-  background:#ef4444;
-
-  color:white;
-
-  font-size:11px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-}
-
-.titulo-app{
-
-  flex:1;
-
-  text-align:center;
-
-}
-
-.titulo-app h1{
-
-  margin:0;
-
-  font-size:24px;
-
-  line-height:1.1;
-
-}
-
-.titulo-app span{
-
-  display:block;
-
-  margin-top:6px;
-
-  color:#ffd21c;
-
-  font-size:15px;
-
-  font-weight:bold;
-
-}
-
-/* =========================
-   CONTEÚDO
-========================= */
-
-main{
-
-  width:100%;
-
-  max-width:1100px;
-
-  margin:auto;
-
-  padding:16px;
-
-}
-
-.card{
-
-  background:white;
-
-  border-radius:18px;
-
-  padding:18px;
-
-  margin-bottom:16px;
-
-  box-shadow:
-    0 4px 16px
-    rgba(0,0,0,.07);
-
-}
-
-.hidden{
-
-  display:none!important;
-
-}
-
-h2{
-
-  margin-top:0;
-
-  color:#10203d;
-
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-.login-logo{
-
-  text-align:center;
-
-  font-size:55px;
-
-  margin-bottom:8px;
-
-}
-
-.login-title{
-
-  text-align:center;
-
-  margin-bottom:20px;
-
-}
-
-input,
-select,
-button{
-
-  width:100%;
-
-  padding:14px;
-
-  border-radius:11px;
-
-  border:1px solid #cbd5e1;
-
-  font-size:15px;
-
-  margin-top:9px;
-
-}
-
-input:focus,
-select:focus{
-
-  outline:2px solid #9bbcf5;
-
-  border-color:#2563eb;
-
-}
-
-button{
-
-  border:0;
-
-  background:#08295c;
-
-  color:white;
-
-  font-weight:bold;
-
-  cursor:pointer;
-
-}
-
-button:active{
-
-  transform:scale(.99);
-
-}
-
-button.secondary{
-
-  background:#e2e8f0;
-
-  color:#172033;
-
-}
-
-button.success{
-
-  background:#166534;
-
-}
-
-button.danger{
-
-  background:#991b1b;
-
-}
-
-/* =========================
-   USUÁRIO
-========================= */
-
-.user-box{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:12px;
-
-}
-
-.user-box strong{
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
-}
-
-.user-box button{
-
-  width:auto;
-
-  min-width:90px;
-
-  margin:0;
-
-}
-
-/* =========================
-   MENU
-========================= */
-
-.tabs{
-
-  display:flex;
-
-  gap:8px;
-
-  overflow-x:auto;
-
-  margin-bottom:16px;
-
-  padding-bottom:3px;
-
-}
-
-.tabs button{
-
-  width:auto;
-
-  min-width:max-content;
-
-  margin:0;
-
-  white-space:nowrap;
-
-  padding:
-    13px
-    17px;
-
-}
-
-.tabs button.active{
-
-  background:#08295c;
-
-}
-
-/* =========================
-   ACESSO RÁPIDO
-========================= */
-
-.acesso-rapido{
-
-  margin-top:18px;
-
-}
-
-.acesso-rapido h3{
-
-  margin:
-    0
-    0
-    10px;
-
-  color:#10295b;
-
-}
-
-.acesso-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:8px;
-
-}
-
-.acesso-grid button{
-
-  margin:0;
-
-  min-height:72px;
-
-  padding:7px 4px;
-
-  background:white;
-
-  color:#10295b;
-
-  border-radius:14px;
-
-  box-shadow:
-    0 3px 10px
-    rgba(0,0,0,.08);
-
-  font-size:22px;
-
-}
-
-.acesso-grid button span{
-
-  display:block;
-
-  margin-top:5px;
-
-  font-size:10px;
-
-}
-
-/* =========================
-   RESUMO
-========================= */
-
-.grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:12px;
-
-}
-
-.stat{
-
-  background:#f8fafc;
-
-  border-radius:16px;
-
-  padding:20px;
-
-  text-align:center;
-
-}
-
-.stat b{
-
-  display:block;
-
-  font-size:32px;
-
-  margin-bottom:6px;
-
-}
-
-.stat-label{
-
-  font-size:14px;
-
-}
-
-/* =========================
-   MENSAGENS
-========================= */
-
-.msg{
-
-  padding:13px;
-
-  border-radius:11px;
-
-  margin-top:12px;
-
-  background:#f1f5f9;
-
-}
-
-.success-msg{
-
-  background:#dcfce7;
-
-  color:#166534;
-
-}
-
-.danger-msg{
-
-  background:#fee2e2;
-
-  color:#991b1b;
-
-}
-
-.warning-msg{
-
-  background:#fef3c7;
-
-  color:#92400e;
-
-}
-
-/* =========================
-   TABELAS
-========================= */
-
-.table-wrap{
-
-  width:100%;
-
-  overflow:auto;
-
-}
-
-table{
-
-  width:100%;
-
-  border-collapse:collapse;
-
-  min-width:650px;
-
-}
-
-th,
-td{
-
-  padding:
-    11px
-    9px;
-
-  border-bottom:
-    1px solid
-    #e2e8f0;
-
-  text-align:left;
-
-  white-space:nowrap;
-
-}
-
-th{
-
-  background:#f8fafc;
-
-  color:#334155;
-
-}
-
-/* =========================
-   BADGES
-========================= */
-
-.badge{
-
-  display:inline-block;
-
-  padding:
-    5px
-    9px;
-
-  border-radius:999px;
-
-  font-size:11px;
-
-  font-weight:bold;
-
-}
-
-.badge-ok{
-
-  background:#dcfce7;
-
-  color:#166534;
-
-}
-
-.badge-baixo{
-
-  background:#fee2e2;
-
-  color:#991b1b;
-
-}
-
-.badge-entrada{
-
-  background:#dcfce7;
-
-  color:#166534;
-
-}
-
-.badge-saida{
-
-  background:#fee2e2;
-
-  color:#991b1b;
-
-}
-
-/* =========================
-   LEITOR
-========================= */
-
-.scanner{
-
-  margin-top:10px;
-
-  border-radius:14px;
-
-  overflow:hidden;
-
-  background:#0f172a;
-
-}
-
-.scanner video{
-
-  width:100%!important;
-
-}
-
-.scanner-help{
-
-  padding:10px;
-
-  text-align:center;
-
-  color:white;
-
-  background:#0f172a;
-
-  font-size:13px;
-
-}
-
-/* =========================
-   TIPO MOVIMENTO
-========================= */
-
-.tipo-movimento{
-
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:10px;
-
-  margin-top:10px;
-
-}
-
-.tipo-movimento button{
-
-  margin:0;
-
-}
-
-.tipo-ativo{
-
-  outline:3px solid #2563eb;
-
-}
-
-/* =========================
-   SEPARADOR
-========================= */
-
-hr{
-
-  border:0;
-
-  border-top:
-    1px solid
-    #e2e8f0;
-
-  margin:
-    24px
-    0;
-
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:700px){
-
-  main{
-
-    padding:12px;
-
-  }
-
-  .card{
-
-    padding:15px;
-
-    border-radius:16px;
-
-  }
-
-  .titulo-app h1{
-
-    font-size:21px;
-
-  }
-
-  .titulo-app span{
-
-    font-size:13px;
-
-  }
-
-  .grid{
-
-    grid-template-columns:1fr;
-
-  }
-
-  .acesso-grid{
-
-    grid-template-columns:
-      repeat(5,1fr);
-
-  }
-
-  .stat b{
-
-    font-size:29px;
-
-  }
-
-  .user-box{
-
-    display:block;
-
-  }
-
-  .user-box button{
-
-    width:100%;
-
-    margin-top:10px;
-
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  >
+
+  <meta
+    name="theme-color"
+    content="#08295c"
+  >
+
+  <title>Almoxarifado — Manutenção</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Leitor de código de barras -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- Configuração do Supabase -->
+  <script src="config.js"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      color: #172033;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    /* CABEÇALHO */
+
+    .topo-app {
+      background: #08295c;
+      color: white;
+      padding: 18px 16px 24px;
+      border-radius: 0 0 28px 28px;
+    }
+
+    .topo-linha {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .menu-btn,
+    .notificacao-btn {
+      width: 48px;
+      height: 48px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 27px;
+      cursor: pointer;
+    }
+
+    .titulo-app {
+      flex: 1;
+      text-align: center;
+    }
+
+    .titulo-app h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .titulo-app span {
+      display: block;
+      margin-top: 6px;
+      color: #ffd21c;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .notificacao-btn {
+      position: relative;
+    }
+
+    .notificacao-btn b {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 21px;
+      height: 21px;
+      padding: 2px;
+      border-radius: 50%;
+      background: #ef4444;
+      color: white;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* CONTEÚDO */
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.07);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #10203d;
+    }
+
+    /* FORMULÁRIOS */
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 11px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+      margin-top: 9px;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid #9bbcf5;
+      border-color: #2563eb;
+    }
+
+    button {
+      border: 0;
+      background: #08295c;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(.99);
+    }
+
+    button.secondary {
+      background: #e2e8f0;
+      color: #172033;
+    }
+
+    button.success {
+      background: #166534;
+    }
+
+    button.danger {
+      background: #991b1b;
+    }
+
+    /* USUÁRIO */
+
+    .user-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .user-box strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-box button {
+      width: auto;
+      min-width: 90px;
+      margin: 0;
+    }
+
+    /* MENU */
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      padding-bottom: 3px;
+    }
+
+    .tabs button {
+      width: auto;
+      min-width: max-content;
+      margin: 0;
+      white-space: nowrap;
+      padding: 13px 17px;
+    }
+
+    .tabs button.active {
+      background: #08295c;
+    }
+
+    /* RESUMO */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+    }
+
+    /* ACESSO RÁPIDO */
+
+    .acesso-rapido {
+      margin-top: 18px;
+    }
+
+    .acesso-rapido h3 {
+      margin: 0 0 10px;
+      color: #10295b;
+    }
+
+    .acesso-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .acesso-grid button {
+      margin: 0;
+      min-height: 72px;
+      padding: 7px 4px;
+      background: white;
+      color: #10295b;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+      font-size: 22px;
+    }
+
+    .acesso-grid button span {
+      display: block;
+      margin-top: 5px;
+      font-size: 10px;
+    }
+
+    /* MENSAGENS */
+
+    .msg {
+      padding: 13px;
+      border-radius: 11px;
+      margin-top: 12px;
+      background: #f1f5f9;
+    }
+
+    .success-msg {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .danger-msg {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .warning-msg {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* TABELAS */
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th,
+    td {
+      padding: 11px 9px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    /* BADGES */
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .badge-ok,
+    .badge-entrada {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-baixo,
+    .badge-saida {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* LEITOR */
+
+    .scanner {
+      margin-top: 10px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .scanner video {
+      width: 100% !important;
+      max-height: 360px;
+      object-fit: cover;
+    }
+
+    .scanner-help {
+      padding: 10px;
+      text-align: center;
+      color: white;
+      background: #0f172a;
+      font-size: 13px;
+    }
+
+    /* MOVIMENTO */
+
+    .tipo-movimento {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tipo-movimento button {
+      margin: 0;
+    }
+
+    .tipo-ativo {
+      outline: 3px solid #2563eb;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #e2e8f0;
+      margin: 24px 0;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      main {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 15px;
+        border-radius: 16px;
+      }
+
+      .titulo-app h1 {
+        font-size: 21px;
+      }
+
+      .titulo-app span {
+        font-size: 13px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .acesso-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .stat b {
+        font-size: 29px;
+      }
+
+      .user-box {
+        display: block;
+      }
+
+      .user-box button {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
 
+  <!-- CABEÇALHO -->
 
-<!-- =========================
-     CABEÇALHO
-========================= -->
+  <header class="topo-app">
 
-<header class="topo-app">
-
-  <div class="topo-linha">
-
-    <button
-      class="menu-btn"
-      id="btnMenu"
-      aria-label="Menu"
-    >
-      ☰
-    </button>
-
-    <div class="titulo-app">
-
-      <h1>
-        📦 Almoxarifado
-      </h1>
-
-      <span>
-        MANUTENÇÃO
-      </span>
-
-    </div>
-
-    <button
-      class="notificacao-btn"
-      id="btnNotificacao"
-      aria-label="Notificações"
-    >
-
-      🔔
-
-      <b id="contadorNotificacao">
-        0
-      </b>
-
-    </button>
-
-  </div>
-
-</header>
-
-
-<main>
-
-
-<!-- =========================
-     LOGIN
-========================= -->
-
-<section
-  id="loginCard"
-  class="card"
->
-
-  <div class="login-logo">
-    📦
-  </div>
-
-  <h2 class="login-title">
-    Acesso ao estoque
-  </h2>
-
-  <input
-    id="email"
-    type="email"
-    placeholder="E-mail"
-    autocomplete="email"
-  >
-
-  <input
-    id="senha"
-    type="password"
-    placeholder="Senha"
-    autocomplete="current-password"
-  >
-
-  <button id="entrar">
-    🔐 Entrar
-  </button>
-
-  <button
-    id="criarConta"
-    class="secondary"
-  >
-    Criar conta
-  </button>
-
-  <div id="loginMsg"></div>
-
-</section>
-
-
-<!-- =========================
-     APLICAÇÃO
-========================= -->
-
-<section
-  id="app"
-  class="hidden"
->
-
-
-<!-- USUÁRIO -->
-
-<div class="card">
-
-  <div class="user-box">
-
-    <strong id="usuario">
-      👤 Usuário
-    </strong>
-
-    <button
-      id="sair"
-      class="secondary"
-    >
-      Sair
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- MENU PRINCIPAL -->
-
-<div class="tabs">
-
-  <button
-    class="active"
-    data-tab="resumo"
-  >
-    📊 Resumo
-  </button>
-
-  <button
-    data-tab="materiais"
-  >
-    📦 Materiais
-  </button>
-
-  <button
-    data-tab="movimentos"
-  >
-    🔄 Entrada/Saída
-  </button>
-
-  <button
-    data-tab="inventario"
-  >
-    📋 Inventário
-  </button>
-
-</div>
-
-
-<!-- =========================
-     RESUMO
-========================= -->
-
-<section
-  id="resumo"
-  class="tab card"
->
-
-  <h2>
-    Visão geral
-  </h2>
-
-  <div class="grid">
-
-    <div class="stat">
-
-      <b id="qtdMateriais">
-        0
-      </b>
-
-      <div class="stat-label">
-        Materiais cadastrados
-      </div>
-
-    </div>
-
-    <div class="stat">
-
-      <b id="qtdEstoque">
-        0
-      </b>
-
-      <div class="stat-label">
-        Itens em estoque
-      </div>
-
-    </div>
-
-    <div class="stat">
-
-      <b id="qtdBaixo">
-        0
-      </b>
-
-      <div class="stat-label">
-        Estoque baixo
-      </div>
-
-    </div>
-
-  </div>
-
-  <div
-    id="alertas"
-    class="msg"
-  >
-    Carregando estoque...
-  </div>
-
-
-  <div class="acesso-rapido">
-
-    <h3>
-      Acesso rápido
-    </h3>
-
-    <div class="acesso-grid">
+    <div class="topo-linha">
 
       <button
-        data-atalho="materiais"
+        class="menu-btn"
+        id="btnMenu"
+        type="button"
+        aria-label="Menu"
+      >
+        ☰
+      </button>
+
+      <div class="titulo-app">
+
+        <h1>📦 Almoxarifado</h1>
+
+        <span>MANUTENÇÃO</span>
+
+      </div>
+
+      <button
+        class="notificacao-btn"
+        id="btnNotificacao"
+        type="button"
+        aria-label="Notificações"
+      >
+
+        🔔
+
+        <b id="contadorNotificacao">0</b>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <main>
+
+    <!-- LOGIN -->
+
+    <section
+      id="loginCard"
+      class="card"
+    >
+
+      <div class="login-logo"
+        style="text-align:center;font-size:55px;margin-bottom:8px"
       >
         📦
-        <span>
-          Materiais
-        </span>
+      </div>
+
+      <h2
+        class="login-title"
+        style="text-align:center;margin-bottom:20px"
+      >
+        Acesso ao estoque
+      </h2>
+
+      <input
+        id="email"
+        type="email"
+        placeholder="E-mail"
+        autocomplete="email"
+      >
+
+      <input
+        id="senha"
+        type="password"
+        placeholder="Senha"
+        autocomplete="current-password"
+      >
+
+      <button
+        id="entrar"
+        type="button"
+      >
+        🔐 Entrar
       </button>
 
       <button
-        data-atalho="movimentos"
+        id="criarConta"
+        type="button"
+        class="secondary"
       >
-        🔄
-        <span>
-          Movimento
-        </span>
+        Criar conta
       </button>
 
-      <button
-        data-atalho="inventario"
-      >
-        📋
-        <span>
-          Inventário
-        </span>
-      </button>
+      <div id="loginMsg"></div>
 
-      <button
-        id="atalhoEntrada"
-      >
-        🟢
-        <span>
-          Entrada
-        </span>
-      </button>
-
-      <button
-        id="atalhoSaida"
-      >
-        🔴
-        <span>
-          Saída
-        </span>
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
+    </section>
 
 
-<!-- =========================
-     MATERIAIS
-========================= -->
+    <!-- APLICAÇÃO -->
 
-<section
-  id="materiais"
-  class="tab card hidden"
->
-
-  <h2>
-    📦 Cadastro de material
-  </h2>
-
-  <input
-    id="codigo"
-    placeholder="Código / código de barras"
-    autocomplete="off"
-  >
-
-  <input
-    id="descricao"
-    placeholder="Descrição do material"
-  >
-
-  <input
-    id="unidade"
-    placeholder="Unidade (UN, KG, M...)"
-  >
-
-  <input
-    id="minimo"
-    type="number"
-    min="0"
-    step="0.01"
-    placeholder="Estoque mínimo"
-  >
-
-  <button
-    id="salvarMaterial"
-    class="success"
-  >
-    💾 Cadastrar material
-  </button>
-
-  <div id="materialMsg"></div>
-
-
-  <hr>
-
-
-  <h2>
-    Materiais cadastrados
-  </h2>
-
-  <div class="table-wrap">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>
-            Código
-          </th>
-
-          <th>
-            Descrição
-          </th>
-
-          <th>
-            Unidade
-          </th>
-
-          <th>
-            Estoque
-          </th>
-
-          <th>
-            Mínimo
-          </th>
-
-          <th>
-            Status
-          </th>
-
-        </tr>
-
-      </thead>
-
-      <tbody
-        id="listaMateriais"
-      ></tbody>
-
-    </table>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     MOVIMENTOS
-========================= -->
-
-<section
-  id="movimentos"
-  class="tab card hidden"
->
-
-  <h2>
-    🔄 Registrar entrada ou saída
-  </h2>
-
-  <select
-    id="materialMovimento"
-  >
-
-    <option value="">
-      Selecione o material
-    </option>
-
-  </select>
-
-  <button
-    type="button"
-    id="btnLerCodigoMovimento"
-  >
-    📷 Ler código de barras
-  </button>
-
-  <div
-    id="leitorCodigoMovimento"
-    class="scanner hidden"
-  ></div>
-
-  <div
-    id="ajudaScannerMovimento"
-    class="scanner-help hidden"
-  >
-    Aponte a câmera para o código de barras.
-  </div>
-
-  <div
-    id="msgCodigoMovimento"
-  ></div>
-
-
-  <input
-    type="hidden"
-    id="tipoMovimento"
-    value=""
-  >
-
-
-  <div class="tipo-movimento">
-
-    <button
-      type="button"
-      id="btnEntrada"
-      class="success"
+    <section
+      id="app"
+      class="hidden"
     >
-      🟢 Entrada
-    </button>
 
-    <button
-      type="button"
-      id="btnSaida"
-      class="danger"
-    >
-      🔴 Saída
-    </button>
+      <!-- USUÁRIO -->
 
-  </div>
+      <div class="card">
 
+        <div class="user-box">
 
-  <input
-    id="quantidade"
-    type="number"
-    min="0.01"
-    step="0.01"
-    placeholder="Quantidade"
-  >
+          <strong id="usuario">
+            👤 Usuário
+          </strong>
 
-  <input
-    id="tue"
-    placeholder="TUE / composição (opcional)"
-  >
-
-  <input
-    id="observacao"
-    placeholder="Observação (opcional)"
-  >
-
-  <button
-    id="registrarMovimento"
-  >
-    💾 Registrar movimento
-  </button>
-
-  <div id="movMsg"></div>
-
-
-  <hr>
-
-
-  <h2>
-    Últimos movimentos
-  </h2>
-
-  <div class="table-wrap">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>
-            Data
-          </th>
-
-          <th>
-            Tipo
-          </th>
-
-          <th>
-            Material
-          </th>
-
-          <th>
-            Qtd.
-          </th>
-
-          <th>
-            TUE
-          </th>
-
-          <th>
-            Observação
-          </th>
-
-        </tr>
-
-      </thead>
-
-      <tbody
-        id="listaMovimentos"
-      ></tbody>
-
-    </table>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     INVENTÁRIO
-========================= -->
-
-<section
-  id="inventario"
-  class="tab card hidden"
->
-
-  <h2>
-    📋 Inventário
-  </h2>
-
-  <div class="table-wrap">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>
-            Código
-          </th>
-
-          <th>
-            Descrição
-          </th>
-
-          <th>
-            Unidade
-          </th>
-
-          <th>
-            Estoque
-          </th>
-
-          <th>
-            Mínimo
-          </th>
-
-          <th>
-            Status
-          </th>
-
-        </tr>
-
-      </thead>
-
-      <tbody
-        id="listaInventario"
-      ></tbody>
-
-    </table>
-
-  </div>
-
-</section>
-
-
-</section>
-
-</main>
-
-
-<script>
-
-(() => {
-
-
-/* =========================
-   CONFIGURAÇÃO
-========================= */
-
-const cfg =
-  window.CONFIGURACAO_DE_ESTOQUE || {};
-
-const supabaseUrl =
-  cfg.SUPABASE_URL ||
-  cfg.URL_SUPABASE;
-
-const supabaseKey =
-  cfg.SUPABASE_ANON_KEY;
-
-
-const $ = id =>
-  document.getElementById(id);
-
-
-let sb = null;
-
-let materiais = [];
-
-let movimentos = [];
-
-let scannerCadastro = null;
-
-let scannerMovimento = null;
-
-
-/* =========================
-   MENSAGENS
-========================= */
-
-function msg(
-  id,
-  texto,
-  tipo="danger"
-){
-
-  const el = $(id);
-
-  if(!el) return;
-
-  el.className =
-    "msg " +
-    (
-      tipo === "success"
-      ? "success-msg"
-      :
-      tipo === "warning"
-      ? "warning-msg"
-      :
-      "danger-msg"
-    );
-
-  el.textContent = texto;
-
-}
-
-
-/* =========================
-   CONFIGURAÇÃO
-========================= */
-
-if(
-  !supabaseUrl ||
-  !supabaseKey
-){
-
-  msg(
-    "loginMsg",
-    "Configuração do Supabase não encontrada. Verifique o arquivo config.js."
-  );
-
-  return;
-
-}
-
-
-sb =
-  window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-  );
-
-
-/* =========================
-   LOGIN
-========================= */
-
-async function entrar(){
-
-  const email =
-    $("email")
-    .value
-    .trim();
-
-  const senha =
-    $("senha")
-    .value;
-
-  if(
-    !email ||
-    !senha
-  ){
-
-    msg(
-      "loginMsg",
-      "Informe e-mail e senha."
-    );
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await sb.auth.signInWithPassword({
-
-      email,
-
-      password:senha
-
-    });
-
-
-  if(error){
-
-    msg(
-      "loginMsg",
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  $("loginMsg")
-    .textContent = "";
-
-
-  await atualizarSessao();
-
-}
-
-
-/* =========================
-   CRIAR CONTA
-========================= */
-
-async function criarConta(){
-
-  const email =
-    $("email")
-    .value
-    .trim();
-
-  const senha =
-    $("senha")
-    .value;
-
-
-  if(
-    !email ||
-    senha.length < 6
-  ){
-
-    msg(
-      "loginMsg",
-      "Informe um e-mail e uma senha com pelo menos 6 caracteres."
-    );
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await sb.auth.signUp({
-
-      email,
-
-      password:senha
-
-    });
-
-
-  if(error){
-
-    msg(
-      "loginMsg",
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  msg(
-    "loginMsg",
-    "Conta criada. Confirme o e-mail se o Supabase solicitar.",
-    "success"
-  );
-
-}
-
-
-/* =========================
-   SESSÃO
-========================= */
-
-async function atualizarSessao(){
-
-  const {
-    data:{
-      session
-    }
-  } =
-    await sb.auth.getSession();
-
-
-  if(session){
-
-    $("loginCard")
-      .classList
-      .add("hidden");
-
-
-    $("app")
-      .classList
-      .remove("hidden");
-
-
-    $("usuario")
-      .textContent =
-      "👤 " +
-      (
-        session.user.email ||
-        "Usuário"
-      );
-
-
-    await carregarTudo();
-
-  }else{
-
-    $("loginCard")
-      .classList
-      .remove("hidden");
-
-
-    $("app")
-      .classList
-      .add("hidden");
-
-  }
-
-}
-
-
-/* =========================
-   CARREGAR TUDO
-========================= */
-
-async function carregarTudo(){
-
-  await carregarMateriais();
-
-  await carregarMovimentos();
-
-  renderizar();
-
-}
-
-
-/* =========================
-   MATERIAIS
-========================= */
-
-async function carregarMateriais(){
-
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("materiais")
-      .select("*")
-      .order(
-        "descricao"
-      );
-
-
-  if(error){
-
-    console.error(error);
-
-    msg(
-      "materialMsg",
-      "Erro ao carregar materiais: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  materiais =
-    data || [];
-
-}
-
-
-/* =========================
-   SALVAR MATERIAL
-========================= */
-
-async function salvarMaterial(){
-
-  const codigo =
-    $("codigo")
-    .value
-    .trim();
-
-  const descricao =
-    $("descricao")
-    .value
-    .trim();
-
-  const unidade =
-    $("unidade")
-    .value
-    .trim() ||
-    "UN";
-
-  const minimo =
-    Number(
-      $("minimo")
-      .value || 0
-    );
-
-
-  if(
-    !codigo ||
-    !descricao
-  ){
-
-    msg(
-      "materialMsg",
-      "Código e descrição são obrigatórios."
-    );
-
-    return;
-
-  }
-
-
-  const existente =
-    materiais.find(
-      m =>
-        String(m.codigo)
-        .trim()
-        .toLowerCase()
-        ===
-        codigo
-        .toLowerCase()
-    );
-
-
-  if(existente){
-
-    msg(
-      "materialMsg",
-      "Já existe um material cadastrado com este código."
-    );
-
-    return;
-
-  }
-
-
-  const {
-    error
-  } =
-    await sb
-      .from("materiais")
-      .insert({
-
-        codigo,
-
-        descricao,
-
-        unidade,
-
-        quantidade:0,
-
-        minimo
-
-      });
-
-
-  if(error){
-
-    msg(
-      "materialMsg",
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  $("codigo").value = "";
-
-  $("descricao").value = "";
-
-  $("unidade").value = "";
-
-  $("minimo").value = "";
-
-
-  msg(
-    "materialMsg",
-    "Material cadastrado com sucesso.",
-    "success"
-  );
-
-
-  await carregarTudo();
-
-}
-
-
-/* =========================
-   MOVIMENTOS
-========================= */
-
-async function registrarMovimento(){
-
-  const material_id =
-    $("materialMovimento")
-    .value;
-
-  const tipo =
-    $("tipoMovimento")
-    .value;
-
-  const quantidade =
-    Number(
-      $("quantidade")
-      .value
-    );
-
-
-  if(
-    !material_id ||
-    !tipo ||
-    quantidade <= 0
-  ){
-
-    msg(
-      "movMsg",
-      "Selecione o material, escolha entrada ou saída e informe uma quantidade válida."
-    );
-
-    return;
-
-  }
-
-
-  const material =
-    materiais.find(
-      m =>
-        String(m.id)
-        ===
-        String(material_id)
-    );
-
-
-  if(!material){
-
-          msg(
-      "movMsg",
-      "Material não encontrado."
-    );
-
-    return;
-
-  }
-
-
-  const estoqueAtual =
-    Number(
-      material.quantidade || 0
-    );
-
-
-  if(
-    tipo === "saida" &&
-    quantidade > estoqueAtual
-  ){
-
-    msg(
-      "movMsg",
-      "Estoque insuficiente. Estoque atual: " +
-      estoqueAtual
-    );
-
-    return;
-
-  }
-
-
-  const {
-    data:{
-      user
-    }
-  } =
-    await sb.auth.getUser();
-
-
-  const {
-    error
-  } =
-    await sb
-      .from("movimentos")
-      .insert({
-
-        material_id,
-
-        tipo,
-
-        quantidade,
-
-        tue:
-          $("tue")
-          .value
-          .trim() ||
-          null,
-
-        observacao:
-          $("observacao")
-          .value
-          .trim() ||
-          null,
-
-        usuario_id:
-          user?.id ||
-          null
-
-      });
-
-
-  if(error){
-
-    msg(
-      "movMsg",
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  $("quantidade").value = "";
-
-  $("tue").value = "";
-
-  $("observacao").value = "";
-
-  $("tipoMovimento").value = "";
-
-
-  $("btnEntrada")
-    .classList
-    .remove("tipo-ativo");
-
-  $("btnSaida")
-    .classList
-    .remove("tipo-ativo");
-
-
-  msg(
-    "movMsg",
-    "Movimento registrado com sucesso.",
-    "success"
-  );
-
-
-  await carregarTudo();
-
-}
-
-
-/* =========================
-   CARREGAR MOVIMENTOS
-========================= */
-
-async function carregarMovimentos(){
-
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("movimentos")
-      .select(
-        "id,data,tipo,quantidade,tue,observacao,material_id,materiais(codigo,descricao)"
-      )
-      .order(
-        "data",
-        {
-          ascending:false
-        }
-      )
-      .limit(100);
-
-
-  if(error){
-
-    console.error(error);
-
-    movimentos = [];
-
-    return;
-
-  }
-
-
-  movimentos =
-    data || [];
-
-}
-
-
-/* =========================
-   RENDERIZAR
-========================= */
-
-function renderizar(){
-
-  const estoque =
-    materiais.reduce(
-      (
-        soma,
-        material
-      ) =>
-        soma +
-        Number(
-          material.quantidade || 0
-        ),
-      0
-    );
-
-
-  const baixos =
-    materiais.filter(
-      material =>
-        Number(
-          material.quantidade || 0
-        )
-        <=
-        Number(
-          material.minimo || 0
-        )
-    );
-
-
-  $("qtdMateriais")
-    .textContent =
-    materiais.length;
-
-
-  $("qtdEstoque")
-    .textContent =
-    estoque;
-
-
-  $("qtdBaixo")
-    .textContent =
-    baixos.length;
-
-
-  if(baixos.length){
-
-    $("alertas")
-      .className =
-      "msg warning-msg";
-
-
-    $("alertas")
-      .textContent =
-      "⚠️ " +
-      baixos.length +
-      " material(is) estão no estoque mínimo ou abaixo.";
-
-  }else{
-
-    $("alertas")
-      .className =
-      "msg success-msg";
-
-
-    $("alertas")
-      .textContent =
-      "✅ Nenhum material abaixo do estoque mínimo.";
-
-  }
-
-
-  $("contadorNotificacao")
-    .textContent =
-    baixos.length;
-
-
-  renderizarMateriais();
-
-  renderizarInventario();
-
-  renderizarSelect();
-
-  renderizarMovimentos();
-
-}
-
-
-/* =========================
-   LISTA DE MATERIAIS
-========================= */
-
-function renderizarMateriais(){
-
-  $("listaMateriais")
-    .innerHTML =
-
-    materiais
-      .map(
-        material => {
-
-          const baixo =
-            Number(
-              material.quantidade || 0
-            )
-            <=
-            Number(
-              material.minimo || 0
-            );
-
-
-          return `
-
-            <tr>
-
-              <td>
-                ${esc(material.codigo)}
-              </td>
-
-              <td>
-                ${esc(material.descricao)}
-              </td>
-
-              <td>
-                ${esc(material.unidade || "UN")}
-              </td>
-
-              <td>
-                ${Number(
-                  material.quantidade || 0
-                )}
-              </td>
-
-              <td>
-                ${Number(
-                  material.minimo || 0
-                )}
-              </td>
-
-              <td>
-
-                <span
-                  class="badge ${
-                    baixo
-                    ? "badge-baixo"
-                    : "badge-ok"
-                  }"
-                >
-
-                  ${
-                    baixo
-                    ? "⚠️ BAIXO"
-                    : "✅ OK"
-                  }
-
-                </span>
-
-              </td>
-
-            </tr>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   INVENTÁRIO
-========================= */
-
-function renderizarInventario(){
-
-  $("listaInventario")
-    .innerHTML =
-
-    materiais
-      .map(
-        material => {
-
-          const baixo =
-            Number(
-              material.quantidade || 0
-            )
-            <=
-            Number(
-              material.minimo || 0
-            );
-
-
-          return `
-
-            <tr>
-
-              <td>
-                ${esc(material.codigo)}
-              </td>
-
-              <td>
-                ${esc(material.descricao)}
-              </td>
-
-              <td>
-                ${esc(material.unidade || "UN")}
-              </td>
-
-              <td>
-                ${Number(
-                  material.quantidade || 0
-                )}
-              </td>
-
-              <td>
-                ${Number(
-                  material.minimo || 0
-                )}
-              </td>
-
-              <td>
-
-                <span
-                  class="badge ${
-                    baixo
-                    ? "badge-baixo"
-                    : "badge-ok"
-                  }"
-                >
-
-                  ${
-                    baixo
-                    ? "⚠️ BAIXO"
-                    : "✅ OK"
-                  }
-
-                </span>
-
-              </td>
-
-            </tr>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   SELECT DE MATERIAL
-========================= */
-
-function renderizarSelect(){
-
-  $("materialMovimento")
-    .innerHTML =
-
-    '<option value="">Selecione o material</option>' +
-
-    materiais
-      .map(
-        material => `
-
-          <option
-            value="${esc(material.id)}"
+          <button
+            id="sair"
+            type="button"
+            class="secondary"
           >
+            Sair
+          </button>
 
-            ${esc(material.codigo)}
-            —
-            ${esc(material.descricao)}
-            —
-            Estoque:
-            ${Number(
-              material.quantidade || 0
-            )}
+        </div>
 
+      </div>
+
+
+      <!-- MENU -->
+
+      <div class="tabs">
+
+        <button
+          type="button"
+          class="active"
+          data-tab="resumo"
+        >
+          📊 Resumo
+        </button>
+
+        <button
+          type="button"
+          data-tab="materiais"
+        >
+          📦 Materiais
+        </button>
+
+        <button
+          type="button"
+          data-tab="movimentos"
+        >
+          🔄 Entrada/Saída
+        </button>
+
+        <button
+          type="button"
+          data-tab="inventario"
+        >
+          📋 Inventário
+        </button>
+
+      </div>
+
+
+      <!-- RESUMO -->
+
+      <section
+        id="resumo"
+        class="tab card"
+      >
+
+        <h2>Visão geral</h2>
+
+        <div class="grid">
+
+          <div class="stat">
+
+            <b id="qtdMateriais">0</b>
+
+            <div class="stat-label">
+              Materiais cadastrados
+            </div>
+
+          </div>
+
+          <div class="stat">
+
+            <b id="qtdEstoque">0</b>
+
+            <div class="stat-label">
+              Itens em estoque
+            </div>
+
+          </div>
+
+          <div class="stat">
+
+            <b id="qtdBaixo">0</b>
+
+            <div class="stat-label">
+              Estoque baixo
+            </div>
+
+          </div>
+
+        </div>
+
+        <div
+          id="alertas"
+          class="msg"
+        >
+          Carregando estoque...
+        </div>
+
+
+        <!-- ACESSO RÁPIDO -->
+
+        <div class="acesso-rapido">
+
+          <h3>Acesso rápido</h3>
+
+          <div class="acesso-grid">
+
+            <button
+              type="button"
+              data-atalho="materiais"
+            >
+              📦
+              <span>Materiais</span>
+            </button>
+
+            <button
+              type="button"
+              data-atalho="movimentos"
+            >
+              🔄
+              <span>Movimento</span>
+            </button>
+
+            <button
+              type="button"
+              data-atalho="inventario"
+            >
+              📋
+              <span>Inventário</span>
+            </button>
+
+            <button
+              type="button"
+              id="atalhoEntrada"
+            >
+              🟢
+              <span>Entrada</span>
+            </button>
+
+            <button
+              type="button"
+              id="atalhoSaida"
+            >
+              🔴
+              <span>Saída</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- MATERIAIS -->
+
+      <section
+        id="materiais"
+        class="tab card hidden"
+      >
+
+        <h2>📦 Cadastro de material</h2>
+
+        <input
+          id="codigo"
+          placeholder="Código / código de barras"
+          autocomplete="off"
+        >
+
+        <!-- BOTÃO QUE ESTAVA FALTANDO -->
+
+        <button
+          type="button"
+          id="lerCodigoBarras"
+        >
+          📷 Ler código de barras
+        </button>
+
+        <!-- ÁREA DA CÂMERA -->
+
+        <div
+          id="leitorCodigoBarras"
+          class="scanner hidden"
+        ></div>
+
+        <div
+          id="ajudaScanner"
+          class="scanner-help hidden"
+        >
+          Aponte a câmera para o código de barras.
+        </div>
+
+
+        <input
+          id="descricao"
+          placeholder="Descrição do material"
+        >
+
+        <input
+          id="unidade"
+          placeholder="Unidade (UN, KG, M...)"
+        >
+
+        <input
+          id="minimo"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="Estoque mínimo"
+        >
+
+        <button
+          id="salvarMaterial"
+          type="button"
+          class="success"
+        >
+          💾 Cadastrar material
+        </button>
+
+        <div id="materialMsg"></div>
+
+        <hr>
+
+        <h2>Materiais cadastrados</h2>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+                <th>Estoque</th>
+                <th>Mínimo</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="listaMateriais"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- MOVIMENTOS -->
+
+      <section
+        id="movimentos"
+        class="tab card hidden"
+      >
+
+        <h2>🔄 Registrar entrada ou saída</h2>
+
+        <select id="materialMovimento">
+
+          <option value="">
+            Selecione o material
           </option>
 
-        `
-      )
-      .join("");
-
-}
+        </select>
 
 
-/* =========================
-   LISTA DE MOVIMENTOS
-========================= */
+        <!-- LEITOR PARA MOVIMENTO -->
 
-function renderizarMovimentos(){
+        <button
+          type="button"
+          id="btnLerCodigoMovimento"
+        >
+          📷 Ler código de barras
+        </button>
 
-  $("listaMovimentos")
-    .innerHTML =
+        <div
+          id="leitorCodigoMovimento"
+          class="scanner hidden"
+        ></div>
 
-    movimentos
-      .map(
-        movimento => {
+        <div
+          id="ajudaScannerMovimento"
+          class="scanner-help hidden"
+        >
+          Aponte a câmera para o código de barras.
+        </div>
 
-          const entrada =
-            movimento.tipo ===
-            "entrada";
+        <div id="msgCodigoMovimento"></div>
 
 
-          return `
+        <!-- TIPO -->
 
-            <tr>
+        <input
+          type="hidden"
+          id="tipoMovimento"
+          value=""
+        >
 
-              <td>
-                ${formatarData(
-                  movimento.data
-                )}
-              </td>
+        <div class="tipo-movimento">
 
-              <td>
+          <button
+            type="button"
+            id="btnEntrada"
+            class="success"
+          >
+            🟢 Entrada
+          </button>
 
-                <span
-                  class="badge ${
-                    entrada
-                    ? "badge-entrada"
-                    : "badge-saida"
-                  }"
-                >
+          <button
+            type="button"
+            id="btnSaida"
+            class="danger"
+          >
+            🔴 Saída
+          </button>
 
-                  ${
-                    entrada
-                    ? "🟢 ENTRADA"
-                    : "🔴 SAÍDA"
-                  }
+        </div>
 
-                </span>
 
-              </td>
+        <input
+          id="quantidade"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="Quantidade"
+        >
 
-              <td>
-                ${esc(
-                  movimento
-                    .materiais
-                    ?.descricao || ""
-                )}
-              </td>
+        <input
+          id="tue"
+          placeholder="TUE / composição (opcional)"
+        >
 
-              <td>
-                ${Number(
-                  movimento.quantidade || 0
-                )}
-              </td>
+        <input
+          id="observacao"
+          placeholder="Observação (opcional)"
+        >
 
-              <td>
-                ${esc(
-                  movimento.tue || ""
-                )}
-              </td>
+        <button
+          id="registrarMovimento"
+          type="button"
+        >
+          💾 Registrar movimento
+        </button>
 
-              <td>
-                ${esc(
-                  movimento.observacao || ""
-                )}
-              </td>
+        <div id="movMsg"></div>
 
-            </tr>
+        <hr>
 
-          `;
+        <h2>Últimos movimentos</h2>
 
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Material</th>
+                <th>Qtd.</th>
+                <th>TUE</th>
+                <th>Observação</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="listaMovimentos"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- INVENTÁRIO -->
+
+      <section
+        id="inventario"
+        class="tab card hidden"
+      >
+
+        <h2>📋 Inventário</h2>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+                <th>Estoque</th>
+                <th>Mínimo</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="listaInventario"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    (() => {
+
+      "use strict";
+
+      /*
+       * CONFIGURAÇÃO
+       */
+
+      const cfg =
+        window.CONFIGURACAO_DE_ESTOQUE || {};
+
+      const supabaseUrl =
+        cfg.SUPABASE_URL ||
+        cfg.URL_SUPABASE;
+
+      const supabaseKey =
+        cfg.SUPABASE_ANON_KEY;
+
+
+      /*
+       * VARIÁVEIS
+       */
+
+      const $ = id =>
+        document.getElementById(id);
+
+      let sb = null;
+
+      let materiais = [];
+
+      let movimentos = [];
+
+      let scannerCadastro = null;
+
+      let scannerMovimento = null;
+
+
+      /*
+       * MENSAGEM
+       */
+
+      function mostrarMensagem(
+        id,
+        texto,
+        tipo = "danger"
+      ) {
+
+        const elemento = $(id);
+
+        if (!elemento) {
+          return;
         }
-      )
-      .join("");
 
-}
+        elemento.className =
+          "msg " +
+          (
+            tipo === "success"
+              ? "success-msg"
+              : tipo === "warning"
+                ? "warning-msg"
+                : "danger-msg"
+          );
 
-
-/* =========================
-   FORMATAR DATA
-========================= */
-
-function formatarData(data){
-
-  if(!data){
-
-    return "";
-
-  }
-
-
-  return new Date(data)
-    .toLocaleString(
-      "pt-BR"
-    );
-
-}
-
-
-/* =========================
-   SEGURANÇA HTML
-========================= */
-
-function esc(valor){
-
-  return String(
-    valor ?? ""
-  )
-  .replace(
-    /[&<>"']/g,
-    caractere => ({
-
-      "&":"&amp;",
-
-      "<":"&lt;",
-
-      ">":"&gt;",
-
-      '"':"&quot;",
-
-      "'":"&#039;"
-
-    }[caractere])
-  );
-
-}
-
-
-/* =========================
-   ABRIR ABA
-========================= */
-
-function abrirAba(nome){
-
-  document
-    .querySelectorAll(
-      ".tabs button"
-    )
-    .forEach(
-      botao => {
-
-        botao
-          .classList
-          .remove("active");
-
+        elemento.textContent = texto;
       }
-    );
 
 
-  document
-    .querySelectorAll(".tab")
-    .forEach(
-      aba => {
+      /*
+       * VERIFICA CONFIGURAÇÃO
+       */
 
-        aba
-          .classList
-          .add("hidden");
+      if (
+        !supabaseUrl ||
+        !supabaseKey
+      ) {
 
+        mostrarMensagem(
+          "loginMsg",
+          "Configuração do Supabase não encontrada. Verifique o arquivo config.js."
+        );
+
+        return;
       }
-    );
 
 
-  const botao =
-    document.querySelector(
-      `.tabs button[data-tab="${nome}"]`
-    );
+      /*
+       * SUPABASE
+       */
 
-
-  const aba =
-    $(nome);
-
-
-  if(botao){
-
-    botao
-      .classList
-      .add("active");
-
-  }
-
-
-  if(aba){
-
-    aba
-      .classList
-      .remove("hidden");
-
-  }
-
-}
-
-
-/* =========================
-   ENTRADA
-========================= */
-
-function selecionarEntrada(){
-
-  $("tipoMovimento")
-    .value =
-    "entrada";
-
-
-  $("btnEntrada")
-    .classList
-    .add("tipo-ativo");
-
-
-  $("btnSaida")
-    .classList
-    .remove("tipo-ativo");
-
-}
-
-
-/* =========================
-   SAÍDA
-========================= */
-
-function selecionarSaida(){
-
-  $("tipoMovimento")
-    .value =
-    "saida";
-
-
-  $("btnSaida")
-    .classList
-    .add("tipo-ativo");
-
-
-  $("btnEntrada")
-    .classList
-    .remove("tipo-ativo");
-
-}
-
-
-/* =========================
-   SCANNER DO CADASTRO
-========================= */
-
-async function iniciarScannerCadastro(){
-
-  const area =
-    $("leitorCodigoBarras");
-
-  const ajuda =
-    $("ajudaScanner");
-
-
-  if(
-    typeof Html5Qrcode ===
-    "undefined"
-  ){
-
-    alert(
-      "Leitor de código de barras não carregado."
-    );
-
-    return;
-
-  }
-
-
-  area
-    .classList
-    .remove("hidden");
-
-
-  ajuda
-    .classList
-    .remove("hidden");
-
-
-  if(scannerCadastro){
-
-    try{
-
-      await scannerCadastro.stop();
-
-    }catch(e){}
-
-  }
-
-
-  scannerCadastro =
-    new Html5Qrcode(
-      "leitorCodigoBarras"
-    );
-
-
-  try{
-
-    await scannerCadastro.start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      {
-        fps:10,
-
-        qrbox:{
-          width:280,
-          height:120
-        },
-
-        aspectRatio:1.777
-      },
-
-      async codigo => {
-
-        $("codigo")
-          .value =
-          codigo;
-
-
-        await pararScannerCadastro();
-
-
-        $("descricao")
-          .focus();
-
-      },
-
-      () => {}
-
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    await pararScannerCadastro();
-
-
-    alert(
-      "Não foi possível acessar a câmera. Verifique a permissão da câmera no celular."
-    );
-
-  }
-
-}
-
-
-/* =========================
-   PARAR SCANNER CADASTRO
-========================= */
-
-async function pararScannerCadastro(){
-
-  if(scannerCadastro){
-
-    try{
-
-      await scannerCadastro.stop();
-
-    }catch(e){}
-
-    scannerCadastro = null;
-
-  }
-
-
-  $("leitorCodigoBarras")
-    .classList
-    .add("hidden");
-
-
-  $("ajudaScanner")
-    .classList
-    .add("hidden");
-
-}
-
-
-/* =========================
-   SCANNER DO MOVIMENTO
-========================= */
-
-async function iniciarScannerMovimento(){
-
-  const area =
-    $("leitorCodigoMovimento");
-
-  const ajuda =
-    $("ajudaScannerMovimento");
-
-
-  if(
-    typeof Html5Qrcode ===
-    "undefined"
-  ){
-
-    alert(
-      "Leitor de código de barras não carregado."
-    );
-
-    return;
-
-  }
-
-
-  area
-    .classList
-    .remove("hidden");
-
-
-  ajuda
-    .classList
-    .remove("hidden");
-
-
-  if(scannerMovimento){
-
-    try{
-
-      await scannerMovimento.stop();
-
-    }catch(e){}
-
-  }
-
-
-  scannerMovimento =
-    new Html5Qrcode(
-      "leitorCodigoMovimento"
-    );
-
-
-  try{
-
-    await scannerMovimento.start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      {
-        fps:10,
-
-        qrbox:{
-          width:280,
-          height:120
-        },
-
-        aspectRatio:1.777
-      },
-
-      async codigo => {
-
-        await selecionarMaterialPorCodigo(
-          codigo
+      sb =
+        window.supabase.createClient(
+          supabaseUrl,
+          supabaseKey
         );
 
 
-        await pararScannerMovimento();
+      /*
+       * LOGIN
+       */
 
-      },
+      async function entrar() {
 
-      () => {}
+        const email =
+          $("email").value.trim();
 
-    );
+        const senha =
+          $("senha").value;
 
-  }catch(error){
+        if (!email || !senha) {
 
-    console.error(error);
+          mostrarMensagem(
+            "loginMsg",
+            "Informe e-mail e senha."
+          );
 
-    await pararScannerMovimento();
+          return;
+        }
 
+        const {
+          error
+        } =
+          await sb.auth.signInWithPassword({
+            email,
+            password: senha
+          });
 
-    alert(
-      "Não foi possível acessar a câmera. Verifique a permissão da câmera no celular."
-    );
+        if (error) {
 
-  }
+          mostrarMensagem(
+            "loginMsg",
+            error.message
+          );
 
-}
+          return;
+        }
 
+        $("loginMsg").textContent = "";
 
-/* =========================
-   PARAR SCANNER MOVIMENTO
-========================= */
+        await atualizarSessao();
 
-async function pararScannerMovimento(){
+      }
 
-  if(scannerMovimento){
 
-    try{
+      /*
+       * CRIAR CONTA
+       */
 
-      await scannerMovimento.stop();
+      async function criarConta() {
 
-    }catch(e){}
+        const email =
+          $("email").value.trim();
 
-    scannerMovimento = null;
+        const senha =
+          $("senha").value;
 
-  }
+        if (
+          !email ||
+          senha.length < 6
+        ) {
 
+          mostrarMensagem(
+            "loginMsg",
+            "Informe um e-mail e uma senha com pelo menos 6 caracteres."
+          );
 
-  $("leitorCodigoMovimento")
-    .classList
-    .add("hidden");
+          return;
+        }
 
+        const {
+          error
+        } =
+          await sb.auth.signUp({
+            email,
+            password: senha
+          });
 
-  $("ajudaScannerMovimento")
-    .classList
-    .add("hidden");
+        if (error) {
 
-}
+          mostrarMensagem(
+            "loginMsg",
+            error.message
+          );
 
+          return;
+        }
 
-/* =========================
-   ENCONTRAR MATERIAL PELO CÓDIGO
-========================= */
+        mostrarMensagem(
+          "loginMsg",
+          "Conta criada. Confirme o e-mail se o Supabase solicitar.",
+          "success"
+        );
 
-async function selecionarMaterialPorCodigo(
-  codigo
-){
+      }
 
-  const codigoTexto =
-    String(codigo)
-    .trim();
 
+      /*
+       * SESSÃO
+       */
 
-  const material =
-    materiais.find(
-      material =>
-        String(
-          material.codigo
-        )
-        .trim()
-        .toLowerCase()
-        ===
-        codigoTexto
-        .toLowerCase()
-    );
+      async function atualizarSessao() {
 
+        const {
+          data
+        } =
+          await sb.auth.getSession();
 
-  if(!material){
+        const session =
+          data.session;
 
-    $("msgCodigoMovimento")
-      .className =
-      "msg danger-msg";
+        if (session) {
 
+          $("loginCard")
+            .classList
+            .add("hidden");
 
-    $("msgCodigoMovimento")
-      .textContent =
-      "⚠️ Código " +
-      codigoTexto +
-      " não encontrado no cadastro.";
+          $("app")
+            .classList
+            .remove("hidden");
 
+          $("usuario").textContent =
+            "👤 " +
+            (
+              session.user.email ||
+              "Usuário"
+            );
 
-    return;
+          await carregarTudo();
 
-  }
+        } else {
 
+          $("loginCard")
+            .classList
+            .remove("hidden");
 
-  $("materialMovimento")
-    .value =
-    material.id;
+          $("app")
+            .classList
+            .add("hidden");
 
+        }
 
-  $("msgCodigoMovimento")
-    .className =
-    "msg success-msg";
+      }
+          
+      /*
+       * EVENTO DE ALTERAÇÃO DA SESSÃO
+       */
 
+      sb.auth.onAuthStateChange(
+        () => {
 
-  $("msgCodigoMovimento")
-    .textContent =
-    "✅ Material encontrado: " +
-    material.descricao +
-    " | Estoque: " +
-    Number(
-      material.quantidade || 0
-    );
+          setTimeout(
+            atualizarSessao,
+            0
+          );
 
-}
-
-
-/* =========================
-   EVENTOS
-========================= */
-
-$("entrar")
-  .onclick =
-  entrar;
-
-
-$("criarConta")
-  .onclick =
-  criarConta;
-
-
-$("sair")
-  .onclick =
-  async () => {
-
-    await sb.auth.signOut();
-
-    await atualizarSessao();
-
-  };
-
-
-$("salvarMaterial")
-  .onclick =
-  salvarMaterial;
-
-
-$("registrarMovimento")
-  .onclick =
-  registrarMovimento;
-
-
-$("btnEntrada")
-  .onclick =
-  selecionarEntrada;
-
-
-$("btnSaida")
-  .onclick =
-  selecionarSaida;
-
-
-$("lerCodigoBarras")
-  .onclick =
-  iniciarScannerCadastro;
-
-
-$("btnLerCodigoMovimento")
-  .onclick =
-  iniciarScannerMovimento;
-
-
-$("btnMenu")
-  .onclick =
-  () => {
-
-    abrirAba("resumo");
-
-  };
-
-
-$("btnNotificacao")
-  .onclick =
-  () => {
-
-    abrirAba("resumo");
-
-
-    const baixos =
-      materiais.filter(
-        material =>
-          Number(
-            material.quantidade || 0
-          )
-          <=
-          Number(
-            material.minimo || 0
-          )
+        }
       );
 
 
-    if(baixos.length){
+      /*
+       * INICIALIZAÇÃO
+       */
 
-      $("alertas")
-        .scrollIntoView({
-          behavior:"smooth",
-          block:"center"
-        });
+      atualizarSessao();
 
-    }
+    })();
 
-  };
-
-
-/* =========================
-   ABAS
-========================= */
-
-document
-  .querySelectorAll(
-    ".tabs button"
-  )
-  .forEach(
-    botao => {
-
-      botao.onclick =
-        () => {
-
-          abrirAba(
-            botao.dataset.tab
-          );
-
-        };
-
-    }
-  );
-
-
-/* =========================
-   ACESSOS RÁPIDOS
-========================= */
-
-document
-  .querySelectorAll(
-    "[data-atalho]"
-  )
-  .forEach(
-    botao => {
-
-      botao.onclick =
-        () => {
-
-          abrirAba(
-            botao.dataset.atalho
-          );
-
-        };
-
-    }
-  );
-
-
-$("atalhoEntrada")
-  .onclick =
-  () => {
-
-    abrirAba(
-      "movimentos"
-    );
-
-    selecionarEntrada();
-
-  };
-
-
-$("atalhoSaida")
-  .onclick =
-  () => {
-
-    abrirAba(
-      "movimentos"
-    );
-
-    selecionarSaida();
-
-  };
-
-
-/* =========================
-   LIMPAR CÓDIGO
-========================= */
-
-$("codigo")
-  .addEventListener(
-    "change",
-    () => {
-
-      $("codigo")
-        .value =
-        $("codigo")
-        .value
-        .trim();
-
-    }
-  );
-
-
-/* =========================
-   SELEÇÃO DE MATERIAL
-========================= */
-
-$("materialMovimento")
-  .addEventListener(
-    "change",
-    () => {
-
-      const id =
-        $("materialMovimento")
-        .value;
-
-
-      const material =
-        materiais.find(
-          m =>
-            String(m.id)
-            ===
-            String(id)
-        );
-
-
-      if(material){
-
-        $("msgCodigoMovimento")
-          .className =
-          "msg success-msg";
-
-
-        $("msgCodigoMovimento")
-          .textContent =
-          "Material selecionado: " +
-          material.descricao +
-          " | Estoque atual: " +
-          Number(
-            material.quantidade || 0
-          );
-
-      }
-
-    }
-  );
-
-
-/* =========================
-   AUTENTICAÇÃO
-========================= */
-
-sb.auth.onAuthStateChange(
-  () => {
-
-    setTimeout(
-      atualizarSessao,
-      0
-    );
-
-  }
-);
-
-
-/* =========================
-   INICIALIZAÇÃO
-========================= */
-
-atualizarSessao();
-
-
-})();
-
-</script>
+  </script>
 
 </body>
 
