@@ -1,534 +1,1306 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f2338">
-<title>Almoxarifado • Manutenção</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2338">
+  <meta name="description" content="Sistema de controle de almoxarifado da manutenção">
+  <title>Almoxarifado • Manutenção</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="topbar">
+  <!-- CABEÇALHO -->
+  <header class="topbar">
 
-  <div class="brand">
-    <div class="brand-logo">AM</div>
+    <div class="brand">
 
-    <div>
-      <strong>Almoxarifado</strong>
-      <span>Manutenção</span>
-    </div>
-  </div>
+      <div class="brand-logo">
+        AM
+      </div>
 
-  <div class="header-greeting">
-    <span id="maintenanceGreeting">Bom dia</span>,
-    <strong id="maintenanceUserGreeting">usuário</strong>!
-  </div>
-
-  <div class="topuser">
-    <span id="topUserName">Administrador</span>
-    <button onclick="logout()">Sair</button>
-  </div>
-
-</header>
-
-<div class="layout">
-
-<aside class="sidebar">
-
-  <a href="#dashboard" data-page="dashboard">🏠 Dashboard</a>
-
-  <a href="#materials" data-page="materials">📝 Cadastro de Materiais</a>
-
-  <a href="#stock" data-page="stock">📦 Consultar Estoque</a>
-
-  <a href="#entry" data-page="entry">📥 Entrada</a>
-
-  <a href="#exit" data-page="exit">📤 Saída</a>
-
-  <a href="#history" data-page="history">🧾 Histórico</a>
-
-  <a href="#users" data-page="users">👥 Usuários</a>
-
-</aside>
-
-<main>
-
-<!-- DASHBOARD -->
-
-<section id="dashboard" class="page">
-
-  <div class="title">
-    <div>
-      <h1>Dashboard</h1>
-      <p>Visão geral do almoxarifado</p>
-    </div>
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <span>Materiais cadastrados</span>
-      <strong id="dashMaterials">0</strong>
-    </div>
-
-    <div class="card">
-      <span>Itens em estoque</span>
-      <strong id="dashStock">0</strong>
-    </div>
-
-    <div class="card">
-      <span>Entradas</span>
-      <strong id="dashEntries">0</strong>
-    </div>
-
-    <div class="card">
-      <span>Saídas</span>
-      <strong id="dashExits">0</strong>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- CADASTRO -->
-
-<section id="materials" class="page">
-
-  <div class="title">
-    <div>
-      <h1>Cadastro de Materiais</h1>
-      <p>Cadastre, edite e exclua materiais</p>
-    </div>
-  </div>
-
-  <div class="panel form">
-
-    <input type="hidden" id="cadId">
-
-    <label>
-      Código do material*
-      <input id="cadCode" placeholder="Ex.: MAT-0001">
-    </label>
-
-    <label>
-      Descrição*
-      <input id="cadDesc" placeholder="Descrição do material">
-    </label>
-
-    <label>
-      Quantidade
-      <input id="cadQty" type="number" min="0" value="0">
-    </label>
-
-    <label>
-      Estoque mínimo
-      <input id="cadMin" type="number" min="0" value="0">
-    </label>
-
-    <label>
-      Unidade
-      <input id="cadUnit" value="UN">
-    </label>
-
-    <label>
-      Foto do material
-      <input id="cadPhoto" type="file" accept="image/*" capture="environment">
-    </label>
-
-    <label>
-      Responsável
-      <input id="cadResp" readonly>
-    </label>
-
-    <div class="form-actions">
-
-      <button onclick="salvarCadastroMaterial()">
-        Cadastrar material
-      </button>
-
-      <button
-        id="cadCancelBtn"
-        class="dark"
-        onclick="cancelarEdicaoCadastro()"
-        style="display:none">
-
-        Cancelar
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <h3>Materiais cadastrados</h3>
-
-      <div class="search-area">
-
-        <input
-          id="cadSearch"
-          type="search"
-          placeholder="Pesquisar código ou descrição..."
-          oninput="renderCadastroMateriais()">
-
-        <button
-          class="dark"
-          onclick="verTodosMateriais()">
-
-          Ver todos
-
-        </button>
-
+      <div class="brand-text">
+        <strong>Almoxarifado</strong>
+        <span>Manutenção</span>
       </div>
 
     </div>
 
-    <div id="cadTable" class="tablewrap"></div>
+    <!-- SAUDAÇÃO AO LADO DO ALMOXARIFADO -->
+    <div class="header-greeting">
 
-  </div>
+      <span id="maintenanceGreeting">
+        Bom dia
+      </span>
 
-</section>
-
-
-<!-- ESTOQUE -->
-
-<section id="stock" class="page">
-
-  <div class="title">
-
-    <div>
-      <h1>Consultar Estoque</h1>
-      <p>Consulte os materiais disponíveis</p>
-    </div>
-
-  </div>
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <h3>Estoque atual</h3>
-
-      <input
-        id="stockSearch"
-        type="search"
-        placeholder="Pesquisar material..."
-        oninput="renderStock()">
+      <strong id="maintenanceUserGreeting">
+        usuário
+      </strong>!
 
     </div>
 
-    <div id="stockTable" class="tablewrap"></div>
-
-  </div>
-
-</section>
-
-
-<!-- ENTRADA -->
-
-<section id="entry" class="page">
-
-  <div class="title">
-
-    <div>
-      <h1>Entrada de Material</h1>
-      <p>Registre a entrada de materiais</p>
-    </div>
-
-  </div>
-
-  <div class="panel form">
-
-    <label>
-      Código do material
-      <input
-        id="entryCode"
-        placeholder="Digite ou escaneie o código">
-    </label>
-
-    <label>
-      Quantidade*
-      <input id="entryQty" type="number" min="1">
-    </label>
-
-    <label>
-      Material
-      <input id="entryDesc" readonly>
-    </label>
-
-    <label>
-      Unidade
-      <input id="entryUnit" readonly>
-    </label>
-
-    <label>
-      Responsável
-      <input id="entryResp" readonly>
-    </label>
-
-    <label>
-      Observação
-      <textarea id="entryObs"></textarea>
-    </label>
-
-    <div class="form-actions">
-
-      <button onclick="registrarEntrada()">
-        Registrar entrada
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- SAÍDA -->
-
-<section id="exit" class="page">
-
-  <div class="title">
-
-    <div>
-      <h1>Saída de Material</h1>
-      <p>Registre a retirada de materiais</p>
-    </div>
-
-  </div>
-
-  <div class="panel form">
-
-    <label>
-      Código do material
-      <input id="exitCode">
-    </label>
-
-    <label>
-      Quantidade*
-      <input id="exitQty" type="number" min="1">
-    </label>
-
-    <label>
-      Material
-      <input id="exitDesc" readonly>
-    </label>
-
-    <label>
-      Unidade
-      <input id="exitUnit" readonly>
-    </label>
-
-    <label>
-      Colaborador
-      <input id="exitResp" readonly>
-    </label>
-
-    <label>
-      TUE / Local de aplicação*
-      <input id="exitDest" required>
-    </label>
-
-    <label>
-      Observação
-      <textarea id="exitObs"></textarea>
-    </label>
-
-    <div class="form-actions">
-
-      <button onclick="registrarSaida()">
-        Registrar saída
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- HISTÓRICO -->
-
-<section id="history" class="page">
-
-  <div class="title">
-
-    <div>
-      <h1>Histórico</h1>
-      <p>Consulte as movimentações</p>
-    </div>
-
-  </div>
-
-  <div class="panel">
-
-    <div class="history-search">
-
-      <input
-        id="histSearch"
-        type="search"
-        placeholder="Pesquisar movimentação..."
-        oninput="renderHistorico()">
-
-      <select id="histType" onchange="renderHistorico()">
-
-        <option value="">Todos</option>
-        <option value="entrada">Entradas</option>
-        <option value="saida">Saídas</option>
-
-      </select>
-
-      <input id="histFrom" type="date" onchange="renderHistorico()">
-
-      <input id="histTo" type="date" onchange="renderHistorico()">
-
-      <button class="dark" onclick="limparFiltrosHistorico()">
-        Limpar
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="cards">
-
-    <div class="card">
-      <span>Movimentações</span>
-      <strong id="histTotal">0</strong>
-    </div>
-
-    <div class="card">
-      <span>Entradas</span>
-      <strong id="histEntries">0</strong>
-    </div>
-
-    <div class="card">
-      <span>Saídas</span>
-      <strong id="histExits">0</strong>
-    </div>
-
-  </div>
-
-
-  <div class="panel">
-
-    <h3>Movimentações registradas</h3>
-
-    <div id="histTable" class="tablewrap"></div>
-
-  </div>
-
-</section>
-
-
-<!-- USUÁRIOS -->
-
-<section id="users" class="page">
-
-  <div class="title">
-
-    <div>
-      <h1>Usuários</h1>
-      <p>Gerenciamento de usuários e permissões</p>
-    </div>
-
-  </div>
-
-  <div class="panel form">
-
-    <input type="hidden" id="userId">
-
-    <label>
-      Nome*
-      <input id="userName" placeholder="Nome completo">
-    </label>
-
-    <label>
-      Login / E-mail*
-      <input id="userLogin" placeholder="login ou e-mail">
-    </label>
-
-    <label>
-      Perfil*
-
-      <select id="userRole">
-
-        <option>Administrador</option>
-        <option>Almoxarife</option>
-        <option>Colaborador</option>
-
-      </select>
-
-    </label>
-
-    <label>
-      Status*
-
-      <select id="userStatus">
-
-        <option>Ativo</option>
-        <option>Inativo</option>
-
-      </select>
-
-    </label>
-
-    <div class="form-actions">
-
-      <button onclick="salvarUsuario()">
-        Cadastrar usuário
-      </button>
+    <div class="topuser">
+
+      <span id="topUserName">
+        Administrador
+      </span>
 
       <button
-        id="userCancelBtn"
-        class="dark"
-        onclick="cancelarUsuario()"
-        style="display:none">
+        type="button"
+        onclick="logout()">
 
-        Cancelar
+        Sair
 
       </button>
 
     </div>
 
+  </header>
+
+
+  <!-- ESTRUTURA PRINCIPAL -->
+  <div class="layout">
+
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+
+      <nav>
+
+        <a
+          href="#dashboard"
+          data-page="dashboard">
+
+          <span class="menu-icon">📊</span>
+          <span>Dashboard</span>
+
+        </a>
+
+
+        <a
+          href="#materials"
+          data-page="materials">
+
+          <span class="menu-icon">📝</span>
+          <span>Cadastro de Materiais</span>
+
+        </a>
+
+
+        <a
+          href="#stock"
+          data-page="stock">
+
+          <span class="menu-icon">📦</span>
+          <span>Consultar Estoque</span>
+
+        </a>
+
+
+        <a
+          href="#entry"
+          data-page="entry">
+
+          <span class="menu-icon">📥</span>
+          <span>Entrada</span>
+
+        </a>
+
+
+        <a
+          href="#exit"
+          data-page="exit">
+
+          <span class="menu-icon">📤</span>
+          <span>Saída</span>
+
+        </a>
+
+
+        <a
+          href="#history"
+          data-page="history">
+
+          <span class="menu-icon">🧾</span>
+          <span>Histórico</span>
+
+        </a>
+
+
+        <a
+          href="#users"
+          data-page="users">
+
+          <span class="menu-icon">👥</span>
+          <span>Usuários</span>
+
+        </a>
+
+      </nav>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+    <main class="main-content">
+
+
+      <!-- ================= DASHBOARD ================= -->
+
+      <section
+        id="dashboard"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Dashboard
+            </h1>
+
+            <p>
+              Visão geral do almoxarifado
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-cards">
+
+
+          <!-- MATERIAIS -->
+
+          <div class="dashboard-card materials-card">
+
+            <div class="dashboard-card-icon">
+              📦
+            </div>
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Materiais
+              </span>
+
+              <strong id="dashMaterials">
+                0
+              </strong>
+
+              <small>
+                Materiais cadastrados
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- ESTOQUE BAIXO -->
+
+          <div class="dashboard-card low-stock-card">
+
+            <div class="dashboard-card-icon">
+              ⚠️
+            </div>
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Estoque baixo
+              </span>
+
+              <strong id="dashLowStock">
+                0
+              </strong>
+
+              <small>
+                Materiais com estoque baixo
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- ENTRADAS -->
+
+          <div class="dashboard-card entries-card">
+
+            <div class="dashboard-card-icon">
+              ↓
+            </div>
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Entradas
+              </span>
+
+              <strong id="dashEntries">
+                0
+              </strong>
+
+              <small>
+                Movimentações hoje
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- SAÍDAS -->
+
+          <div class="dashboard-card exits-card">
+
+            <div class="dashboard-card-icon">
+              ↑
+            </div>
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Saídas
+              </span>
+
+              <strong id="dashExits">
+                0
+              </strong>
+
+              <small>
+                Movimentações hoje
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ÁREA INFERIOR DO DASHBOARD -->
+
+        <div class="dashboard-bottom">
+
+
+          <!-- ESTOQUE BAIXO -->
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h3>
+                Estoque baixo
+              </h3>
+
+              <a
+                href="#stock"
+                data-page="stock">
+
+                Ver todos
+
+              </a>
+
+            </div>
+
+            <div
+              id="dashboardLowStock"
+              class="table-container">
+
+            </div>
+
+          </div>
+
+
+          <!-- ÚLTIMAS MOVIMENTAÇÕES -->
+
+          <div class="panel">
+
+            <div class="panel-header">
+
+              <h3>
+                Últimas movimentações
+              </h3>
+
+              <a
+                href="#history"
+                data-page="history">
+
+                Ver todas
+
+              </a>
+
+            </div>
+
+            <div
+              id="dashboardMovements"
+              class="movements-container">
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= CADASTRO DE MATERIAIS ================= -->
+
+      <section
+        id="materials"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Cadastro de Materiais
+            </h1>
+
+            <p>
+              Cadastre, edite e exclua materiais do almoxarifado
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <div class="panel material-form-panel">
+
+          <form
+            id="materialForm"
+            class="material-form">
+
+            <input
+              type="hidden"
+              id="cadId">
+
+
+            <div class="form-group">
+
+              <label for="cadCode">
+                Código do material*
+              </label>
+
+              <input
+                id="cadCode"
+                type="text"
+                placeholder="Ex.: MAT-0001"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadDesc">
+                Descrição*
+              </label>
+
+              <input
+                id="cadDesc"
+                type="text"
+                placeholder="Descrição do material"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadQty">
+                Quantidade
+              </label>
+
+              <input
+                id="cadQty"
+                type="number"
+                min="0"
+                value="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadMin">
+                Estoque mínimo
+              </label>
+
+              <input
+                id="cadMin"
+                type="number"
+                min="0"
+                value="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadUnit">
+                Unidade
+              </label>
+
+              <input
+                id="cadUnit"
+                type="text"
+                value="UN">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadPhoto">
+                Foto do material
+              </label>
+
+              <input
+                id="cadPhoto"
+                type="file"
+                accept="image/*"
+                capture="environment">
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="cadResp">
+                Responsável
+              </label>
+
+              <input
+                id="cadResp"
+                type="text"
+                readonly>
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="submit"
+                class="primary-btn">
+
+                Cadastrar material
+
+              </button>
+
+
+              <button
+                type="button"
+                id="cadCancelBtn"
+                class="secondary-btn"
+                onclick="cancelarEdicaoCadastro()"
+                style="display:none">
+
+                Cancelar
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <!-- MATERIAIS CADASTRADOS -->
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Materiais cadastrados
+            </h3>
+
+
+            <div class="search-box">
+
+              <input
+                id="cadSearch"
+                type="search"
+                placeholder="Pesquisar código ou descrição..."
+                oninput="renderCadastroMateriais()">
+
+              <button
+                type="button"
+                class="secondary-btn"
+                onclick="verTodosMateriais()">
+
+                Ver todos
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="cadTable"
+            class="table-container">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= CONSULTAR ESTOQUE ================= -->
+
+      <section
+        id="stock"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Consultar Estoque
+            </h1>
+
+            <p>
+              Consulte os materiais disponíveis
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Estoque atual
+            </h3>
+
+
+            <input
+              id="stockSearch"
+              class="search-input"
+              type="search"
+              placeholder="Pesquisar material..."
+              oninput="renderStock()">
+
+          </div>
+
+
+          <div
+            id="stockTable"
+            class="table-container">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= ENTRADA ================= -->
+
+      <section
+        id="entry"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Entrada de Material
+            </h1>
+
+            <p>
+              Registre a entrada de materiais no estoque
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <form
+            id="entryForm"
+            class="form-grid">
+
+
+            <div class="form-group">
+
+              <label for="entryCode">
+                Código do material*
+              </label>
+
+              <div class="input-with-button">
+
+                <input
+                  id="entryCode"
+                  type="text"
+                  placeholder="Digite o código ou escaneie o código de barras"
+                  required>
+
+                <button
+                  type="button"
+                  class="scan-btn"
+                  onclick="scanMaterial('entry')">
+
+                  📷 Escanear
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="material-preview">
+
+              <div
+                id="entryPhoto"
+                class="material-photo">
+
+                📦
+
+              </div>
+
+              <div>
+
+                <span>
+                  Material identificado
+                </span>
+
+                <strong id="entryDesc">
+                  —
+                </strong>
+
+                <div class="material-info">
+
+                  <span>
+                    Unidade:
+                    <strong id="entryUnit">—</strong>
+                  </span>
+
+                  <span>
+                    Estoque:
+                    <strong id="entryStock">—</strong>
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="entryQty">
+                Quantidade*
+              </label>
+
+              <input
+                id="entryQty"
+                type="number"
+                min="1"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="entryResp">
+                Responsável
+              </label>
+
+              <input
+                id="entryResp"
+                type="text"
+                readonly>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+              <label for="entryObs">
+                Observação
+              </label>
+
+              <textarea
+                id="entryObs"
+                rows="4"
+                placeholder="Digite uma observação, se necessário">
+
+              </textarea>
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="submit"
+                class="primary-btn">
+
+                Registrar entrada
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= SAÍDA ================= -->
+
+      <section
+        id="exit"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Saída de Material
+            </h1>
+
+            <p>
+              Registre a retirada de materiais
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <form
+            id="exitForm"
+            class="form-grid">
+
+
+            <div class="form-group">
+
+              <label for="exitCode">
+                Código do material*
+              </label>
+
+              <div class="input-with-button">
+
+                <input
+                  id="exitCode"
+                  type="text"
+                  placeholder="Digite o código ou escaneie o código de barras"
+                  required>
+
+                <button
+                  type="button"
+                  class="scan-btn"
+                  onclick="scanMaterial('exit')">
+
+                  📷 Escanear
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            <div class="material-preview">
+
+              <div
+                id="exitPhoto"
+                class="material-photo">
+
+                📦
+
+              </div>
+
+              <div>
+
+                <span>
+                  Material identificado
+                </span>
+
+                <strong id="exitDesc">
+                  —
+                </strong>
+
+                <div class="material-info">
+
+                  <span>
+                    Unidade:
+                    <strong id="exitUnit">—</strong>
+                  </span>
+
+                  <span>
+                    Estoque atual:
+                    <strong id="exitStock">—</strong>
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="exitQty">
+                Quantidade retirada*
+              </label>
+
+              <input
+                id="exitQty"
+                type="number"
+                min="1"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="exitResp">
+                Responsável
+              </label>
+
+              <input
+                id="exitResp"
+                type="text"
+                readonly>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="exitDest">
+                TUE / Local de aplicação*
+              </label>
+
+              <input
+                id="exitDest"
+                type="text"
+                placeholder="Ex.: 4015 / Oficina Deodoro"
+                required>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+              <label for="exitObs">
+                Observação
+              </label>
+
+              <textarea
+                id="exitObs"
+                rows="4"
+                placeholder="Digite uma observação, se necessário">
+
+              </textarea>
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="submit"
+                class="primary-btn">
+
+                Registrar saída
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= HISTÓRICO ================= -->
+
+      <section
+        id="history"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Histórico
+            </h1>
+
+            <p>
+              Consulte todas as movimentações do almoxarifado
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="history-filters">
+
+
+            <input
+              id="histSearch"
+              type="search"
+              placeholder="Pesquisar material, código ou responsável..."
+              oninput="renderHistorico()">
+
+
+            <select
+              id="histType"
+              onchange="renderHistorico()">
+
+              <option value="">
+                Todos
+              </option>
+
+              <option value="entrada">
+                Entradas
+              </option>
+
+              <option value="saida">
+                Saídas
+              </option>
+
+            </select>
+
+
+            <input
+              id="histFrom"
+              type="date"
+              onchange="renderHistorico()">
+
+
+            <input
+              id="histTo"
+              type="date"
+              onchange="renderHistorico()">
+
+
+            <button
+              type="button"
+              class="secondary-btn"
+              onclick="limparFiltrosHistorico()">
+
+              Limpar
+
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-cards history-cards">
+
+
+          <div class="dashboard-card">
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Movimentações
+              </span>
+
+              <strong id="histTotal">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-card entries-card">
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Entradas
+              </span>
+
+              <strong id="histEntries">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-card exits-card">
+
+            <div class="dashboard-card-content">
+
+              <span>
+                Saídas
+              </span>
+
+              <strong id="histExits">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Movimentações registradas
+            </h3>
+
+          </div>
+
+
+          <div
+            id="histTable"
+            class="table-container">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================= USUÁRIOS ================= -->
+
+      <section
+        id="users"
+        class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              Usuários
+            </h1>
+
+            <p>
+              Gerenciamento de usuários e permissões
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <form
+            id="userForm"
+            class="form-grid">
+
+            <input
+              type="hidden"
+              id="userId">
+
+
+            <div class="form-group">
+
+              <label for="userName">
+                Nome*
+              </label>
+
+              <input
+                id="userName"
+                type="text"
+                placeholder="Nome completo"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="userLogin">
+                Login / E-mail*
+              </label>
+
+              <input
+                id="userLogin"
+                type="text"
+                placeholder="Login ou e-mail"
+                required>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="userRole">
+                Perfil*
+              </label>
+
+              <select id="userRole">
+
+                <option value="Administrador">
+                  Administrador
+                </option>
+
+                <option value="Almoxarife">
+                  Almoxarife
+                </option>
+
+                <option value="Colaborador">
+                  Colaborador
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="userStatus">
+                Status*
+              </label>
+
+              <select id="userStatus">
+
+                <option value="Ativo">
+                  Ativo
+                </option>
+
+                <option value="Inativo">
+                  Inativo
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+              <button
+                type="submit"
+                class="primary-btn">
+
+                Cadastrar usuário
+
+              </button>
+
+
+              <button
+                type="button"
+                id="userCancelBtn"
+                class="secondary-btn"
+                onclick="cancelarUsuario()"
+                style="display:none">
+
+                Cancelar
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <h3>
+              Usuários cadastrados
+            </h3>
+
+
+            <input
+              id="userSearch"
+              class="search-input"
+              type="search"
+              placeholder="Pesquisar usuário..."
+              oninput="renderUsuarios()">
+
+          </div>
+
+
+          <div
+            id="usersTable"
+            class="table-container">
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
 
 
-  <div class="panel">
+  <!-- MENSAGENS DE SUCESSO / ERRO -->
 
-    <div class="panel-head">
-
-      <h3>Usuários cadastrados</h3>
-
-      <input
-        id="userSearch"
-        type="search"
-        placeholder="Pesquisar usuário..."
-        oninput="renderUsuarios()">
-
-    </div>
-
-    <div id="usersTable" class="tablewrap"></div>
+  <div
+    id="toast"
+    class="toast">
 
   </div>
 
-</section>
 
-</main>
+  <!-- JAVASCRIPT -->
 
-</div>
-
-<div id="toast" class="toast"></div>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
