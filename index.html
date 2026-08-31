@@ -1,2410 +1,534 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#08295c">
-<title>Almoxarifado — Manutenção</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="./config.js"></script>
-
-<style>
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#eef2f7;
-  color:#172033;
-}
-
-header{
-  background:#08295c;
-  color:#fff;
-  padding:16px;
-  border-radius:0 0 22px 22px;
-}
-
-.head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.head h1{
-  text-align:center;
-  flex:1;
-  font-size:22px;
-  margin:0;
-}
-
-.head small{
-  display:block;
-  color:#ffd21c;
-  margin-top:4px;
-}
-
-.icon{
-  width:44px!important;
-  margin:0!important;
-  background:transparent!important;
-  font-size:22px!important;
-  padding:8px!important;
-}
-
-.wrap{
-  max-width:1100px;
-  margin:auto;
-  padding:14px;
-}
-
-.card{
-  background:#fff;
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 4px 16px #00000012;
-}
-
-.hidden{
-  display:none!important;
-}
-
-input,
-button{
-  width:100%;
-  padding:13px;
-  border-radius:10px;
-  border:1px solid #cbd5e1;
-  font-size:15px;
-  margin-top:8px;
-}
-
-button{
-  border:0;
-  background:#08295c;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button.secondary{
-  background:#e2e8f0;
-  color:#172033;
-}
-
-button.success{
-  background:#166534;
-}
-
-button.danger{
-  background:#991b1b;
-}
-
-.user{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.user button{
-  width:auto;
-  margin:0;
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  margin-bottom:14px;
-}
-
-.tabs button{
-  width:auto;
-  min-width:max-content;
-  margin:0;
-}
-
-.tabs .active{
-  outline:3px solid #9bbcf5;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-
-.stat{
-  text-align:center;
-  background:#f8fafc;
-  border-radius:14px;
-  padding:18px;
-}
-
-.stat b{
-  display:block;
-  font-size:30px;
-}
-
-.msg{
-  padding:12px;
-  border-radius:10px;
-  margin-top:10px;
-  background:#f1f5f9;
-}
-
-.ok{
-  background:#dcfce7;
-  color:#166534;
-}
-
-.warn{
-  background:#fef3c7;
-  color:#92400e;
-}
-
-.err{
-  background:#fee2e2;
-  color:#991b1b;
-}
-
-.table{
-  overflow:auto;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:650px;
-}
-
-th,
-td{
-  padding:10px;
-  border-bottom:1px solid #e2e8f0;
-  text-align:left;
-  white-space:nowrap;
-}
-
-th{
-  background:#f8fafc;
-}
-
-.type{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.scanner{
-  margin-top:8px;
-  background:#0f172a;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-.scanner video{
-  width:100%!important;
-}
-
-.photo{
-  width:70px;
-  height:70px;
-  border-radius:8px;
-  object-fit:cover;
-}
-
-@media(max-width:700px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .user{
-    display:block;
-  }
-
-  .user button{
-    width:100%;
-    margin-top:10px;
-  }
-
-}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f2338">
+<title>Almoxarifado • Manutenção</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-  <div class="head">
+<header class="topbar">
 
-    <button
-      id="menu"
-      class="icon"
-      type="button"
-    >
-      ☰
-    </button>
+  <div class="brand">
+    <div class="brand-logo">AM</div>
 
-    <h1>
-      📦 Almoxarifado
-      <small>MANUTENÇÃO</small>
-    </h1>
-
-    <button
-      id="bell"
-      class="icon"
-      type="button"
-    >
-      🔔
-    </button>
-
+    <div>
+      <strong>Almoxarifado</strong>
+      <span>Manutenção</span>
+    </div>
   </div>
+
+  <div class="header-greeting">
+    <span id="maintenanceGreeting">Bom dia</span>,
+    <strong id="maintenanceUserGreeting">usuário</strong>!
+  </div>
+
+  <div class="topuser">
+    <span id="topUserName">Administrador</span>
+    <button onclick="logout()">Sair</button>
+  </div>
+
 </header>
 
-<main class="wrap">
+<div class="layout">
 
-<section
-  id="login"
-  class="card"
->
+<aside class="sidebar">
 
-  <div style="text-align:center;font-size:52px">
-    📦
+  <a href="#dashboard" data-page="dashboard">🏠 Dashboard</a>
+
+  <a href="#materials" data-page="materials">📝 Cadastro de Materiais</a>
+
+  <a href="#stock" data-page="stock">📦 Consultar Estoque</a>
+
+  <a href="#entry" data-page="entry">📥 Entrada</a>
+
+  <a href="#exit" data-page="exit">📤 Saída</a>
+
+  <a href="#history" data-page="history">🧾 Histórico</a>
+
+  <a href="#users" data-page="users">👥 Usuários</a>
+
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page">
+
+  <div class="title">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Visão geral do almoxarifado</p>
+    </div>
   </div>
 
-  <h2 style="text-align:center">
-    Acesso ao estoque
-  </h2>
+  <div class="cards">
 
-  <input
-    id="email"
-    type="email"
-    autocomplete="username"
-    placeholder="E-mail"
-  >
+    <div class="card">
+      <span>Materiais cadastrados</span>
+      <strong id="dashMaterials">0</strong>
+    </div>
 
-  <input
-    id="password"
-    type="password"
-    autocomplete="current-password"
-    placeholder="Senha"
-  >
+    <div class="card">
+      <span>Itens em estoque</span>
+      <strong id="dashStock">0</strong>
+    </div>
 
-  <button
-    id="loginBtn"
-    type="button"
-  >
-    🔐 Entrar
-  </button>
+    <div class="card">
+      <span>Entradas</span>
+      <strong id="dashEntries">0</strong>
+    </div>
 
-  <button
-    id="signupBtn"
-    class="secondary"
-    type="button"
-  >
-    Criar conta
-  </button>
+    <div class="card">
+      <span>Saídas</span>
+      <strong id="dashExits">0</strong>
+    </div>
 
-  <div id="loginMsg"></div>
+  </div>
 
 </section>
 
 
-<section
-  id="app"
-  class="hidden"
->
+<!-- CADASTRO -->
 
-  <div class="card">
+<section id="materials" class="page">
 
-    <div class="user">
+  <div class="title">
+    <div>
+      <h1>Cadastro de Materiais</h1>
+      <p>Cadastre, edite e exclua materiais</p>
+    </div>
+  </div>
 
-      <strong id="user">
-        👤 Usuário
-      </strong>
+  <div class="panel form">
+
+    <input type="hidden" id="cadId">
+
+    <label>
+      Código do material*
+      <input id="cadCode" placeholder="Ex.: MAT-0001">
+    </label>
+
+    <label>
+      Descrição*
+      <input id="cadDesc" placeholder="Descrição do material">
+    </label>
+
+    <label>
+      Quantidade
+      <input id="cadQty" type="number" min="0" value="0">
+    </label>
+
+    <label>
+      Estoque mínimo
+      <input id="cadMin" type="number" min="0" value="0">
+    </label>
+
+    <label>
+      Unidade
+      <input id="cadUnit" value="UN">
+    </label>
+
+    <label>
+      Foto do material
+      <input id="cadPhoto" type="file" accept="image/*" capture="environment">
+    </label>
+
+    <label>
+      Responsável
+      <input id="cadResp" readonly>
+    </label>
+
+    <div class="form-actions">
+
+      <button onclick="salvarCadastroMaterial()">
+        Cadastrar material
+      </button>
 
       <button
-        id="logout"
-        class="secondary"
-        type="button"
-      >
-        Sair
+        id="cadCancelBtn"
+        class="dark"
+        onclick="cancelarEdicaoCadastro()"
+        style="display:none">
+
+        Cancelar
+
       </button>
 
     </div>
-
-    <div
-      id="role"
-      style="margin-top:8px;color:#64748b;font-size:13px"
-    ></div>
 
   </div>
 
 
-  <nav class="tabs">
+  <div class="panel">
 
-    <button
-      data-tab="home"
-      class="active"
-      type="button"
-    >
-      📊 Resumo
-    </button>
+    <div class="panel-head">
 
-    <button
-      data-tab="materials"
-      type="button"
-    >
-      📦 Materiais
-    </button>
+      <h3>Materiais cadastrados</h3>
 
-    <button
-      data-tab="moves"
-      type="button"
-    >
-      🔄 Entrada/Saída
-    </button>
+      <div class="search-area">
 
-    <button
-      data-tab="inventory"
-      type="button"
-    >
-      📋 Inventário
-    </button>
+        <input
+          id="cadSearch"
+          type="search"
+          placeholder="Pesquisar código ou descrição..."
+          oninput="renderCadastroMateriais()">
 
-  </nav>
+        <button
+          class="dark"
+          onclick="verTodosMateriais()">
 
+          Ver todos
 
-  <section
-    id="home"
-    class="tab card"
-  >
+        </button>
 
-    <h2>
-      Visão geral
-    </h2>
-
-    <div class="grid">
-
-      <div class="stat">
-        <b id="nMaterials">0</b>
-        Materiais
-      </div>
-
-      <div class="stat">
-        <b id="nStock">0</b>
-        Itens em estoque
-      </div>
-
-      <div class="stat">
-        <b id="nLow">0</b>
-        Estoque baixo
       </div>
 
     </div>
 
-    <div
-      id="alerts"
-      class="msg"
-    >
-      Carregando...
+    <div id="cadTable" class="tablewrap"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ESTOQUE -->
+
+<section id="stock" class="page">
+
+  <div class="title">
+
+    <div>
+      <h1>Consultar Estoque</h1>
+      <p>Consulte os materiais disponíveis</p>
     </div>
 
-  </section>
+  </div>
 
+  <div class="panel">
 
-  <section
-    id="materials"
-    class="tab card hidden"
-  >
+    <div class="panel-head">
 
-    <h2>
-      📦 Cadastro de material
-    </h2>
+      <h3>Estoque atual</h3>
 
-    <input
-      id="code"
-      placeholder="Código / código de barras"
-    >
-
-    <button
-      id="scanMat"
-      type="button"
-    >
-      📷 Ler código de barras
-    </button>
-
-    <div
-      id="scannerMat"
-      class="scanner hidden"
-    ></div>
-
-    <input
-      id="desc"
-      placeholder="Descrição"
-    >
-
-    <input
-      id="unit"
-      value="UN"
-      placeholder="Unidade"
-    >
-
-    <input
-      id="min"
-      type="number"
-      min="0"
-      step="0.01"
-      placeholder="Estoque mínimo"
-    >
-
-    <input
-      id="category"
-      placeholder="Categoria (opcional)"
-    >
-
-    <input
-      id="maker"
-      placeholder="Fabricante (opcional)"
-    >
-
-    <input
-      id="shelf"
-      placeholder="Localização (opcional)"
-    >
-
-    <input
-      id="application"
-      placeholder="Local de aplicação (opcional)"
-    >
-
-    <input
-      id="photo"
-      type="url"
-      placeholder="URL da foto do material (opcional)"
-    >
-
-    <button
-      id="saveMat"
-      class="success"
-      type="button"
-    >
-      💾 Cadastrar material
-    </button>
-
-    <div id="matMsg"></div>
-
-    <hr>
-
-    <div class="table">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Foto</th>
-            <th>Código</th>
-            <th>Descrição</th>
-            <th>Unidade</th>
-            <th>Estoque</th>
-            <th>Mínimo</th>
-            <th>Status</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="matList"></tbody>
-
-      </table>
+      <input
+        id="stockSearch"
+        type="search"
+        placeholder="Pesquisar material..."
+        oninput="renderStock()">
 
     </div>
 
-  </section>
+    <div id="stockTable" class="tablewrap"></div>
+
+  </div>
+
+</section>
 
 
-  <section
-    id="moves"
-    class="tab card hidden"
-  >
+<!-- ENTRADA -->
 
-    <h2>
-      🔄 Entrada / Saída
-    </h2>
+<section id="entry" class="page">
+
+  <div class="title">
+
+    <div>
+      <h1>Entrada de Material</h1>
+      <p>Registre a entrada de materiais</p>
+    </div>
+
+  </div>
+
+  <div class="panel form">
 
     <label>
-      Tipo de movimentação
+      Código do material
+      <input
+        id="entryCode"
+        placeholder="Digite ou escaneie o código">
     </label>
 
-    <div class="type">
+    <label>
+      Quantidade*
+      <input id="entryQty" type="number" min="1">
+    </label>
 
-      <button
-        id="entryType"
-        class="success"
-        type="button"
-      >
-        ➕ Entrada
+    <label>
+      Material
+      <input id="entryDesc" readonly>
+    </label>
+
+    <label>
+      Unidade
+      <input id="entryUnit" readonly>
+    </label>
+
+    <label>
+      Responsável
+      <input id="entryResp" readonly>
+    </label>
+
+    <label>
+      Observação
+      <textarea id="entryObs"></textarea>
+    </label>
+
+    <div class="form-actions">
+
+      <button onclick="registrarEntrada()">
+        Registrar entrada
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SAÍDA -->
+
+<section id="exit" class="page">
+
+  <div class="title">
+
+    <div>
+      <h1>Saída de Material</h1>
+      <p>Registre a retirada de materiais</p>
+    </div>
+
+  </div>
+
+  <div class="panel form">
+
+    <label>
+      Código do material
+      <input id="exitCode">
+    </label>
+
+    <label>
+      Quantidade*
+      <input id="exitQty" type="number" min="1">
+    </label>
+
+    <label>
+      Material
+      <input id="exitDesc" readonly>
+    </label>
+
+    <label>
+      Unidade
+      <input id="exitUnit" readonly>
+    </label>
+
+    <label>
+      Colaborador
+      <input id="exitResp" readonly>
+    </label>
+
+    <label>
+      TUE / Local de aplicação*
+      <input id="exitDest" required>
+    </label>
+
+    <label>
+      Observação
+      <textarea id="exitObs"></textarea>
+    </label>
+
+    <div class="form-actions">
+
+      <button onclick="registrarSaida()">
+        Registrar saída
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- HISTÓRICO -->
+
+<section id="history" class="page">
+
+  <div class="title">
+
+    <div>
+      <h1>Histórico</h1>
+      <p>Consulte as movimentações</p>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="history-search">
+
+      <input
+        id="histSearch"
+        type="search"
+        placeholder="Pesquisar movimentação..."
+        oninput="renderHistorico()">
+
+      <select id="histType" onchange="renderHistorico()">
+
+        <option value="">Todos</option>
+        <option value="entrada">Entradas</option>
+        <option value="saida">Saídas</option>
+
+      </select>
+
+      <input id="histFrom" type="date" onchange="renderHistorico()">
+
+      <input id="histTo" type="date" onchange="renderHistorico()">
+
+      <button class="dark" onclick="limparFiltrosHistorico()">
+        Limpar
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="cards">
+
+    <div class="card">
+      <span>Movimentações</span>
+      <strong id="histTotal">0</strong>
+    </div>
+
+    <div class="card">
+      <span>Entradas</span>
+      <strong id="histEntries">0</strong>
+    </div>
+
+    <div class="card">
+      <span>Saídas</span>
+      <strong id="histExits">0</strong>
+    </div>
+
+  </div>
+
+
+  <div class="panel">
+
+    <h3>Movimentações registradas</h3>
+
+    <div id="histTable" class="tablewrap"></div>
+
+  </div>
+
+</section>
+
+
+<!-- USUÁRIOS -->
+
+<section id="users" class="page">
+
+  <div class="title">
+
+    <div>
+      <h1>Usuários</h1>
+      <p>Gerenciamento de usuários e permissões</p>
+    </div>
+
+  </div>
+
+  <div class="panel form">
+
+    <input type="hidden" id="userId">
+
+    <label>
+      Nome*
+      <input id="userName" placeholder="Nome completo">
+    </label>
+
+    <label>
+      Login / E-mail*
+      <input id="userLogin" placeholder="login ou e-mail">
+    </label>
+
+    <label>
+      Perfil*
+
+      <select id="userRole">
+
+        <option>Administrador</option>
+        <option>Almoxarife</option>
+        <option>Colaborador</option>
+
+      </select>
+
+    </label>
+
+    <label>
+      Status*
+
+      <select id="userStatus">
+
+        <option>Ativo</option>
+        <option>Inativo</option>
+
+      </select>
+
+    </label>
+
+    <div class="form-actions">
+
+      <button onclick="salvarUsuario()">
+        Cadastrar usuário
       </button>
 
       <button
-        id="exitType"
-        class="danger"
-        type="button"
-      >
-        ➖ Saída
+        id="userCancelBtn"
+        class="dark"
+        onclick="cancelarUsuario()"
+        style="display:none">
+
+        Cancelar
+
       </button>
 
     </div>
 
-    <input
-      id="moveCode"
-      placeholder="Código / código de barras"
-    >
+  </div>
 
-    <button
-      id="scanMove"
-      type="button"
-    >
-      📷 Ler código de barras
-    </button>
 
-    <div
-      id="scannerMove"
-      class="scanner hidden"
-    ></div>
+  <div class="panel">
 
-    <div
-      id="moveMaterial"
-      class="msg"
-    >
-      Informe o código do material.
-    </div>
+    <div class="panel-head">
 
-    <input
-      id="moveQty"
-      type="number"
-      min="0.01"
-      step="0.01"
-      placeholder="Quantidade"
-    >
+      <h3>Usuários cadastrados</h3>
 
-    <input
-      id="employee"
-      placeholder="Nome do colaborador"
-    >
-
-    <input
-      id="registration"
-      placeholder="Matrícula"
-    >
-
-    <input
-      id="applicationPlace"
-      placeholder="Local de aplicação"
-    >
-
-    <input
-      id="moveDate"
-      type="date"
-    >
-
-    <button
-      id="saveMove"
-      class="success"
-      type="button"
-    >
-      💾 Registrar movimentação
-    </button>
-
-    <div id="moveMsg"></div>
-
-    <hr>
-
-    <h3>
-      Últimas movimentações
-    </h3>
-
-    <div class="table">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Data</th>
-            <th>Tipo</th>
-            <th>Código</th>
-            <th>Quantidade</th>
-            <th>Colaborador</th>
-            <th>Matrícula</th>
-            <th>Aplicação</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="moveList"></tbody>
-
-      </table>
+      <input
+        id="userSearch"
+        type="search"
+        placeholder="Pesquisar usuário..."
+        oninput="renderUsuarios()">
 
     </div>
 
-  </section>
+    <div id="usersTable" class="tablewrap"></div>
 
-
-  <section
-    id="inventory"
-    class="tab card hidden"
-  >
-
-    <h2>
-      📋 Inventário
-    </h2>
-
-    <input
-      id="inventorySearch"
-      placeholder="🔎 Pesquisar código ou descrição"
-    >
-
-    <div class="table">
-
-      <table>
-
-        <thead>
-
-          <tr>
-            <th>Foto</th>
-            <th>Código</th>
-            <th>Descrição</th>
-            <th>Local</th>
-            <th>Estoque</th>
-            <th>Mínimo</th>
-            <th>Status</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="listaInventario"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
+  </div>
 
 </section>
 
 </main>
 
+</div>
 
-<script>
+<div id="toast" class="toast"></div>
 
-(() => {
-
-"use strict";
-
-
-/* ==========================================
-   CONFIGURAÇÃO
-========================================== */
-
-const cfg =
-  window.CONFIGURACAO_DE_ESTOQUE || {};
-
-const supabaseUrl =
-  cfg.SUPABASE_URL ||
-  cfg.URL_SUPABASE;
-
-const supabaseKey =
-  cfg.SUPABASE_ANON_KEY ||
-  cfg.SUPABASE_KEY ||
-  cfg.ANON_KEY;
-
-const $ =
-  id =>
-    document.getElementById(id);
-
-let sb = null;
-
-let materiais = [];
-
-let movimentos = [];
-
-let tipoMovimento = "entrada";
-
-let scannerCadastro = null;
-
-let scannerMovimento = null;
-
-
-/* ==========================================
-   MENSAGENS
-========================================== */
-
-function mostrarMensagem(
-  id,
-  texto,
-  tipo = "danger"
-) {
-
-  const elemento =
-    $(id);
-
-  if (!elemento) {
-    return;
-  }
-
-  elemento.className =
-    "msg " +
-    (
-      tipo === "success"
-        ? "ok"
-        : tipo === "warning"
-          ? "warn"
-          : "err"
-    );
-
-  elemento.textContent =
-    texto;
-
-}
-
-
-/* ==========================================
-   SEGURANÇA HTML
-========================================== */
-
-function esc(valor) {
-
-  return String(valor ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
-}
-
-
-/* ==========================================
-   FOTO
-========================================== */
-
-function htmlFoto(url) {
-
-  if (!url) {
-    return "";
-  }
-
-  return `
-    <img
-      class="photo"
-      src="${esc(url)}"
-      alt="Foto"
-      loading="lazy"
-      onerror="this.style.display='none'"
-    >
-  `;
-
-}
-
-
-/* ==========================================
-   VERIFICAR BIBLIOTECA
-========================================== */
-
-if (!window.supabase) {
-
-  mostrarMensagem(
-    "loginMsg",
-    "Não foi possível carregar o Supabase. Verifique a internet e recarregue a página."
-  );
-
-  return;
-
-}
-
-
-/* ==========================================
-   VERIFICAR CONFIGURAÇÃO
-========================================== */
-
-if (
-  !supabaseUrl ||
-  !supabaseKey
-) {
-
-  mostrarMensagem(
-    "loginMsg",
-    "Configuração do Supabase não encontrada."
-  );
-
-  return;
-
-}
-
-
-/* ==========================================
-   INICIAR SUPABASE
-========================================== */
-
-try {
-
-  sb =
-    window.supabase.createClient(
-      supabaseUrl,
-      supabaseKey
-    );
-
-} catch (erro) {
-
-  console.error(erro);
-
-  mostrarMensagem(
-    "loginMsg",
-    "Erro ao iniciar o Supabase."
-  );
-
-  return;
-
-}
-
-
-/* ==========================================
-   LOGIN
-========================================== */
-
-async function entrar() {
-
-  const email =
-    $("email").value.trim();
-
-  const senha =
-    $("password").value;
-
-  if (
-    !email ||
-    !senha
-  ) {
-
-    mostrarMensagem(
-      "loginMsg",
-      "Informe e-mail e senha.",
-      "warning"
-    );
-
-    return;
-  }
-
-  const {
-    error
-  } =
-    await sb.auth.signInWithPassword({
-
-      email,
-      password: senha
-
-    });
-
-  if (error) {
-
-    mostrarMensagem(
-      "loginMsg",
-      error.message
-    );
-
-    return;
-  }
-
-  await atualizarSessao();
-
-}
-
-
-/* ==========================================
-   CRIAR CONTA
-========================================== */
-
-async function cadastrarConta() {
-
-  const email =
-    $("email").value.trim();
-
-  const senha =
-    $("password").value;
-
-  if (
-    !email ||
-    !senha
-  ) {
-
-    mostrarMensagem(
-      "loginMsg",
-      "Informe e-mail e senha.",
-      "warning"
-    );
-
-    return;
-  }
-
-  if (
-    senha.length < 6
-  ) {
-
-    mostrarMensagem(
-      "loginMsg",
-      "A senha deve ter pelo menos 6 caracteres.",
-      "warning"
-    );
-
-    return;
-  }
-
-  const {
-    error
-  } =
-    await sb.auth.signUp({
-
-      email,
-      password: senha
-
-    });
-
-  if (error) {
-
-    mostrarMensagem(
-      "loginMsg",
-      error.message
-    );
-
-    return;
-  }
-
-  mostrarMensagem(
-    "loginMsg",
-    "Conta criada. Confirme o e-mail se for solicitado.",
-    "success"
-  );
-
-}
-
-
-/* ==========================================
-   SESSÃO
-========================================== */
-
-async function atualizarSessao() {
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await sb.auth.getSession();
-
-    if (error) {
-      throw error;
-    }
-
-    const session =
-      data.session;
-
-    if (session) {
-
-      $("login")
-        .classList
-        .add("hidden");
-
-      $("app")
-        .classList
-        .remove("hidden");
-
-      $("user").textContent =
-        "👤 " +
-        (
-          session.user.email ||
-          "Usuário"
-        );
-
-      await carregarPerfil();
-
-      await carregarTudo();
-
-    } else {
-
-      $("login")
-        .classList
-        .remove("hidden");
-
-      $("app")
-        .classList
-        .add("hidden");
-
-    }
-
-  } catch (erro) {
-
-    console.error(erro);
-
-    mostrarMensagem(
-      "loginMsg",
-      "Erro ao verificar acesso: " +
-      erro.message
-    );
-
-  }
-
-}
-
-
-/* ==========================================
-   PERFIL
-========================================== */
-
-async function carregarPerfil() {
-
-  try {
-
-    const {
-      data: usuarioData
-    } =
-      await sb.auth.getUser();
-
-    const usuario =
-      usuarioData.user;
-
-    if (!usuario) {
-      return;
-    }
-
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from("user_roles")
-        .select("role")
-        .eq(
-          "user_id",
-          usuario.id
-        )
-        .maybeSingle();
-
-    if (error) {
-
-      console.warn(
-        "Perfil não carregado:",
-        error.message
-      );
-
-    }
-
-    $("role").textContent =
-      "Perfil: " +
-      (
-        data?.role ||
-        "usuário"
-      );
-
-  } catch (erro) {
-
-    console.warn(erro);
-
-  }
-
-}
-
-
-/* ==========================================
-   LOGOUT
-========================================== */
-
-async function sair() {
-
-  await sb.auth.signOut();
-
-  await atualizarSessao();
-
-}
-
-
-/* ==========================================
-   BUSCAR MATERIAIS
-========================================== */
-
-async function carregarMateriais() {
-
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("materiais")
-      .select("*")
-      .order("descricao");
-
-  if (error) {
-
-    console.error(error);
-
-    mostrarMensagem(
-      "matMsg",
-      "Erro ao carregar materiais: " +
-      error.message
-    );
-
-    return;
-  }
-
-  materiais =
-    data || [];
-
-  renderizarMateriais();
-
-  renderizarInventario();
-
-  atualizarResumo();
-
-}
-
-
-/* ==========================================
-   STATUS
-========================================== */
-
-function obterEstoque(material) {
-
-  return Number(
-    material.estoque ??
-    material.quantidade ??
-    0
-  );
-
-}
-
-
-function obterMinimo(material) {
-
-  return Number(
-    material.estoque_minimo ??
-    material.minimo ??
-    0
-  );
-
-}
-
-
-function obterStatus(material) {
-
-  const estoque =
-    obterEstoque(material);
-
-  const minimo =
-    obterMinimo(material);
-
-  if (
-    estoque <= 0
-  ) {
-    return "Sem estoque";
-  }
-
-  if (
-    estoque <= minimo
-  ) {
-    return "Estoque baixo";
-  }
-
-  return "Normal";
-
-}
-
-
-/* ==========================================
-   RENDERIZAR MATERIAIS
-========================================== */
-
-function renderizarMateriais() {
-
-  const lista =
-    $("matList");
-
-  lista.innerHTML =
-    "";
-
-  materiais.forEach(
-    material => {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-
-        <td>
-          ${htmlFoto(material.foto_url)}
-        </td>
-
-        <td>
-          ${esc(
-            material.codigo ||
-            material.codigo_barras ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            material.descricao ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            material.unidade ||
-            "UN"
-          )}
-        </td>
-
-        <td>
-          ${obterEstoque(material)}
-        </td>
-
-        <td>
-          ${obterMinimo(material)}
-        </td>
-
-        <td>
-          ${obterStatus(material)}
-        </td>
-
-      `;
-
-      lista.appendChild(tr);
-
-    }
-  );
-
-}
-
-
-/* ==========================================
-   BUSCAR MATERIAL PELO CÓDIGO
-========================================== */
-
-function buscarMaterial(codigo) {
-
-  const valor =
-    String(
-      codigo ||
-      ""
-    )
-      .trim()
-      .toLowerCase();
-
-  if (!valor) {
-    return null;
-  }
-
-  return materiais.find(
-    material => {
-
-      const codigoPrincipal =
-        String(
-          material.codigo ||
-          ""
-        )
-          .trim()
-          .toLowerCase();
-
-      const codigoBarras =
-        String(
-          material.codigo_barras ||
-          ""
-        )
-          .trim()
-          .toLowerCase();
-
-      return (
-        codigoPrincipal === valor ||
-        codigoBarras === valor
-      );
-
-    }
-  ) || null;
-
-}
-
-
-/* ==========================================
-   CADASTRAR MATERIAL
-========================================== */
-
-async function salvarMaterial() {
-
-  const codigo =
-    $("code").value.trim();
-
-  const descricao =
-    $("desc").value.trim();
-
-  const unidade =
-    $("unit").value.trim() ||
-    "UN";
-
-  const minimo =
-    Number(
-      $("min").value ||
-      0
-    );
-
-  const categoria =
-    $("category").value.trim();
-
-  const fabricante =
-    $("maker").value.trim();
-
-  const localizacao =
-    $("shelf").value.trim();
-
-  const aplicacao =
-    $("application").value.trim();
-
-  const foto =
-    $("photo").value.trim();
-
-  if (!codigo) {
-
-    mostrarMensagem(
-      "matMsg",
-      "Informe o código ou código de barras.",
-      "warning"
-    );
-
-    return;
-  }
-
-  if (!descricao) {
-
-    mostrarMensagem(
-      "matMsg",
-      "Informe a descrição do material.",
-      "warning"
-    );
-
-    return;
-  }
-
-  if (
-    buscarMaterial(codigo)
-  ) {
-
-    mostrarMensagem(
-      "matMsg",
-      "Esse código já está cadastrado.",
-      "warning"
-    );
-
-    return;
-  }
-
-  const registro = {
-
-    codigo,
-    codigo_barras:
-      codigo,
-    descricao,
-    unidade,
-    estoque:
-      0,
-    estoque_minimo:
-      minimo,
-    categoria:
-      categoria || null,
-    fabricante:
-      fabricante || null,
-    localizacao:
-      localizacao || null,
-    local_aplicacao:
-      aplicacao || null,
-    foto_url:
-      foto || null,
-    ativo:
-      true
-
-  };
-
-  const {
-    error
-  } =
-    await sb
-      .from("materiais")
-      .insert(registro);
-
-  if (error) {
-
-    console.error(error);
-
-    mostrarMensagem(
-      "matMsg",
-      "Erro ao cadastrar: " +
-      error.message
-    );
-
-    return;
-  }
-
-  mostrarMensagem(
-    "matMsg",
-    "Material cadastrado com sucesso.",
-    "success"
-  );
-
-  $("code").value = "";
-  $("desc").value = "";
-  $("min").value = "";
-  $("category").value = "";
-  $("maker").value = "";
-  $("shelf").value = "";
-  $("application").value = "";
-  $("photo").value = "";
-
-  await carregarMateriais();
-
-}
-
-
-/* ==========================================
-   MOSTRAR MATERIAL NA MOVIMENTAÇÃO
-========================================== */
-
-function mostrarMaterialMovimento() {
-
-  const codigo =
-    $("moveCode").value.trim();
-
-  const material =
-    buscarMaterial(codigo);
-
-  const caixa =
-    $("moveMaterial");
-
-  if (!codigo) {
-
-    caixa.textContent =
-      "Informe o código do material.";
-
-    caixa.className =
-      "msg";
-
-    return;
-  }
-
-  if (!material) {
-
-    caixa.textContent =
-      "Material não encontrado.";
-
-    caixa.className =
-      "msg warn";
-
-    return;
-  }
-
-  caixa.textContent =
-    material.descricao +
-    " — Estoque atual: " +
-    obterEstoque(material) +
-    " " +
-    (
-      material.unidade ||
-      "UN"
-    );
-
-  caixa.className =
-    "msg ok";
-
-}
-
-
-/* ==========================================
-   TIPO DE MOVIMENTO
-========================================== */
-
-function selecionarEntrada() {
-
-  tipoMovimento =
-    "entrada";
-
-  $("entryType")
-    .classList
-    .add("active");
-
-  $("exitType")
-    .classList
-    .remove("active");
-
-}
-
-
-function selecionarSaida() {
-
-  tipoMovimento =
-    "saida";
-
-  $("exitType")
-    .classList
-    .add("active");
-
-  $("entryType")
-    .classList
-    .remove("active");
-
-}
-
-
-/* ==========================================
-   SALVAR MOVIMENTO
-========================================== */
-
-async function salvarMovimento() {
-
-  const codigo =
-    $("moveCode").value.trim();
-
-  const quantidade =
-    Number(
-      $("moveQty").value
-    );
-
-  const colaborador =
-    $("employee").value.trim();
-
-  const matricula =
-    $("registration").value.trim();
-
-  const aplicacao =
-    $("applicationPlace").value.trim();
-
-  const dataMovimento =
-    $("moveDate").value;
-
-  const material =
-    buscarMaterial(codigo);
-
-  if (!material) {
-
-    mostrarMensagem(
-      "moveMsg",
-      "Material não encontrado.",
-      "warning"
-    );
-
-    return;
-  }
-
-  if (
-    !quantidade ||
-    quantidade <= 0
-  ) {
-
-    mostrarMensagem(
-      "moveMsg",
-      "Informe uma quantidade válida.",
-      "warning"
-    );
-
-    return;
-  }
-
-  const estoqueAtual =
-    obterEstoque(material);
-
-  if (
-    tipoMovimento === "saida" &&
-    quantidade > estoqueAtual
-  ) {
-
-    mostrarMensagem(
-      "moveMsg",
-      "Quantidade maior que o estoque disponível."
-    );
-
-    return;
-  }
-
-  const novoEstoque =
-    tipoMovimento === "entrada"
-      ? estoqueAtual + quantidade
-      : estoqueAtual - quantidade;
-
-  const {
-    error: erroEstoque
-  } =
-    await sb
-      .from("materiais")
-      .update({
-
-        estoque:
-          novoEstoque
-
-      })
-      .eq(
-        "id",
-        material.id
-      );
-
-  if (erroEstoque) {
-
-    console.error(
-      erroEstoque
-    );
-
-    mostrarMensagem(
-      "moveMsg",
-      "Erro ao atualizar estoque: " +
-      erroEstoque.message
-    );
-
-    return;
-  }
-
-  const movimento = {
-
-    material_id:
-      material.id,
-
-    codigo:
-      material.codigo,
-
-    tipo:
-      tipoMovimento,
-
-    quantidade,
-
-    colaborador:
-      colaborador || null,
-
-    matricula:
-      matricula || null,
-
-    local_aplicacao:
-      aplicacao || null,
-
-    data:
-      dataMovimento ||
-      new Date().toISOString()
-
-  };
-
-  const {
-    error: erroMovimento
-  } =
-    await sb
-      .from("movimentos")
-      .insert(
-        movimento
-      );
-
-  if (erroMovimento) {
-
-    console.error(
-      erroMovimento
-    );
-
-    mostrarMensagem(
-      "moveMsg",
-      "O estoque foi atualizado, mas houve erro ao registrar o histórico: " +
-      erroMovimento.message
-    );
-
-    await carregarMateriais();
-
-    return;
-  }
-
-  mostrarMensagem(
-    "moveMsg",
-    tipoMovimento === "entrada"
-      ? "Entrada registrada com sucesso."
-      : "Saída registrada com sucesso.",
-    "success"
-  );
-
-  $("moveQty").value = "";
-  $("employee").value = "";
-  $("registration").value = "";
-  $("applicationPlace").value = "";
-
-  await carregarTudo();
-
-}
-
-
-/* ==========================================
-   CARREGAR MOVIMENTOS
-========================================== */
-
-async function carregarMovimentos() {
-
-  const {
-    data,
-    error
-  } =
-    await sb
-      .from("movimentos")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:
-            false
-        }
-      )
-      .limit(100);
-
-  if (error) {
-
-    console.error(error);
-
-    return;
-  }
-
-  movimentos =
-    data || [];
-
-  renderizarMovimentos();
-
-}
-
-
-/* ==========================================
-   RENDERIZAR MOVIMENTOS
-========================================== */
-
-function renderizarMovimentos() {
-
-  const lista =
-    $("moveList");
-
-  lista.innerHTML =
-    "";
-
-  movimentos.forEach(
-    movimento => {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-
-        <td>
-          ${esc(
-            movimento.data ||
-            movimento.created_at ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.tipo ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.codigo ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.quantidade ||
-            0
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.colaborador ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.matricula ||
-            ""
-          )}
-        </td>
-
-        <td>
-          ${esc(
-            movimento.local_aplicacao ||
-            ""
-          )}
-        </td>
-
-      `;
-
-      lista.appendChild(
-        tr
-      );
-
-    }
-  );
-
-}
-
-
-/* ==========================================
-   INVENTÁRIO
-========================================== */
-
-function renderizarInventario(
-  filtro = ""
-) {
-
-  const busca =
-    filtro
-      .trim()
-      .toLowerCase();
-
-  const lista =
-    $("listaInventario");
-
-  lista.innerHTML =
-    "";
-
-  materiais
-    .filter(
-      material => {
-
-        if (!busca) {
-          return true;
-        }
-
-        return (
-          String(
-            material.codigo ||
-            material.codigo_barras ||
-            ""
-          )
-            .toLowerCase()
-            .includes(busca)
-          ||
-          String(
-            material.descricao ||
-            ""
-          )
-            .toLowerCase()
-            .includes(busca)
-        );
-
-      }
-    )
-    .forEach(
-      material => {
-
-        const tr =
-          document.createElement("tr");
-
-        tr.innerHTML = `
-
-          <td>
-            ${htmlFoto(material.foto_url)}
-          </td>
-
-          <td>
-            ${esc(
-              material.codigo ||
-              material.codigo_barras ||
-              ""
-            )}
-          </td>
-
-          <td>
-            ${esc(
-              material.descricao ||
-              ""
-            )}
-          </td>
-
-          <td>
-            ${esc(
-              material.localizacao ||
-              ""
-            )}
-          </td>
-
-          <td>
-            ${obterEstoque(material)}
-          </td>
-
-          <td>
-            ${obterMinimo(material)}
-          </td>
-
-          <td>
-            ${obterStatus(material)}
-          </td>
-
-        `;
-
-        lista.appendChild(
-          tr
-        );
-
-      }
-    );
-
-}
-
-
-/* ==========================================
-   RESUMO
-========================================== */
-
-function atualizarResumo() {
-
-  const totalMateriais =
-    materiais.length;
-
-  const totalEstoque =
-    materiais.reduce(
-      (
-        soma,
-        material
-      ) => {
-
-        return (
-          soma +
-          obterEstoque(material)
-        );
-
-      },
-      0
-    );
-
-  const estoqueBaixo =
-    materiais.filter(
-      material => {
-
-        return (
-          obterEstoque(material) <=
-          obterMinimo(material)
-        );
-
-      }
-    ).length;
-
-  $("nMaterials").textContent =
-    totalMateriais;
-
-  $("nStock").textContent =
-    totalEstoque;
-
-  $("nLow").textContent =
-    estoqueBaixo;
-
-  if (
-    estoqueBaixo > 0
-  ) {
-
-    $("alerts").textContent =
-      estoqueBaixo +
-      " material(is) com estoque baixo.";
-
-    $("alerts").className =
-      "msg warn";
-
-  } else {
-
-    $("alerts").textContent =
-      "Estoque dentro dos níveis mínimos.";
-
-    $("alerts").className =
-      "msg ok";
-
-  }
-
-}
-
-
-/* ==========================================
-   CARREGAR TUDO
-========================================== */
-
-async function carregarTudo() {
-
-  await carregarMateriais();
-
-  await carregarMovimentos();
-
-}
-
-
-/* ==========================================
-   ABAS
-========================================== */
-
-document
-  .querySelectorAll(
-    ".tabs button"
-  )
-  .forEach(
-    botao => {
-
-      botao.addEventListener(
-        "click",
-        () => {
-
-          document
-            .querySelectorAll(
-              ".tabs button"
-            )
-            .forEach(
-              item =>
-                item
-                  .classList
-                  .remove("active")
-            );
-
-          document
-            .querySelectorAll(
-              ".tab"
-            )
-            .forEach(
-              aba =>
-                aba
-                  .classList
-                  .add("hidden")
-            );
-
-          botao
-            .classList
-            .add("active");
-
-          const id =
-            botao.dataset.tab;
-
-          $(id)
-            .classList
-            .remove("hidden");
-
-        }
-      );
-
-    }
-  );
-
-
-/* ==========================================
-   LEITOR DE CÓDIGO DE BARRAS
-========================================== */
-
-async function alternarScanner(
-  destino
-) {
-
-  const cadastro =
-    destino === "cadastro";
-
-  const containerId =
-    cadastro
-      ? "scannerMat"
-      : "scannerMove";
-
-  let scannerAtual =
-    cadastro
-      ? scannerCadastro
-      : scannerMovimento;
-
-  if (scannerAtual) {
-
-    try {
-
-      await scannerAtual.stop();
-
-      await scannerAtual.clear();
-
-    } catch (erro) {
-
-      console.warn(erro);
-
-    }
-
-    if (cadastro) {
-
-      scannerCadastro =
-        null;
-
-    } else {
-
-      scannerMovimento =
-        null;
-
-    }
-
-    $(containerId)
-      .classList
-      .add("hidden");
-
-    return;
-  }
-
-  if (
-    !window.Html5Qrcode
-  ) {
-
-    mostrarMensagem(
-      cadastro
-        ? "matMsg"
-        : "moveMsg",
-      "O leitor de código não carregou."
-    );
-
-    return;
-  }
-
-  $(containerId)
-    .classList
-    .remove("hidden");
-
-  const scanner =
-    new Html5Qrcode(
-      containerId
-    );
-
-  if (cadastro) {
-
-    scannerCadastro =
-      scanner;
-
-  } else {
-
-    scannerMovimento =
-      scanner;
-
-  }
-
-  try {
-
-    await scanner.start(
-
-      {
-        facingMode:
-          "environment"
-      },
-
-      {
-        fps:
-          10,
-
-        qrbox: {
-          width:
-            250,
-          height:
-            150
-        }
-      },
-
-      texto => {
-
-        if (cadastro) {
-
-          $("code").value =
-            texto;
-
-          alternarScanner(
-            "cadastro"
-          );
-
-        } else {
-
-          $("moveCode").value =
-            texto;
-
-          mostrarMaterialMovimento();
-
-          alternarScanner(
-            "movimento"
-          );
-
-        }
-
-      }
-
-    );
-
-  } catch (erro) {
-
-    console.error(erro);
-
-    mostrarMensagem(
-      cadastro
-        ? "matMsg"
-        : "moveMsg",
-      "Não foi possível abrir a câmera. Autorize o acesso à câmera no navegador."
-    );
-
-    $(containerId)
-      .classList
-      .add("hidden");
-
-    if (cadastro) {
-
-      scannerCadastro =
-        null;
-
-    } else {
-
-      scannerMovimento =
-        null;
-
-    }
-
-  }
-
-}
-
-
-/* ==========================================
-   EVENTOS
-========================================== */
-
-$("loginBtn")
-  .addEventListener(
-    "click",
-    entrar
-  );
-
-$("signupBtn")
-  .addEventListener(
-    "click",
-    cadastrarConta
-  );
-
-$("logout")
-  .addEventListener(
-    "click",
-    sair
-  );
-
-$("saveMat")
-  .addEventListener(
-    "click",
-    salvarMaterial
-  );
-
-$("saveMove")
-  .addEventListener(
-    "click",
-    salvarMovimento
-  );
-
-$("entryType")
-  .addEventListener(
-    "click",
-    selecionarEntrada
-  );
-
-$("exitType")
-  .addEventListener(
-    "click",
-    selecionarSaida
-  );
-
-$("moveCode")
-  .addEventListener(
-    "input",
-    mostrarMaterialMovimento
-  );
-
-$("inventorySearch")
-  .addEventListener(
-    "input",
-    evento =>
-      renderizarInventario(
-        evento.target.value
-      )
-  );
-
-$("scanMat")
-  .addEventListener(
-    "click",
-    () =>
-      alternarScanner(
-        "cadastro"
-      )
-  );
-
-$("scanMove")
-  .addEventListener(
-    "click",
-    () =>
-      alternarScanner(
-        "movimento"
-      )
-  );
-
-
-/* ==========================================
-   DATA
-========================================== */
-
-$("moveDate").value =
-  new Date()
-    .toISOString()
-    .slice(
-      0,
-      10
-    );
-
-
-/* ==========================================
-   ESTADO INICIAL
-========================================== */
-
-selecionarEntrada();
-
-
-/* ==========================================
-   ALTERAÇÃO DE LOGIN
-========================================== */
-
-sb.auth.onAuthStateChange(
-  () => {
-
-    setTimeout(
-      atualizarSessao,
-      0
-    );
-
-  }
-);
-
-
-/* ==========================================
-   INICIALIZAÇÃO
-========================================== */
-
-atualizarSessao();
-
-
-})();
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
